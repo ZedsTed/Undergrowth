@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static MathsUtils;
 
-[RequireComponent(typeof(Camera))]
+
 public class CameraController : MonoBehaviour
 {
     /// <summary>
@@ -66,7 +67,7 @@ public class CameraController : MonoBehaviour
     [Header("Rotation")]
     [Space]
     public bool RotationEnabled;
-    public float rotateSpeed;
+    public float rotateSpeed;    
     public GameObject pivotPoint;
 
     private void Start()
@@ -92,22 +93,22 @@ public class CameraController : MonoBehaviour
         panMovement = Vector3.zero;
 
         if (Input.GetKey(KeyCode.W) || Input.mousePosition.y >= Screen.height - ScreenEdgeBorderThickness)
-            panMovement += Vector3.forward * panSpeed * Time.deltaTime;
+            panMovement += transform.forward * panSpeed * Time.deltaTime;
 
         if (Input.GetKey(KeyCode.S) || Input.mousePosition.y <= ScreenEdgeBorderThickness)
-            panMovement -= Vector3.forward * panSpeed * Time.deltaTime;
+            panMovement -= transform.forward * panSpeed * Time.deltaTime;
 
         if (Input.GetKey(KeyCode.A) || Input.mousePosition.x <= ScreenEdgeBorderThickness)
-            panMovement += Vector3.left * panSpeed * Time.deltaTime;
+            panMovement -= transform.right * panSpeed * Time.deltaTime;
 
         if (Input.GetKey(KeyCode.D) || Input.mousePosition.x >= Screen.width - ScreenEdgeBorderThickness)
-            panMovement += Vector3.right * panSpeed * Time.deltaTime;
+            panMovement += transform.right * panSpeed * Time.deltaTime;
 
         if (Input.GetKey(KeyCode.Q))
-            panMovement += Vector3.up * panSpeed * Time.deltaTime;
+            panMovement += transform.up * panSpeed * Time.deltaTime;
 
         if (Input.GetKey(KeyCode.E))
-            panMovement += Vector3.down * panSpeed * Time.deltaTime;
+            panMovement -= transform.up * panSpeed * Time.deltaTime;
 
 
         #region Zoom
@@ -196,8 +197,18 @@ public class CameraController : MonoBehaviour
     {
         if (rotationActive && pivotPoint != null)
         {
+            float rotateDegrees = 0f;
+            rotateDegrees += rotateSpeed * mouseDelta.y;
+
+            Vector3 currentVector = transform.position - pivotPoint.transform.position;
+            currentVector.x = 0;
+
+            float angleDifference = Vector3.Angle(initialPosition, currentVector) * (Vector3.Cross(initialPosition, currentVector).x > 0 ? 1 : -1);
+            float newAngle = Mathf.Clamp(angleDifference + rotateDegrees, -30f, 45f);
+            rotateDegrees = newAngle - angleDifference;
+
             transform.RotateAround(pivotPoint.transform.position, Vector3.up, mouseDelta.x * rotateSpeed);
-            transform.RotateAround(pivotPoint.transform.position, transform.right, mouseDelta.y * rotateSpeed);
+            transform.RotateAround(pivotPoint.transform.position, transform.right, rotateDegrees);
         }
 
         lastMousePosition = Input.mousePosition;
