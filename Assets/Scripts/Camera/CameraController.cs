@@ -68,7 +68,7 @@ public class CameraController : MonoBehaviour
     [Space]
     public bool RotationEnabled;
     public float rotateSpeed;    
-    public GameObject pivotPoint;
+    public Vector3 pivotPoint;
 
     private void Start()
     {
@@ -158,7 +158,7 @@ public class CameraController : MonoBehaviour
                     mouseDelta = Input.mousePosition - lastMousePosition;
 
                     if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
-                        pivotPoint = hit.transform.gameObject;
+                        pivotPoint = hit.point;
                 }
                 else
                 {
@@ -207,8 +207,8 @@ public class CameraController : MonoBehaviour
            
             rotate.y = Mathf.Clamp(rotate.y, -30f, 45f);
 
-            t.RotateAround(pivotPoint.transform.position, Vector3.up, mouseDelta.x * rotateSpeed);
-            t.RotateAround(pivotPoint.transform.position, transform.right, mouseDelta.y * rotateSpeed);
+            t.RotateAround(pivotPoint, Vector3.up, mouseDelta.x * rotateSpeed);
+            t.RotateAround(pivotPoint, transform.right, mouseDelta.y * rotateSpeed);
 
             
             Vector3 rot = t.localRotation.eulerAngles;
