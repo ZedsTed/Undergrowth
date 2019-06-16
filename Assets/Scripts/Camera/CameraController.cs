@@ -32,6 +32,10 @@ public class CameraController : MonoBehaviour
     [Tooltip("Speed of the zooming.")]
     public float zoomSpeed;
 
+    [Tooltip("Smoothing used for rotation lerping.")]
+    public float rotationSmoothing;
+
+
 
     [Header("Movement Limits")]
     [Space]
@@ -67,7 +71,7 @@ public class CameraController : MonoBehaviour
     [Header("Rotation")]
     [Space]
     public bool RotationEnabled;
-    public float rotateSpeed;    
+    public float rotateSpeed;
     public Vector3 pivotPoint;
 
     private void Start()
@@ -87,33 +91,35 @@ public class CameraController : MonoBehaviour
 
         if (FreeMode)
             IsoMode = false;
-        
+
         #region Movement
 
         panMovement = Vector3.zero;
 
-        if (Input.GetKey(KeyCode.W) /*|| Input.mousePosition.y >= Screen.height - ScreenEdgeBorderThickness*/)
-            panMovement += transform.forward * panSpeed * Time.deltaTime;
+        if (IsCameraMovementBeingInput())
+        {
+            if (Input.GetKey(KeyCode.W) /*|| Input.mousePosition.y >= Screen.height - ScreenEdgeBorderThickness*/)
+                panMovement += new Vector3(0f, 0f, 1f) * panSpeed * Time.deltaTime;
 
-        if (Input.GetKey(KeyCode.S) /*|| Input.mousePosition.y <= ScreenEdgeBorderThickness*/)
-            panMovement -= transform.forward * panSpeed * Time.deltaTime;
+            if (Input.GetKey(KeyCode.S) /*|| Input.mousePosition.y <= ScreenEdgeBorderThickness*/)
+                panMovement -= new Vector3(0f, 0f, 1f) * panSpeed * Time.deltaTime;
 
-        if (Input.GetKey(KeyCode.A) /*|| Input.mousePosition.x <= ScreenEdgeBorderThickness*/)
-            panMovement -= transform.right * panSpeed * Time.deltaTime;
+            if (Input.GetKey(KeyCode.A) /*|| Input.mousePosition.x <= ScreenEdgeBorderThickness*/)
+                panMovement -= transform.right * panSpeed * Time.deltaTime;
 
-        if (Input.GetKey(KeyCode.D) /*|| Input.mousePosition.x >= Screen.width - ScreenEdgeBorderThickness*/)
-            panMovement += transform.right * panSpeed * Time.deltaTime;
+            if (Input.GetKey(KeyCode.D) /*|| Input.mousePosition.x >= Screen.width - ScreenEdgeBorderThickness*/)
+                panMovement += transform.right * panSpeed * Time.deltaTime;
 
-        if (Input.GetKey(KeyCode.Q))
-            panMovement += transform.up * panSpeed * Time.deltaTime;
+            if (Input.GetKey(KeyCode.Q))
+                panMovement += transform.up * panSpeed * Time.deltaTime;
 
-        if (Input.GetKey(KeyCode.E))
-            panMovement -= transform.up * panSpeed * Time.deltaTime;
+            if (Input.GetKey(KeyCode.E))
+                panMovement -= transform.up * panSpeed * Time.deltaTime;
 
-
+        }
         #region Zoom
 
-        panMovement += transform.forward * Input.mouseScrollDelta.y * zoomSpeed;
+        panMovement += transform.forward * Input.mouseScrollDelta.y * zoomSpeed * Time.deltaTime;
         //Camera.main.fieldOfView = Mathf.Clamp(Camera.main.fieldOfView, zoomLimit.x, zoomLimit.y);
 
         #endregion
@@ -160,17 +166,17 @@ public class CameraController : MonoBehaviour
                 //    && lastMousePosition.x <= Screen.width
                 //    && lastMousePosition.y < Screen.height)
                 //{
-                    mouseDelta = Input.mousePosition - lastMousePosition;
+                mouseDelta = Input.mousePosition - lastMousePosition;
                 //}
                 //else
                 //{
                 //    mouseDelta = Vector3.zero;
                 //}
             }
-            
+
             if (Input.GetMouseButtonUp(2) || Input.GetKeyUp(KeyCode.LeftControl))
             {
-                rotationActive = false;               
+                rotationActive = false;
             }
 
             lastMousePosition = Input.mousePosition;
@@ -178,6 +184,39 @@ public class CameraController : MonoBehaviour
 
         #endregion
 
+
+
+    }
+
+
+    private void LateUpdate()
+    {
+        if (rotationActive && pivotPoint != null)
+        {
+
+
+            Transform cameraTransform = transform;
+
+            cameraTransform.RotateAround(pivotPoint, Vector3.up, mouseDelta.x * rotateSpeed);
+
+            // if we're at our limits, then we can only allow them to rotate it back to normal.
+            if ((transform.localRotation.eulerAngles.x < 45f && mouseDelta.y >= 0f) || (transform.localRotation.eulerAngles.x > 10f && mouseDelta.y <= 0f))
+            {
+                cameraTransform.RotateAround(pivotPoint, transform.right, mouseDelta.y * rotateSpeed);
+            }
+
+            Vector3 pos = cameraTransform.position;
+            Vector3 rot = cameraTransform.localRotation.eulerAngles;
+
+            rot.x = Mathf.Clamp(rot.x, 10f, 45f);
+
+            var quat = Quaternion.identity;
+            quat.eulerAngles = rot;
+
+            transform.localRotation = Quaternion.Lerp(transform.localRotation, quat, rotationSmoothing * Time.unscaledDeltaTime);
+            //transform.position = pos;
+
+        }
 
         #region Boundries
 
@@ -192,42 +231,6 @@ public class CameraController : MonoBehaviour
         }
 
         #endregion
-    }
-
-
-    private void LateUpdate()
-    {
-        if (rotationActive && pivotPoint != null)
-        {
-            // if we're at our limits, then we can only allow them to rotate it back to normal.
-            if ((transform.localRotation.eulerAngles.x < 45f && mouseDelta.y >= 0f) || (transform.localRotation.eulerAngles.x > 10f && mouseDelta.y <= 0f))
-            {
-                Transform cameraTransform = transform;
-                Vector2 rotate = Vector2.zero;
-
-                rotate.x = mouseDelta.x * rotateSpeed;
-                rotate.y = mouseDelta.y * rotateSpeed;
-
-                //Debug.Log("mosueDelta: " + mouseDelta);                
-
-                cameraTransform.RotateAround(pivotPoint, Vector3.up, rotate.x);
-                cameraTransform.RotateAround(pivotPoint, transform.right, rotate.y);
-
-                Vector3 pos = cameraTransform.position;
-                Vector3 rot = cameraTransform.localRotation.eulerAngles;
-
-                rot.x = Mathf.Clamp(rot.x, 10f, 45f);
-                //pos.y = Mathf.Clamp(pos.y, 0.5f, 20f);
-
-
-                Debug.Log("x: " + rot.x);
-
-                var quat = Quaternion.identity;
-                quat.eulerAngles = rot;
-                transform.localRotation = quat;
-                //transform.position = pos;
-            }
-        }
 
         //lastMousePosition = Input.mousePosition;
     }
