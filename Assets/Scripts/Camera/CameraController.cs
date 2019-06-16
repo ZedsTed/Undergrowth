@@ -146,27 +146,29 @@ public class CameraController : MonoBehaviour
 
         if (RotationEnabled)
         {
+            if (Input.GetMouseButtonDown(2) || Input.GetKeyDown(KeyCode.LeftControl))
+            {
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
+                    pivotPoint = hit.point;
+            }
             if (Input.GetMouseButton(2) || Input.GetKey(KeyCode.LeftControl))
             {
                 rotationActive = true;
 
-                if (lastMousePosition.x >= 0 
-                    && lastMousePosition.y >= 0
-                    && lastMousePosition.x <= Screen.width
-                    && lastMousePosition.y < Screen.height)
-                {
+                //if (lastMousePosition.x >= 0 
+                //    && lastMousePosition.y >= 0
+                //    && lastMousePosition.x <= Screen.width
+                //    && lastMousePosition.y < Screen.height)
+                //{
                     mouseDelta = Input.mousePosition - lastMousePosition;
-
-                    if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
-                        pivotPoint = hit.point;
-                }
-                else
-                {
-                    mouseDelta = Vector3.zero;
-                }
+                //}
+                //else
+                //{
+                //    mouseDelta = Vector3.zero;
+                //}
             }
-
-            if (Input.GetMouseButtonUp(2))
+            
+            if (Input.GetMouseButtonUp(2) || Input.GetKeyUp(KeyCode.LeftControl))
             {
                 rotationActive = false;               
             }
@@ -197,31 +199,37 @@ public class CameraController : MonoBehaviour
     {
         if (rotationActive && pivotPoint != null)
         {
-            Transform t = transform;
-            Vector2 rotate = Vector2.zero;
+            // if we're at our limits, then we can only allow them to rotate it back to normal.
+            if ((transform.localRotation.eulerAngles.x < 45f && mouseDelta.y >= 0f) || (transform.localRotation.eulerAngles.x > 10f && mouseDelta.y <= 0f))
+            {
+                Transform cameraTransform = transform;
+                Vector2 rotate = Vector2.zero;
 
-            rotate.x = mouseDelta.x * rotateSpeed;
-            rotate.y = mouseDelta.y * rotateSpeed;
+                rotate.x = mouseDelta.x * rotateSpeed;
+                rotate.y = mouseDelta.y * rotateSpeed;
 
-           
-           
-            rotate.y = Mathf.Clamp(rotate.y, -30f, 45f);
+                //Debug.Log("mosueDelta: " + mouseDelta);                
 
-            t.RotateAround(pivotPoint, Vector3.up, mouseDelta.x * rotateSpeed);
-            t.RotateAround(pivotPoint, transform.right, mouseDelta.y * rotateSpeed);
+                cameraTransform.RotateAround(pivotPoint, Vector3.up, rotate.x);
+                cameraTransform.RotateAround(pivotPoint, transform.right, rotate.y);
 
-            
-            Vector3 rot = t.localRotation.eulerAngles;
+                Vector3 pos = cameraTransform.position;
+                Vector3 rot = cameraTransform.localRotation.eulerAngles;
 
-            rot.x = Mathf.Clamp(rot.x, -30f, 45f);           
-           
+                rot.x = Mathf.Clamp(rot.x, 10f, 45f);
+                //pos.y = Mathf.Clamp(pos.y, 0.5f, 20f);
 
-            Debug.Log("x: " + rot.x);
 
-            transform.localRotation = Quaternion.Euler(rot);
+                Debug.Log("x: " + rot.x);
+
+                var quat = Quaternion.identity;
+                quat.eulerAngles = rot;
+                transform.localRotation = quat;
+                //transform.position = pos;
+            }
         }
 
-        lastMousePosition = Input.mousePosition;
+        //lastMousePosition = Input.mousePosition;
     }
 
     /// <summary>

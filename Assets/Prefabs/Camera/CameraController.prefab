@@ -139,5 +139,5 @@ MonoBehaviour:
   lengthLimit: {x: 0, y: 0}
   widthLimit: {x: 0, y: 0}
   RotationEnabled: 1
-  rotateSpeed: 0.1
-  pivotPoint: {fileID: 0}
+  rotateSpeed: 0.05
+  pivotPoint: {x: 0, y: 0, z: 0}

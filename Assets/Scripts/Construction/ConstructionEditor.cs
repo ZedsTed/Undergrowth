@@ -1,12 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
 
 public class ConstructionEditor : MonoBehaviour
 {
 
     public Grid EditorGrid;
 
+    public TextMeshProUGUI WorldPositionDebug;
+    public TextMeshProUGUI CellPositionDebug;
+    public TextMeshProUGUI WorldCellPositionDebug;
 
     void Start()
     {
@@ -23,17 +29,22 @@ public class ConstructionEditor : MonoBehaviour
 
             Vector3Int cellPos = EditorGrid.WorldToCell(pos);
 
+            Vector3 worldCellPos = EditorGrid.GetCellCenterWorld(cellPos);
+
             var posEnd = pos;
             posEnd.y = posEnd.y + 1f;
 
             var cellPosEnd = cellPos;
             cellPosEnd.y = cellPosEnd.y + 1;
 
-            Debug.DrawLine(pos, posEnd * 1.5f, Color.blue);
-            Debug.DrawLine(cellPos, cellPosEnd * 2, Color.red);
+            Debug.DrawLine(pos, posEnd, Color.blue);
+            Debug.DrawLine(cellPos, cellPosEnd, Color.red);
 
-            Debug.Log("pos: " + pos);
-            Debug.Log("cellPos: " + cellPos);
+            WorldPositionDebug.text = "World Position: " + pos.ToString();
+            CellPositionDebug.text = "Cell Position: " + cellPos.ToString();
+            WorldCellPositionDebug.text = "Center Position: " + worldCellPos.ToString();
+            //Debug.Log("pos: " + pos);
+            //Debug.Log("cellPos: " + cellPos);
         }
         if (Input.GetMouseButtonDown(0))
         {
@@ -41,7 +52,7 @@ public class ConstructionEditor : MonoBehaviour
             {
                 GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
-                cube.transform.position = EditorGrid.WorldToCell(clickHit.point);
+                cube.transform.position = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(clickHit.point));
             }
         }
     }
