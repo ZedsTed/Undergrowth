@@ -86,6 +86,14 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
+        
+
+
+    }
+
+
+    private void LateUpdate()
+    {
         if (IsoMode)
             FreeMode = false;
 
@@ -184,17 +192,8 @@ public class CameraController : MonoBehaviour
 
         #endregion
 
-
-
-    }
-
-
-    private void LateUpdate()
-    {
         if (rotationActive && pivotPoint != null)
         {
-
-
             Transform cameraTransform = transform;
 
             cameraTransform.RotateAround(pivotPoint, Vector3.up, mouseDelta.x * rotateSpeed);
