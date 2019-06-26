@@ -4,6 +4,19 @@ using UnityEngine;
 
 public class Plant : MonoBehaviour
 {
+    public enum LifeCycle
+    {
+        Seed,
+        Germination,
+        Seedling,
+        Young,
+        Mature,
+        Flowering, // Plant will either Flower or Spore
+        Sporing, // Eventually we will have a base life cycle and then Flowering/Spore on top.
+        Pollinated,
+        Seeding
+    }
+
     public enum Sunlight
     {
         Any,
@@ -68,6 +81,26 @@ public class Plant : MonoBehaviour
     [Tooltip("How much soil is needed by the plant.")]
     public float SoilUsageNeed;
 
+    /// <summary>
+    /// How much sunlight this plant needs.
+    /// </summary>
+    public Sunlight SunlightNeed;
+
+    /// <summary>
+    /// 0 - 1 value for current water level.
+    /// </summary>
+    protected float SunlightLevel;
+
+    /// <summary>
+    /// How much moisture/water the plant needs.
+    /// </summary>
+    public Moisture MoistureNeed;
+
+    /// <summary>
+    /// 0 - 1 value for current water level.
+    /// </summary>
+    protected float WaterLevel;
+
     public float GrowthRate;
     public float CurrentGrowth;
     public float MaxGrowth;
@@ -79,8 +112,107 @@ public class Plant : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected void FixedUpdate()
     {
-        
+        // We work out how much we'll grow by this tick through
+        // checking the energy output and multiplying by its set growth rate.
+        CurrentGrowth = Mathf.Clamp((Photosynthesis()/100) * GrowthRate, 0f, MaxGrowth);
+    }
+
+    /// <summary>
+    /// Goes through the photosynthesis process and returns the energy amount - a 0-1 value.
+    /// </summary>
+    /// <returns></returns>
+    float Photosynthesis()
+    {
+        float energy = 0f;
+
+        // we want to reflect how close to zero/equilibrium the sunlight and moisture levels are.
+
+
+        float sunlightSatisfaction = CalculateSunlightSatisfaction();
+        float moistureSatisfaction = CalculateMoistureSatisfaction();
+
+        // If we're within a window of healthy satisfaction, then energy is higher.
+        if (sunlightSatisfaction >= -0.05f && sunlightSatisfaction <= 0.05f)
+            energy += 0.5f;
+        else if (sunlightSatisfaction >= -0.15f && sunlightSatisfaction <= 0.15f)
+            energy += 0.35f;
+        else if (sunlightSatisfaction >= -0.25f && sunlightSatisfaction <= 0.25f)
+            energy += 0.15f;
+        else
+            energy += 0f;
+
+
+        // If we're within a window of healthy satisfaction, then things are good.
+        if (moistureSatisfaction >= -0.05f && moistureSatisfaction <= 0.05f)
+            energy += 0.5f;
+        else if (moistureSatisfaction >= -0.15f && moistureSatisfaction <= 0.15f)
+            energy += 0.35f;
+        else if (moistureSatisfaction >= -0.25f && moistureSatisfaction <= 0.25f)
+            energy += 0.15f;
+        else
+            energy += 0f;
+
+        return energy;
+    }
+
+    /// <summary>
+    /// Figures out how satisfied the plant is given its current sunlight amount and needs.
+    /// </summary>
+    /// <returns></returns>
+    protected float CalculateSunlightSatisfaction()
+    {
+        float sunlightNeed = 0f;
+
+        switch (SunlightNeed)
+        {
+            case Sunlight.Any:
+                sunlightNeed = float.MinValue;
+                break;
+            case Sunlight.Full:
+                sunlightNeed = 1f;
+                break;
+            case Sunlight.Partial:
+                sunlightNeed = 0.5f;
+                break;
+            case Sunlight.Shade:
+                sunlightNeed = 0.25f;
+                break;
+            default:
+                break;
+        }
+
+        return SunlightLevel - sunlightNeed;        
+    }
+
+
+    /// <summary>
+    /// Figures out how satisfied the plant is given its current water/moistures amount and needs.
+    /// </summary>
+    /// <returns></returns>
+    protected float CalculateMoistureSatisfaction()
+    {
+        float moistureNeed = 0f;
+
+        switch (MoistureNeed)
+        {
+            case Moisture.Any:
+                moistureNeed = float.MinValue;
+                break;
+            case Moisture.MoistDraining:
+                moistureNeed = 1f;
+                break;
+            case Moisture.PoorlyDrained:
+                moistureNeed = 0.5f;
+                break;
+            case Moisture.WellDrained:
+                moistureNeed = 0.25f;
+                break;
+            default:
+                break;
+        }
+
+        return WaterLevel - moistureNeed;
     }
 }
