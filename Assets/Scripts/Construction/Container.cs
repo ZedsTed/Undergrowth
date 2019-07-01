@@ -5,7 +5,7 @@ using UnityEngine;
 public class Container : MonoBehaviour
 {
     protected ContainerDefinition definition;
-    public ContainerDefinition Definition { get; set; }
+    public ContainerDefinition Definition { get { return definition; } set { definition = value; } }
 
     // Eventually this will be split into multiple variables such as Nitrogen, Potash etc.
     [Tooltip("Soil Fertility of the bed")]

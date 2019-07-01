@@ -5,7 +5,7 @@ using UnityEngine;
 public class Plant : MonoBehaviour
 {
     protected Container plantBed;
-    public Container PlantBed { get; set; }
+    public Container PlantBed { get { return plantBed; } set { plantBed = value; } }
 
     [SerializeField]
     protected PlantDefinition.LifeCycle currentLifeCycle;
@@ -20,18 +20,24 @@ public class Plant : MonoBehaviour
     public float SoilUsageNeed;
 
     protected PlantDefinition definition;
-    public PlantDefinition Definition { get; set; } 
+    public PlantDefinition Definition { get { return definition; } set { definition = value; } }
 
-    
+    [SerializeField]
     protected float sunlightLevel;
 
     /// <summary>
     /// 0 - 1 value for current water level.
     /// </summary>
+    [SerializeField]
     protected float waterLevel;
 
+    [Tooltip("The default optimal growth rate that this plant should have.")]
     public float GrowthRate;
+    [Tooltip("The current scaled growth rate that this plant does have.")]
+    public float CurrentGrowthRate;
+    [Tooltip("The current absolute growth of this plant.")]
     public float CurrentGrowth;
+    [Tooltip("The maximum growth that this plant should have.")]
     public float MaxGrowth;
 
 
@@ -41,14 +47,22 @@ public class Plant : MonoBehaviour
         
     }
 
-    // Update is called once per frame
+    protected void Update()
+    {
+        float normalizedGrowth = GetGrowthPercentage() / 100;
+
+        transform.localScale = new Vector3(normalizedGrowth, normalizedGrowth, normalizedGrowth);
+    }
     protected void FixedUpdate()
     {
+        CurrentGrowthRate = (Photosynthesis() / 100) * GrowthRate;
+
         // We work out how much we'll grow by this tick through
         // checking the energy output and multiplying by its set growth rate.
-        CurrentGrowth = Mathf.Clamp((Photosynthesis()/100) * GrowthRate, 0f, MaxGrowth);
+        CurrentGrowth += CurrentGrowthRate;
+        CurrentGrowth = Mathf.Clamp(CurrentGrowth, 0f, MaxGrowth);
 
-        CheckCurrentLifeCycle();
+        UpdateCurrentLifeCycle();
     }
 
     public void Sow()
@@ -65,7 +79,7 @@ public class Plant : MonoBehaviour
     /// Looks at the current growth amount, the growth percentage threshold to 'level up' a life cycle, and returns the new/current life cycle.
     /// </summary>
     /// <returns></returns>
-    protected void CheckCurrentLifeCycle()
+    protected void UpdateCurrentLifeCycle()
     {
         switch (currentLifeCycle)
         {
@@ -91,13 +105,13 @@ public class Plant : MonoBehaviour
     /// <summary>
     /// Gets the percentage representing the current growth / max growth.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>0 - 100 value representing actual percentage.</returns>
     protected float GetGrowthPercentage()
     {
         if (MaxGrowth == 0f)
             return 0f;
 
-        return CurrentGrowth / MaxGrowth;
+        return (CurrentGrowth / MaxGrowth) * 100;
     }
 
     /// <summary>
