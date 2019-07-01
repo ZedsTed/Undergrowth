@@ -4,106 +4,36 @@ using UnityEngine;
 
 public class Plant : MonoBehaviour
 {
-    public enum LifeCycle
+    protected Container plantBed;
+    public Container PlantBed { get; set; }
+
+    [SerializeField]
+    protected PlantDefinition.LifeCycle currentLifeCycle;
+    public PlantDefinition.LifeCycle CurrentLifeCycle
     {
-        Seed,
-        Germination,
-        Seedling,
-        Young,
-        Mature,
-        Flowering, // Plant will either Flower or Spore
-        Sporing, // Eventually we will have a base life cycle and then Flowering/Spore on top.
-        Pollinated,
-        Seeding
+        get { return currentLifeCycle; }
+        set { currentLifeCycle = value; }
     }
 
-    public enum Sunlight
-    {
-        Any,
-        Full,
-        Partial,
-        Shade
-    }
-
-    public enum Soil
-    {
-        Any,
-        Chalk,
-        Clay,
-        Loam,
-        Sand
-    }
-
-    public enum Moisture
-    {
-        Any,
-        MoistDraining,
-        PoorlyDrained,
-        WellDrained
-    }
-
-    public enum Ph
-    {
-        Any,
-        Acid,
-        Alkaline,
-        Neutral
-    }
-
-    public enum Exposure
-    {
-        Any,
-        Exposed,
-        Sheltered
-    }
-
-    public enum Hardiness
-    {
-        Any,
-        H1A,    // Under glass all year (15C)
-        H1B,    // Can be grown outside in the summer (10C - 15C)
-        H1C,    // Can be grown outside in the summer
-        H2,     // Tolerant of low temperatures, but not surviving being (1 to 5)
-        H3,     // Hardy in coastal and relatively mild parts of the UK (-5 to 1)
-        H4,     // Hardy through most of the UK (-10 to -5)
-        H5,     // Hardy in most places throughout the UK even in severe (-15 to -10)
-        H6,     // Hardy in all of UK and northern Europe (-20 to -15)
-        H7      // Hardy in the severest European continental climates (-20)
-    }
-
-    public enum Foliage
-    {
-        Evergreen,
-        SemiEvergreen,
-        Deciduous
-    }
-
+    
     [Tooltip("How much soil is needed by the plant.")]
     public float SoilUsageNeed;
 
-    /// <summary>
-    /// How much sunlight this plant needs.
-    /// </summary>
-    public Sunlight SunlightNeed;
+    protected PlantDefinition definition;
+    public PlantDefinition Definition { get; set; } 
+
+    
+    protected float sunlightLevel;
 
     /// <summary>
     /// 0 - 1 value for current water level.
     /// </summary>
-    protected float SunlightLevel;
-
-    /// <summary>
-    /// How much moisture/water the plant needs.
-    /// </summary>
-    public Moisture MoistureNeed;
-
-    /// <summary>
-    /// 0 - 1 value for current water level.
-    /// </summary>
-    protected float WaterLevel;
+    protected float waterLevel;
 
     public float GrowthRate;
     public float CurrentGrowth;
     public float MaxGrowth;
+
 
     // Start is called before the first frame update
     void Start()
@@ -117,6 +47,57 @@ public class Plant : MonoBehaviour
         // We work out how much we'll grow by this tick through
         // checking the energy output and multiplying by its set growth rate.
         CurrentGrowth = Mathf.Clamp((Photosynthesis()/100) * GrowthRate, 0f, MaxGrowth);
+
+        CheckCurrentLifeCycle();
+    }
+
+    public void Sow()
+    {
+        currentLifeCycle = PlantDefinition.LifeCycle.Seed;
+    }
+
+    protected void Grow()
+    {
+
+    }
+
+    /// <summary>
+    /// Looks at the current growth amount, the growth percentage threshold to 'level up' a life cycle, and returns the new/current life cycle.
+    /// </summary>
+    /// <returns></returns>
+    protected void CheckCurrentLifeCycle()
+    {
+        switch (currentLifeCycle)
+        {
+            case PlantDefinition.LifeCycle.Seed:
+                if (GetGrowthPercentage() > definition.GrowthThresholds[PlantDefinition.LifeCycle.Seed])
+                    CurrentLifeCycle = PlantDefinition.LifeCycle.Germination;
+                break;
+            case PlantDefinition.LifeCycle.Germination:
+                if (GetGrowthPercentage() > definition.GrowthThresholds[PlantDefinition.LifeCycle.Germination])
+                    CurrentLifeCycle = PlantDefinition.LifeCycle.Seedling;
+                break;
+            case PlantDefinition.LifeCycle.Seedling:
+                if (GetGrowthPercentage() > definition.GrowthThresholds[PlantDefinition.LifeCycle.Seedling])
+                    CurrentLifeCycle = PlantDefinition.LifeCycle.Young;
+                break;
+            case PlantDefinition.LifeCycle.Young:
+                if (GetGrowthPercentage() > definition.GrowthThresholds[PlantDefinition.LifeCycle.Young])
+                    CurrentLifeCycle = PlantDefinition.LifeCycle.Mature;
+                break;           
+        }
+    }
+
+    /// <summary>
+    /// Gets the percentage representing the current growth / max growth.
+    /// </summary>
+    /// <returns></returns>
+    protected float GetGrowthPercentage()
+    {
+        if (MaxGrowth == 0f)
+            return 0f;
+
+        return CurrentGrowth / MaxGrowth;
     }
 
     /// <summary>
@@ -165,25 +146,25 @@ public class Plant : MonoBehaviour
     {
         float sunlightNeed = 0f;
 
-        switch (SunlightNeed)
+        switch (Definition.SunlightNeed)
         {
-            case Sunlight.Any:
+            case PlantDefinition.Sunlight.Any:
                 sunlightNeed = float.MinValue;
                 break;
-            case Sunlight.Full:
+            case PlantDefinition.Sunlight.Full:
                 sunlightNeed = 1f;
                 break;
-            case Sunlight.Partial:
+            case PlantDefinition.Sunlight.Partial:
                 sunlightNeed = 0.5f;
                 break;
-            case Sunlight.Shade:
+            case PlantDefinition.Sunlight.Shade:
                 sunlightNeed = 0.25f;
                 break;
             default:
                 break;
         }
 
-        return SunlightLevel - sunlightNeed;        
+        return sunlightLevel - sunlightNeed;        
     }
 
 
@@ -195,24 +176,24 @@ public class Plant : MonoBehaviour
     {
         float moistureNeed = 0f;
 
-        switch (MoistureNeed)
+        switch (definition.MoistureNeed)
         {
-            case Moisture.Any:
+            case PlantDefinition.Moisture.Any:
                 moistureNeed = float.MinValue;
                 break;
-            case Moisture.MoistDraining:
+            case PlantDefinition.Moisture.MoistDraining:
                 moistureNeed = 1f;
                 break;
-            case Moisture.PoorlyDrained:
+            case PlantDefinition.Moisture.PoorlyDrained:
                 moistureNeed = 0.5f;
                 break;
-            case Moisture.WellDrained:
+            case PlantDefinition.Moisture.WellDrained:
                 moistureNeed = 0.25f;
                 break;
             default:
                 break;
         }
 
-        return WaterLevel - moistureNeed;
+        return waterLevel - moistureNeed;
     }
 }

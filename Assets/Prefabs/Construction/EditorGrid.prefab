@@ -57,7 +57,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f7996f87d3fe354fa402c374f07812d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  plantManifest: {fileID: 11400000, guid: 6f2331ebcda479b45bd1417b4fe8265b, type: 2}
+  containerManifest: {fileID: 11400000, guid: 295c7e786b58fd546a353d7493371f55, type: 2}
   EditorGrid: {fileID: 4728455150766253185}
+  WorldPositionDebug: {fileID: 0}
+  CellPositionDebug: {fileID: 0}
+  WorldCellPositionDebug: {fileID: 0}
 --- !u!1 &3611995007570025524
 GameObject:
   m_ObjectHideFlags: 0
@@ -116,7 +121,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: d92ef32394b5f474385d74b565a7bdd7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

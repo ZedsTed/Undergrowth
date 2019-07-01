@@ -7,6 +7,14 @@ using TMPro;
 
 public class ConstructionEditor : MonoBehaviour
 {
+    [SerializeField]
+    protected PlantManifest plantManifest;
+    public PlantManifest PlantManifest => plantManifest;
+
+    [SerializeField]
+    protected ContainerManifest containerManifest;
+    public ContainerManifest ContainerManifest => containerManifest;
+
 
     public Grid EditorGrid;
 
@@ -16,10 +24,10 @@ public class ConstructionEditor : MonoBehaviour
 
     void Start()
     {
-        
+
     }
 
-   
+
     void Update()
     {
 
@@ -50,10 +58,50 @@ public class ConstructionEditor : MonoBehaviour
         {
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit clickHit))
             {
-                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                Vector3 hitCellPosition = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(clickHit.point));
 
-                cube.transform.position = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(clickHit.point));
+                if (IsClickOnRaisedBed(clickHit, out Container clickedBed))
+                {
+                    hitCellPosition.y = 0f + clickedBed.Definition.Depth;
+
+                    PlantDefinition pDef = PlantManifest.GetPlantDefinition("Plant01");
+
+                    Plant p = Instantiate(pDef.Actor, hitCellPosition, Quaternion.identity, clickedBed.transform);
+                    p.PlantBed = clickedBed;
+                    p.Definition = pDef;
+                }
+                else
+                {
+                    ContainerDefinition cDef = ContainerManifest.GetContainerDefinition("RaisedBed");
+                    hitCellPosition.y = 0f;
+                    
+                    Container c = Instantiate(cDef.Actor, hitCellPosition, 
+                        Quaternion.identity, transform);
+
+                    c.Definition = cDef;
+                }
             }
         }
+    }
+
+
+    protected bool IsClickOnRaisedBed(RaycastHit clickhit, out Container bed)
+    {
+        // Check if it's in our parents (should be)
+        bed = clickhit.transform.gameObject.GetComponentInParent<Container>();
+        if (bed != null)
+        {
+            return true;
+        }
+
+        // Check if it's in our children (bad if it is, not a good prefab setup.
+        bed = clickhit.transform.gameObject.GetComponentInChildren<Container>();
+        if (bed != null)
+        {
+            Debug.LogWarning(bed.Definition.ContainerName + " has a bad collider setup for its actor/prefab.");
+            return true;
+        }
+
+        return false;
     }
 }

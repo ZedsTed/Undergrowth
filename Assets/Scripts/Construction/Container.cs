@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RaisedBed : MonoBehaviour
+public class Container : MonoBehaviour
 {
-    [Tooltip("Width of the bed")]
-    public float Width;
-    [Tooltip("Length of the bed")]
-    public float Length;
-    [Tooltip("Depth of the bed")]
-    public float Depth;
+    protected ContainerDefinition definition;
+    public ContainerDefinition Definition { get; set; }
 
     // Eventually this will be split into multiple variables such as Nitrogen, Potash etc.
     [Tooltip("Soil Fertility of the bed")]
@@ -25,7 +21,9 @@ public class RaisedBed : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        //var cPos = transform.position;
+        //cPos.y = definition.Depth / 2;
+        //transform.position = cPos;
     }
 
     // Update is called once per frame
@@ -49,6 +47,6 @@ public class RaisedBed : MonoBehaviour
     /// </summary>
     public void OnPlant(Plant plant)
     {
-
+        plant.Sow();
     }
 }
