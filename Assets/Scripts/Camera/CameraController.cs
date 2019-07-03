@@ -107,27 +107,27 @@ public class CameraController : MonoBehaviour
         if (IsCameraMovementBeingInput())
         {
             if (Input.GetKey(KeyCode.W) /*|| Input.mousePosition.y >= Screen.height - ScreenEdgeBorderThickness*/)
-                panMovement += new Vector3(0f, 0f, 1f) * panSpeed * Time.deltaTime;
+                panMovement += new Vector3(0f, 0f, 1f) * panSpeed * Time.unscaledDeltaTime;
 
             if (Input.GetKey(KeyCode.S) /*|| Input.mousePosition.y <= ScreenEdgeBorderThickness*/)
-                panMovement -= new Vector3(0f, 0f, 1f) * panSpeed * Time.deltaTime;
+                panMovement -= new Vector3(0f, 0f, 1f) * panSpeed * Time.unscaledDeltaTime;
 
             if (Input.GetKey(KeyCode.A) /*|| Input.mousePosition.x <= ScreenEdgeBorderThickness*/)
-                panMovement -= transform.right * panSpeed * Time.deltaTime;
+                panMovement -= transform.right * panSpeed * Time.unscaledDeltaTime;
 
             if (Input.GetKey(KeyCode.D) /*|| Input.mousePosition.x >= Screen.width - ScreenEdgeBorderThickness*/)
-                panMovement += transform.right * panSpeed * Time.deltaTime;
+                panMovement += transform.right * panSpeed * Time.unscaledDeltaTime;
 
             if (Input.GetKey(KeyCode.Q))
-                panMovement += transform.up * panSpeed * Time.deltaTime;
+                panMovement += transform.up * panSpeed * Time.unscaledDeltaTime;
 
             if (Input.GetKey(KeyCode.E))
-                panMovement -= transform.up * panSpeed * Time.deltaTime;
+                panMovement -= transform.up * panSpeed * Time.unscaledDeltaTime;
 
         }
         #region Zoom
 
-        panMovement += transform.forward * Input.mouseScrollDelta.y * zoomSpeed * Time.deltaTime;
+        panMovement += transform.forward * Input.mouseScrollDelta.y * zoomSpeed * Time.unscaledDeltaTime;
         //Camera.main.fieldOfView = Mathf.Clamp(Camera.main.fieldOfView, zoomLimit.x, zoomLimit.y);
 
         #endregion
@@ -142,7 +142,7 @@ public class CameraController : MonoBehaviour
 
         if (IsCameraMovementBeingInput())
         {
-            panIncrease += Time.deltaTime / panAcceleration;
+            panIncrease += Time.unscaledDeltaTime / panAcceleration;
             panSpeed = Mathf.Lerp(minPanSpeed, maxPanSpeed, panIncrease);
         }
         else

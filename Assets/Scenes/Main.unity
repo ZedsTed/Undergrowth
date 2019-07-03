@@ -1115,9 +1115,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sun: {fileID: 1435304245}
-  xSpeed: 5
-  ySpeed: 5
-  minToSecond: 5
+  xSpeed: 0.5
+  ySpeed: 0.5
+  minToSecond: 0.001
   currentMinute: 0
 --- !u!1 &1728948183
 GameObject:
