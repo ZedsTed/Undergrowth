@@ -72,5 +72,15 @@ public static class MathsUtils
         return new Vector3(Mathf.Abs(v.x), Mathf.Abs(v.y), Mathf.Abs(v.z));
     }
 
-   
+    /// <summary>
+    /// Returns the value of lerping between two Vectors using LerpAngle.
+    /// </summary>
+    public static Vector3 LerpRotate(Vector3 a, Vector3 b, float t)
+    {
+        float x = Mathf.LerpAngle(a.x, b.x, t);
+        float y = Mathf.LerpAngle(a.y, b.y, t);
+        float z = Mathf.LerpAngle(a.x, b.z, t);
+
+        return new Vector3(x, y, z);
+    }
 }

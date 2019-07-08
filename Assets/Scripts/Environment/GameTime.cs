@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameTime : Singleton<MonoBehaviour>
+public class GameTime : Singleton<GameTime>
 {
     [SerializeField]
     protected bool paused;
@@ -10,6 +10,43 @@ public class GameTime : Singleton<MonoBehaviour>
 
     [SerializeField]
     protected float timeScale = 1f;
+
+    /// <summary>
+    /// How much we want our in-game world to be scaled for time (i.e. one in-game minute is two real-world seconds).
+    /// Lower number is faster.
+    /// </summary>
+    [SerializeField]
+    protected float gameMinuteToRealSecond = 1f;
+    public float GameMinuteToRealSecond { get { return gameMinuteToRealSecond; } }
+
+    /// <summary>
+    /// The current minute, default set to 720 so we start at midday.
+    /// </summary>
+    [SerializeField]
+    protected int currentMinute = 720;
+
+    /// <summary>
+    /// How many minutes are in our in-game days. Always should be 24 * 60.
+    /// </summary>
+    protected const int minutesInDay = 1440;
+    public int MinutesInDay => minutesInDay;
+    public float RealSecondsInDay { get { return minutesInDay * gameMinuteToRealSecond; } }
+
+    /// <summary>
+    /// What day we're on.
+    /// </summary>
+    protected int dayCount = 0;
+
+    /// <summary>
+    /// How many seconds since our last minute was ticked over.
+    /// </summary>
+    protected float timeSinceLastMinute;
+
+    /// <summary>
+    /// Returns the current in-game second count of the current day. 
+    /// Can be used to tell how far through the day you are.
+    /// </summary>
+    public float CurrentMinuteAndSeconds { get { return currentMinute + (timeSinceLastMinute/60); } }
 
     /// <summary>
     /// We use this struct to just hold the data that we need for a time warp enum state its accompanying speed.
@@ -39,7 +76,7 @@ public class GameTime : Singleton<MonoBehaviour>
     {
         new TimeWarp(TimeWarp.TimeWarpState.Normal, 1f),
         new TimeWarp(TimeWarp.TimeWarpState.Fast, 2f),
-        new TimeWarp(TimeWarp.TimeWarpState.SuperFast, 4f)
+        new TimeWarp(TimeWarp.TimeWarpState.SuperFast, 5f)
     };
 
     public TimeWarp.TimeWarpState CurrentState { get; protected set; }
@@ -55,6 +92,8 @@ public class GameTime : Singleton<MonoBehaviour>
             SetTimeWarp(TimeWarp.TimeWarpState.Fast);
         else if (Input.GetKeyDown(KeyCode.Alpha3))
             SetTimeWarp(TimeWarp.TimeWarpState.SuperFast);
+
+        TrackTime();
     }
 
     public void TogglePause()
@@ -87,5 +126,37 @@ public class GameTime : Singleton<MonoBehaviour>
                 }
             }
         }
+    }
+
+    protected void TrackTime()
+    {
+        float t = Time.deltaTime / gameMinuteToRealSecond;
+
+        if (timeSinceLastMinute >= gameMinuteToRealSecond)
+        {
+            timeSinceLastMinute = 0f;
+            OnMinutePassed();
+        }
+        else
+        {
+            timeSinceLastMinute += t;
+        }
+    }
+
+    protected void OnMinutePassed()
+    {
+        ++currentMinute;
+        if (currentMinute >= minutesInDay)
+        {
+            // Next day!
+            ++dayCount;
+            currentMinute = 0;
+            Debug.Log("Good morning!");
+        }
+
+        int min = currentMinute % 60;
+        int hrs = currentMinute / 60;
+
+        Debug.Log("Next minute! " + hrs.ToString() + " : " + min.ToString());
     }
 }

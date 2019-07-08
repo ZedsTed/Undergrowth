@@ -76,6 +76,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2fa406c06da8934b84bf5261c6479ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  paused: 0
+  timeScale: 1
+  gameMinuteToRealSecond: 1
+  currentMinute: 720
 --- !u!1 &3611995007570025524
 GameObject:
   m_ObjectHideFlags: 0

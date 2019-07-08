@@ -1,83 +1,61 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static MathsUtils;
 
 public class SunCycle : MonoBehaviour
 {
     public Light sun;
+    
 
-   
+    protected Quaternion qMidday = new Quaternion(0.8251674f, 0f, 0f, 0.5648884f);
+    protected Quaternion qMidnight = new Quaternion(0f, 0.5648882f, 0.8251675f, 0f);
 
-    public float xSpeed = 0.5f;
-    public float ySpeed = 0.5f;
+    protected Quaternion sunRotation = Quaternion.identity;
+
+    protected Vector3 middayForward = new Vector3(0.0f, -0.9f, -0.4f);
+
+
+
+    protected void Update()
+    {
+        TrackSunRotation();
+        TrackSunIntensity();
+    }
 
     /// <summary>
-    /// A pretty basic time acceleration multiplier for the moment.
+    /// Rotates the sun in accordance with how far through the day we are.
     /// </summary>
-    [Range(0, 5)]
-    public float minToSecond = 1f;
-
-    [SerializeField]
-    protected int currentMinute;
-
-    protected const int minutesInDay = 1440;
-
-    protected int dayCount = 0;
-    protected float timeSinceLastMinute;
-
-    protected float totalSetTime = 1f;
-
-    
-    void Update()
+    protected void TrackSunRotation()
     {
-        float t = Time.deltaTime;
+        float percHalfDay = 0f;
 
-        transform.Rotate(new Vector3(xSpeed * t, ySpeed * t, 0f));
-        // this whole minToSecond thing is a bit whacky
-        // needs to be simplified and split into a better method.
-        // If we've had a minute passed.
-        if (timeSinceLastMinute >= minToSecond)
+        // If we're more than halfway through the day.
+        if (GameTime.Instance.CurrentMinuteAndSeconds > (GameTime.Instance.MinutesInDay / 2))
         {
-            timeSinceLastMinute = 0f;
-            MinutePassed();
+            // Figure out how far we are past midday, so we remove half a day and see how far we are through it
+            percHalfDay = ((GameTime.Instance.CurrentMinuteAndSeconds - (GameTime.Instance.MinutesInDay / 2)) / (GameTime.Instance.MinutesInDay / 2));        
+
+            transform.rotation = Quaternion.Lerp(qMidday, qMidnight, percHalfDay);
         }
         else
-        {
-            timeSinceLastMinute += t;
+        {   // If we're less than halfway through the day
+            // Figure out how far we are past midday, so we remove half a day and see how far we are through it
+            percHalfDay = (GameTime.Instance.CurrentMinuteAndSeconds
+                            / (GameTime.Instance.MinutesInDay / 2));
+
+            transform.rotation = Quaternion.Lerp(qMidnight, qMidday, percHalfDay);
         }
     }
 
-    float setTime = 0f;
-    protected void MinutePassed()
+    /// <summary>
+    /// Changes the intensity of the sun in accordance with how far through the day we are.
+    /// </summary>
+    protected void TrackSunIntensity()
     {
-        ++currentMinute;
-        if (currentMinute >= minutesInDay)
-        {
-            // Next day!
-            ++dayCount;
-            currentMinute = 0;
-            Debug.Log("Good morning!");
-        }
+       
 
-        int min = currentMinute % 60;
-        int hrs = currentMinute / 60;
-
-        Debug.Log("Next minute! " + hrs.ToString() + " : " + min.ToString());
-
-        // still quite fucked at > 18. Seems to work fine with > 6f though. perhaps set time is too low.
-        if (hrs >  18)
-        {
-            setTime += Time.deltaTime / totalSetTime;
-            sun.intensity = Mathf.Lerp(1f, 0f, setTime);
-        }
-        else if (hrs > 6)
-        {
-            setTime += Time.deltaTime / totalSetTime;
-            sun.intensity = Mathf.Lerp(0f, 1f, setTime);
-        }
-        else
-        {
-            setTime = 0f;
-        }
+        float intensity = Vector3.Dot(middayForward, transform.forward);
+        sun.intensity = intensity;
     }
 }
