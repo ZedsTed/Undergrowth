@@ -22,8 +22,11 @@ public class Plant : MonoBehaviour
     protected PlantDefinition definition;
     public PlantDefinition Definition { get { return definition; } set { definition = value; } }
 
+    /// <summary>
+    /// Eventually we'll need to raycast from the sun to the plant to check the actual sunlight level, but this will do for now.
+    /// </summary>
     [SerializeField]
-    protected float sunlightLevel;
+    protected float SunlightLevel => EnvironmentData.Instance.SunIntensity;
 
     /// <summary>
     /// 0 - 1 value for current water level.
@@ -31,14 +34,10 @@ public class Plant : MonoBehaviour
     [SerializeField]
     protected float waterLevel;
 
-    [Tooltip("The default optimal growth rate that this plant should have.")]
-    public float GrowthRate;
     [Tooltip("The current scaled growth rate that this plant does have.")]
     public float CurrentGrowthRate;
     [Tooltip("The current absolute growth of this plant.")]
     public float CurrentGrowth;
-    [Tooltip("The maximum growth that this plant should have.")]
-    public float MaxGrowth;
 
 
     // Start is called before the first frame update
@@ -55,12 +54,12 @@ public class Plant : MonoBehaviour
     }
     protected void FixedUpdate()
     {
-        CurrentGrowthRate = (Photosynthesis() / 100) * GrowthRate;
+        CurrentGrowthRate = (Photosynthesis() / 100) * Definition.GrowthRate;
 
         // We work out how much we'll grow by this tick through
         // checking the energy output and multiplying by its set growth rate.
         CurrentGrowth += CurrentGrowthRate;
-        CurrentGrowth = Mathf.Clamp(CurrentGrowth, 0f, MaxGrowth);
+        CurrentGrowth = Mathf.Clamp(CurrentGrowth, 0f, Definition.MaxGrowth);
 
         UpdateCurrentLifeCycle();
     }
@@ -108,10 +107,10 @@ public class Plant : MonoBehaviour
     /// <returns>0 - 100 value representing actual percentage.</returns>
     protected float GetGrowthPercentage()
     {
-        if (MaxGrowth == 0f)
+        if (Definition.MaxGrowth == 0f)
             return 0f;
 
-        return (CurrentGrowth / MaxGrowth) * 100;
+        return (CurrentGrowth / Definition.MaxGrowth) * 100;
     }
 
     /// <summary>
@@ -178,7 +177,7 @@ public class Plant : MonoBehaviour
                 break;
         }
 
-        return sunlightLevel - sunlightNeed;        
+        return SunlightLevel - sunlightNeed;        
     }
 
 

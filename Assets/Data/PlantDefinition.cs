@@ -23,7 +23,7 @@ public class PlantDefinition : ScriptableObject
     [Tooltip("How much Sunlight this plant needs.")]
     [SerializeField]
     protected Sunlight sunlightNeed;
-    public Sunlight SunlightNeed { get { return sunlightNeed; } }
+    public Sunlight SunlightNeed => sunlightNeed; 
 
     /// <summary>
     /// How much moisture/water the plant needs.
@@ -32,7 +32,25 @@ public class PlantDefinition : ScriptableObject
     [Tooltip("How much Water this plant needs.")]
     [SerializeField]
     protected Moisture moistureNeed;
-    public Moisture MoistureNeed { get { return moistureNeed; } }
+    public Moisture MoistureNeed => moistureNeed;
+
+    /// <summary>
+    /// How fast this plant grows in optimal conditions for it.
+    /// </summary>
+    [Header("Optimal Growth Rate")]
+    [Tooltip("Optimal growth rate for the plant in ideal conditions.")]
+    [SerializeField]
+    protected float growthRate;
+    public float GrowthRate => growthRate;
+
+    /// <summary>
+    /// The maximum growth value for this plant, perhaps in meters, we'll figure it out later.
+    /// </summary>
+    [Header("Maximum Growth")]
+    [Tooltip("Float value for maximum growth this plant can reach.")]
+    [SerializeField]
+    protected float maxGrowth;
+    public float MaxGrowth => maxGrowth;
 
     [Header("Growth Thresholds")]
     [Tooltip("Percentage of growth for each life cycle stage to be achieved.")]

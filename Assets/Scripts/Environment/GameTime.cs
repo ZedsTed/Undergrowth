@@ -157,9 +157,9 @@ public class GameTime : Singleton<GameTime>
             Debug.Log("Good morning!");
         }
 
-        int min = currentMinute % 60;
-        int hrs = currentMinute / 60;
+        //int min = currentMinute % 60;
+        //int hrs = currentMinute / 60;
 
-        Debug.Log("Next minute! " + hrs.ToString() + " : " + min.ToString());
+        //Debug.Log("Next minute! " + hrs.ToString() + " : " + min.ToString());
     }
 }

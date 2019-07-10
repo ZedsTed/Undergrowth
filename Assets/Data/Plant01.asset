@@ -16,3 +16,5 @@ MonoBehaviour:
   plantName: Plant01
   sunlightNeed: 1
   moistureNeed: 1
+  growthRate: 0.2
+  maxGrowth: 6
