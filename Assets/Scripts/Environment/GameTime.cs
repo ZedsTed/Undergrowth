@@ -24,6 +24,7 @@ public class GameTime : Singleton<GameTime>
     /// </summary>
     [SerializeField]
     protected int currentMinute = 720;
+    public int MinuteCount => currentMinute;
 
     /// <summary>
     /// How many minutes are in our in-game days. Always should be 24 * 60.
@@ -36,11 +37,13 @@ public class GameTime : Singleton<GameTime>
     /// What day we're on.
     /// </summary>
     protected int dayCount = 0;
+    public int DayCount => dayCount;
 
     /// <summary>
     /// How many seconds since our last minute was ticked over.
     /// </summary>
     protected float timeSinceLastMinute;
+    public float SecondCount => timeSinceLastMinute;
 
     /// <summary>
     /// Returns the current in-game second count of the current day. 
