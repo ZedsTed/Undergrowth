@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4728455150766253185}
   - component: {fileID: 1404400211245615847}
   - component: {fileID: 874980416846663035}
+  - component: {fileID: 6730030423791670349}
   m_Layer: 0
   m_Name: EditorGrid
   m_TagString: Untagged
@@ -80,6 +81,19 @@ MonoBehaviour:
   timeScale: 1
   gameMinuteToRealSecond: 1
   currentMinute: 720
+--- !u!114 &6730030423791670349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2038038600258421187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18bb45db970fc5d4eb54622b52da53af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sun: {fileID: 0}
 --- !u!1 &3611995007570025524
 GameObject:
   m_ObjectHideFlags: 0

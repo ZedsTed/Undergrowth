@@ -1633,6 +1633,11 @@ PrefabInstance:
       propertyPath: WorldCellPositionDebug
       value: 
       objectReference: {fileID: 983479015}
+    - target: {fileID: 6730030423791670349, guid: 4f059dfc2a1e738419d9a5156fe67072,
+        type: 3}
+      propertyPath: Sun
+      value: 
+      objectReference: {fileID: 1435304247}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f059dfc2a1e738419d9a5156fe67072, type: 3}
 --- !u!1 &1117153452
