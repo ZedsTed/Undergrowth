@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   containerDefinitions:
   - {fileID: 11400000, guid: 5ad4c53668aa38342ab6a6b49172cd7e, type: 2}
+  - {fileID: 11400000, guid: e7153879446ae9e46b3a9fbba9ef92b2, type: 2}
+  - {fileID: 11400000, guid: 4408d189457360a4fb2186ab4037ca86, type: 2}

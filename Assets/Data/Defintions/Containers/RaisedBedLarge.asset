@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c026cb579d92f194987315464ed22f5b, type: 3}
+  m_Name: RaisedBedLarge
+  m_EditorClassIdentifier: 
+  actor: {fileID: 7881954201140342147, guid: 63404a013e9201e42a2fe42039cf4f75, type: 3}
+  containerName: RaisedBedLarge
+  Width: 2
+  Length: 2
+  Depth: 0.5

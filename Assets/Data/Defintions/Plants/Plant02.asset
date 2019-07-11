@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 577723b837a2d6b43b7c4a35b1a8fc74, type: 3}
+  m_Name: Plant02
+  m_EditorClassIdentifier: 
+  actor: {fileID: 4677342252629306890, guid: 9be0c74b60589764d85caa58d3afa79e, type: 3}
+  plantName: Plant02
+  sunlightNeed: 2
+  moistureNeed: 2
+  growthRate: 4
+  maxGrowth: 12
