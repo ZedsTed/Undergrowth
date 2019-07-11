@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 
 
-public class ConstructionEditor : MonoBehaviour
+public class ConstructionEditor : Singleton<ConstructionEditor>
 {
     [SerializeField]
     protected PlantManifest plantManifest;
@@ -22,13 +22,27 @@ public class ConstructionEditor : MonoBehaviour
     public TextMeshProUGUI CellPositionDebug;
     public TextMeshProUGUI WorldCellPositionDebug;
 
-    void Start()
+    public enum ConstructionState
+    {
+        None,
+        Containering,
+        Landscaping,
+        Planting,
+        Watering,
+        Removing
+    }
+
+    [SerializeField]
+    protected ConstructionState mode;
+    public ConstructionState Mode { get { return mode; } protected set { mode = value; } }
+
+    protected void Start()
     {
 
     }
 
 
-    void Update()
+    protected void Update()
     {
 
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
@@ -84,6 +98,13 @@ public class ConstructionEditor : MonoBehaviour
         }
     }
 
+    public void SetConstructionMode(ConstructionState state)
+    {
+        if (mode != state)
+        {
+            mode = state;
+        }
+    }
 
     protected bool IsClickOnRaisedBed(RaycastHit clickhit, out Container bed)
     {
