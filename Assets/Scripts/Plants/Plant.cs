@@ -48,13 +48,7 @@ public class Plant : MonoBehaviour
 
     protected void Update()
     {
-        float normalizedGrowth = GetGrowthPercentage() / 100;
-
-        transform.localScale = new Vector3(normalizedGrowth, normalizedGrowth, normalizedGrowth);
-    }
-    protected void FixedUpdate()
-    {
-        CurrentGrowthRate = (Photosynthesis() / 100) * Definition.GrowthRate;
+        CurrentGrowthRate = (Photosynthesis() / 100) * Definition.GrowthRate * Time.deltaTime;
 
         // We work out how much we'll grow by this tick through
         // checking the energy output and multiplying by its set growth rate.
@@ -62,6 +56,14 @@ public class Plant : MonoBehaviour
         CurrentGrowth = Mathf.Clamp(CurrentGrowth, 0f, Definition.MaxGrowth);
 
         UpdateCurrentLifeCycle();
+
+        float normalizedGrowth = GetGrowthPercentage() / 100;
+
+        transform.localScale = new Vector3(normalizedGrowth, normalizedGrowth, normalizedGrowth);
+    }
+    protected void FixedUpdate()
+    {
+
     }
 
     public void Sow()

@@ -60,7 +60,8 @@ public class GameTime : Singleton<GameTime>
         {
             Normal,
             Fast,
-            SuperFast
+            Faster,
+            Fastest
         }
 
         public TimeWarpState State { get; private set; }
@@ -79,7 +80,9 @@ public class GameTime : Singleton<GameTime>
     {
         new TimeWarp(TimeWarp.TimeWarpState.Normal, 1f),
         new TimeWarp(TimeWarp.TimeWarpState.Fast, 2f),
-        new TimeWarp(TimeWarp.TimeWarpState.SuperFast, 5f)
+        new TimeWarp(TimeWarp.TimeWarpState.Faster, 5f),
+        new TimeWarp(TimeWarp.TimeWarpState.Fastest, 10f)
+
     };
 
     public TimeWarp.TimeWarpState CurrentState { get; protected set; }
@@ -94,7 +97,9 @@ public class GameTime : Singleton<GameTime>
         else if (Input.GetKeyDown(KeyCode.Alpha2))
             SetTimeWarp(TimeWarp.TimeWarpState.Fast);
         else if (Input.GetKeyDown(KeyCode.Alpha3))
-            SetTimeWarp(TimeWarp.TimeWarpState.SuperFast);
+            SetTimeWarp(TimeWarp.TimeWarpState.Faster);
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+            SetTimeWarp(TimeWarp.TimeWarpState.Fastest);
 
         TrackTime();
     }
