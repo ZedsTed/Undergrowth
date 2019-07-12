@@ -165,8 +165,10 @@ public class ToolsManager : MonoBehaviour
     {
         Debug.Log("OnToolMultipleClick");
 
-        
-        lockToggleOn = clickedTool.toggle.isOn;
+        if (deselectedTool == clickedTool)
+            lockToggleOn = false;
+        //lockToggleOn = clickedTool.toggle.isOn ? true : false;
+
         if (!clickedTool.toggle.isOn)
         {
             ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.None);
