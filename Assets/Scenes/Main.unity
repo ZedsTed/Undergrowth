@@ -1717,6 +1717,8 @@ GameObject:
   - component: {fileID: 971840683}
   - component: {fileID: 971840681}
   - component: {fileID: 971840680}
+  - component: {fileID: 971840687}
+  - component: {fileID: 971840686}
   m_Layer: 5
   m_Name: Tools
   m_TagString: Untagged
@@ -1847,11 +1849,73 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b478c1e496b17ec4db11655017d4e519, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ToolsGroup: {fileID: 971840684}
   ContainerToggle: {fileID: 1480338650}
   LandscapingToggle: {fileID: 696990350}
   PlantToggle: {fileID: 958093888}
   WaterToggle: {fileID: 836365252}
   RemoveToggle: {fileID: 1121597493}
+--- !u!114 &971840686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971840678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04493eb0674f4134f8f29940eba1fb8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &971840687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971840678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 2109663825, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 1, g: 0.81568635, b: 0.8117648, a: 1}
+    m_PressedColor: {r: 0.79215693, g: 0.61960787, b: 0.5921569, a: 1}
+    m_SelectedColor: {r: 0.8196079, g: 0.5058824, b: 0.454902, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1771685418}
+  toggleTransition: 1
+  graphic: {fileID: 0}
+  m_Group: {fileID: 0}
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  m_IsOn: 0
 --- !u!1 &983479013
 GameObject:
   m_ObjectHideFlags: 0

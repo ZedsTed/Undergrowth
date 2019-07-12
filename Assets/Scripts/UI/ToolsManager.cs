@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ToolsManager : MonoBehaviour
+public class ToolsManager : MonoBehaviour, ISelectHandler, IDeselectHandler, IPointerClickHandler
 {
+    public ToggleGroup ToolsGroup;
+
     public Toggle ContainerToggle;
     public Toggle LandscapingToggle;
     public Toggle PlantToggle;
@@ -14,6 +17,8 @@ public class ToolsManager : MonoBehaviour
 
     protected void Start()
     {
+        eventSystem = EventSystem.current;
+
         ContainerToggle.onValueChanged.AddListener(delegate
         {
             OnToggleChanged(ContainerToggle);
@@ -44,9 +49,16 @@ public class ToolsManager : MonoBehaviour
     {
         
     }
-    
+
+    EventSystem eventSystem;
+    GameObject selection;
     protected void OnToggleChanged(Toggle toggle)
     {
+        if (eventSystem.currentSelectedGameObject != null && eventSystem.currentSelectedGameObject != selection)
+            selection = eventSystem.currentSelectedGameObject;
+        else if (selection != null && eventSystem.currentSelectedGameObject == null)
+            eventSystem.SetSelectedGameObject(selection);
+
         switch (toggle.name)
         {
             case "Container":
@@ -71,4 +83,45 @@ public class ToolsManager : MonoBehaviour
 
     }
 
+    public void OnSelect(BaseEventData eventData)
+    {
+
+    }
+
+    public void OnDeselect(BaseEventData eventData)
+    {
+       
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventSystem.currentSelectedGameObject != null && eventSystem.currentSelectedGameObject != selection)
+            selection = eventSystem.currentSelectedGameObject;
+        else if (IsToolToggle(eventData.selectedObject) && eventSystem.currentSelectedGameObject == null)
+            eventSystem.SetSelectedGameObject(eventData.selectedObject);
+    }
+
+    /// <summary>
+    /// Checks whether the gameobject passed is one of the tool toggle objects.
+    /// </summary>
+    /// <param name="gameObject"></param>
+    /// <returns></returns>
+    protected bool IsToolToggle(GameObject gameObject)
+    {
+        switch (gameObject.name)
+        {
+            case "Container":
+                return true;
+            case "Landscaping":
+                return true;
+            case "Plant":
+                return true;
+            case "Water":
+                return true;
+            case "Remove":
+                return true;
+            default:
+                return false;
+        }
+    }
 }
