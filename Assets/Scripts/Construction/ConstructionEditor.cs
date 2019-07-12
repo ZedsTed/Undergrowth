@@ -33,6 +33,9 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
     }
 
     [SerializeField]
+    protected ConstructionState previousMode;
+
+    [SerializeField]
     protected ConstructionState mode;
     public ConstructionState Mode { get { return mode; } protected set { mode = value; } }
 
@@ -102,8 +105,14 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
     {
         if (mode != state)
         {
+            previousMode = mode;
             mode = state;
         }
+    }
+
+    public void RevertToPreviousConstructionMode()
+    {
+        mode = previousMode;
     }
 
     protected bool IsClickOnRaisedBed(RaycastHit clickhit, out Container bed)
