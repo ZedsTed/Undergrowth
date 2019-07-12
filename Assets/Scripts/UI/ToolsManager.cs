@@ -95,13 +95,9 @@ public class ToolsManager : MonoBehaviour
         switch (toggle.name)
         {
             case "Container":
-                ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.Containering);
-                break;
             case "Landscaping":
-                ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.Landscaping);
-                break;
             case "Plant":
-                ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.Planting);
+                ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.Placing);
                 break;
             case "Water":
                 ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.Watering);

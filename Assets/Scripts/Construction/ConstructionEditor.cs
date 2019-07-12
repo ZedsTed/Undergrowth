@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-
+using UnityEngine.EventSystems;
 
 public class ConstructionEditor : Singleton<ConstructionEditor>
 {
@@ -25,9 +25,7 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
     public enum ConstructionState
     {
         None,
-        Containering,
-        Landscaping,
-        Planting,
+        Placing, // Handles Containers, Landscaping and Planting.
         Watering,
         Removing
     }
@@ -73,6 +71,9 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
         }
         if (Input.GetMouseButtonDown(0))
         {
+            if (EventSystem.current.IsPointerOverGameObject())
+                return;
+
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit clickHit))
             {
                 Vector3 hitCellPosition = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(clickHit.point));
