@@ -37,20 +37,17 @@ public class ToolsManager : MonoBehaviour
     public Toggle WaterToggle;
     public Toggle RemoveToggle;
 
+    protected GameObject panel;
+
     /// <summary>
     /// Lock Toggle On means if the player selects outside of the toggle ui, we want to lock the deselected toggle on in the Update method.
     /// </summary>
     [SerializeField]
     protected bool lockToggleOn = false;
 
-    /// <summary>
-    /// Lock Toggle Off means if the player selects the same toggle twice, we want to lock the toggle off until they either click it, or another toggle again.
-    /// </summary>
-    [SerializeField]
-    protected bool lockToggleOff = false;
 
     protected void Start()
-    { 
+    {
         ContainerToggle.onValueChanged.AddListener(delegate
         {
             OnToggleChanged(ContainerToggle);
@@ -79,13 +76,13 @@ public class ToolsManager : MonoBehaviour
 
     protected void Update()
     {
-        // If we're locking a toggle ON and the current deselected toggle isn't on already.
-        if (lockToggleOn && !lockToggleOff && deselectedTool != null && !deselectedTool.toggle.isOn)
-            deselectedTool.toggle.SetIsOnWithoutNotify(true);
-        else if (!lockToggleOn && lockToggleOff && clickedTool.toggle.isOn)
-        {   // If we're locking a toggle OFF and the current click toggle is currently on.
-            clickedTool.toggle.isOn = false;
+        if (lockToggleOn && selectedTool != null && !selectedTool.toggle.isOn)
+        {
+            selectedTool.toggle.SetIsOnWithoutNotify(true);
         }
+
+        if (panel != null && !selectedTool.toggle.isOn)
+            DespawnSelectableList();        
     }
 
     protected void OnToggleChanged(Toggle toggle)
@@ -98,15 +95,19 @@ public class ToolsManager : MonoBehaviour
             case "Landscaping":
             case "Plant":
                 ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.Placing);
+                SpawnSelectableList(toggle);
                 break;
             case "Water":
                 ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.Watering);
+                DespawnSelectableList();
                 break;
             case "Remove":
                 ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.Removing);
+                DespawnSelectableList();
                 break;
             default:
                 ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.None);
+                DespawnSelectableList();
                 break;
         }
 
@@ -122,7 +123,6 @@ public class ToolsManager : MonoBehaviour
         clickedTool = tool;
     }
 
-
     public void SetSelectedTool(ToolToggle tool)
     {
         selectedTool = tool;
@@ -137,11 +137,40 @@ public class ToolsManager : MonoBehaviour
     {
         deselectedTool = tool;
 
-        if (selectedTool == deselectedTool)        
+        if (selectedTool == deselectedTool)
             OnNonToolClick();
-    }    
+    }
 
-    
+    public void OnSelectableListClicked()
+    {
+        Debug.Log("OnSelectableListClicked");
+        lockToggleOn = true;
+    }
+
+    /// <summary>
+    /// Spawns our selectable list for selecting the placement objects.
+    /// </summary>
+    /// <param name="tool"></param>
+    protected void SpawnSelectableList(Toggle toggle)
+    {
+        // If we already have a panel spawned, return
+        if (panel != null && panel.transform.parent == toggle.transform)
+            return;
+        else
+            DespawnSelectableList();
+
+
+        if (panel == null)
+            panel = Instantiate(Resources.Load("Prefabs/UI/HorizontalItemList") as GameObject, toggle.transform);
+    }
+
+    public void DespawnSelectableList()
+    {
+        DestroyImmediate(panel);
+        panel = null;
+    }
+
+
     /// <summary>
     /// Called in the case where the player clicks outside of the tool UI.
     /// </summary>
@@ -149,9 +178,8 @@ public class ToolsManager : MonoBehaviour
     {
         Debug.Log("OnNonToolClick");
         lockToggleOn = true;
-        OnToggleChanged(deselectedTool.toggle);
+        OnToggleChanged(selectedTool.toggle);
     }
-
 
     /// <summary>
     /// Called in the case where the player clicks the same tool twice.
@@ -161,19 +189,17 @@ public class ToolsManager : MonoBehaviour
     {
         Debug.Log("OnToolMultipleClick");
 
-        if (deselectedTool == clickedTool)
-            lockToggleOn = false;
-        //lockToggleOn = clickedTool.toggle.isOn ? true : false;
+        if (selectedTool == clickedTool)
+            lockToggleOn = false;        
 
-        if (!clickedTool.toggle.isOn)
+        if (!selectedTool.toggle.isOn)
         {
+            DespawnSelectableList();
             ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.None);
         }
-        //else
-        //{
-        //    ConstructionEditor.Instance.RevertToPreviousConstructionMode();
-        //}
+        
     }
+
 
     /// <summary>
     /// Checks whether the gameobject passed is one of the tool toggle objects.

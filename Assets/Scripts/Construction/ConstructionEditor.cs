@@ -116,6 +116,24 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
         mode = previousMode;
     }
 
+
+    protected void OnConstructionModeChanged()
+    {
+        switch (mode)
+        {
+            case ConstructionState.None:
+                break;
+            case ConstructionState.Placing:
+                break;
+            case ConstructionState.Watering:
+                break;
+            case ConstructionState.Removing:
+                break;
+            default:
+                break;
+        }
+    }
+
     protected bool IsClickOnRaisedBed(RaycastHit clickhit, out Container bed)
     {
         // Check if it's in our parents (should be)

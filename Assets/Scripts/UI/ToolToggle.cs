@@ -32,6 +32,12 @@ public class ToolToggle : MonoBehaviour, ISelectHandler, IDeselectHandler, IPoin
         if (eventData.pointerCurrentRaycast.gameObject == gameObject)
             toolsManager.SetClickedTool(this);
 
+        if (eventData.pointerCurrentRaycast.gameObject.GetComponent<SelectableList>())
+            toolsManager.OnSelectableListClicked();
+
+        if (eventData.pointerCurrentRaycast.gameObject.GetComponentInParent<SelectableList>())
+            toolsManager.OnSelectableListClicked();
+
         Debug.Log("click" + eventData.pointerCurrentRaycast.gameObject);
     }
 
@@ -39,7 +45,9 @@ public class ToolToggle : MonoBehaviour, ISelectHandler, IDeselectHandler, IPoin
     {
         // If we're being deselected, let the tools manager know.
         if (eventData.selectedObject == gameObject)
+        {
             toolsManager.SetDeselectedTool(this);
+        }
 
         Debug.Log("deselect"+eventData.selectedObject.name);
     }

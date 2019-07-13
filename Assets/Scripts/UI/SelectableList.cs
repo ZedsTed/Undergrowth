@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class SelectableList : MonoBehaviour
 {
+    public List<SelectableListItem> Items;
+
     // Start is called before the first frame update
-    void Start()
+    protected void Start()
     {
         
     }
 
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
         
     }
