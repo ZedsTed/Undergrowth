@@ -38,6 +38,8 @@ public class ToolToggle : MonoBehaviour, ISelectHandler, IDeselectHandler, IPoin
         if (eventData.pointerCurrentRaycast.gameObject.GetComponentInParent<SelectableList>())
             toolsManager.OnSelectableListClicked();
 
+        EventSystem.current.SetSelectedGameObject(gameObject, eventData);
+
         Debug.Log("click" + eventData.pointerCurrentRaycast.gameObject);
     }
 

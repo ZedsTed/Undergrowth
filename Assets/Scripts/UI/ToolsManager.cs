@@ -81,8 +81,11 @@ public class ToolsManager : MonoBehaviour
             selectedTool.toggle.SetIsOnWithoutNotify(true);
         }
 
-        if (panel != null && !selectedTool.toggle.isOn)
-            DespawnSelectableList();        
+        if (panel != null && selectedTool != null)
+        {
+            if (!selectedTool.toggle.isOn)
+                DespawnSelectableList();
+        }
     }
 
     protected void OnToggleChanged(Toggle toggle)
