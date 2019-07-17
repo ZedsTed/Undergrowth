@@ -79,6 +79,13 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
                     inputPosition.y = 0f;
                 
                     pickedObject.transform.position = inputPosition;
+
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        hitCellPosition.y = 0f;
+                        pickedObject.transform.position = hitCellPosition;
+                        pickedObject = null;
+                    }
                 }
             }
         }
