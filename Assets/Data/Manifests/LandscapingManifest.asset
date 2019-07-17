@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6aa7c05fa3a0944b9e650a6f925f55d, type: 3}
+  m_Name: LandscapingManifest
+  m_EditorClassIdentifier: 
+  landscapingDefinitions:
+  - {fileID: 11400000, guid: 0ad47b481abb6c048a455be6edc9da2f, type: 2}
+  - {fileID: 11400000, guid: 6237b4184b9174d4f8eb545a51434253, type: 2}
+  - {fileID: 11400000, guid: 24c476ee5142d43408c2b40202e9b389, type: 2}

@@ -8,12 +8,18 @@ using UnityEngine.EventSystems;
 public class ConstructionEditor : Singleton<ConstructionEditor>
 {
     [SerializeField]
+    protected ContainerManifest containerManifest;
+    public ContainerManifest ContainerManifest => containerManifest;
+
+    [SerializeField]
+    protected LandscapingManifest landscapingManifest;
+    public LandscapingManifest LandscapingManifest => landscapingManifest;
+
+    [SerializeField]
     protected PlantManifest plantManifest;
     public PlantManifest PlantManifest => plantManifest;
 
-    [SerializeField]
-    protected ContainerManifest containerManifest;
-    public ContainerManifest ContainerManifest => containerManifest;
+    
 
 
     public Grid EditorGrid;

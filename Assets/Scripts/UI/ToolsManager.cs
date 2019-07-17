@@ -235,7 +235,20 @@ public class ToolsManager : MonoBehaviour
 
     protected void SetupLandscapingSelectableList()
     {
+        if (panel == null)
+            return;
 
+        panel.onItemSelected += ConstructionEditor.Instance.OnItemSelected;
+
+        int containerDefCount = ConstructionEditor.Instance.ContainerManifest.containerDefinitions.Count;
+
+        SelectableListItem item = (Resources.Load("Prefabs/UI/HorizontalListItem") as GameObject).GetComponent<SelectableListItem>();
+
+        for (int i = 0, iC = containerDefCount; i < iC; ++i)
+        {
+            item.id = ConstructionEditor.Instance.LandscapingManifest.GetLandscapingDefinition(i).LandscapingName;
+            panel.AddPrefab(item);
+        }
     }
 
     protected void SetupPlantSelectableList()
