@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
+using System;
 
 public class ConstructionEditor : Singleton<ConstructionEditor>
 {
@@ -19,10 +20,12 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
     protected PlantManifest plantManifest;
     public PlantManifest PlantManifest => plantManifest;
 
-    
+
 
 
     public Grid EditorGrid;
+
+    public ToolsManager ToolsManager;
 
     public TextMeshProUGUI WorldPositionDebug;
     public TextMeshProUGUI CellPositionDebug;
@@ -43,69 +46,89 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
     protected ConstructionState mode;
     public ConstructionState Mode { get { return mode; } protected set { mode = value; } }
 
+    public Action<ConstructionState> onConstructionModeChanged;
+
+    protected GameObject pickedObject;
+    public GameObject PickedObject { get { return pickedObject; } protected set { pickedObject = value; } }
+
+    protected Vector3 inputPosition;
+
     protected void Start()
     {
-
+        inputPosition = new Vector3(0f, 0f, 0f);
     }
 
 
     protected void Update()
     {
-
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
+        if (mode == ConstructionState.Placing)
         {
-            Vector3 pos = hit.point;
-
-            Vector3Int cellPos = EditorGrid.WorldToCell(pos);
-
-            Vector3 worldCellPos = EditorGrid.GetCellCenterWorld(cellPos);
-
-            var posEnd = pos;
-            posEnd.y = posEnd.y + 1f;
-
-            var cellPosEnd = cellPos;
-            cellPosEnd.y = cellPosEnd.y + 1;
-
-            Debug.DrawLine(pos, posEnd, Color.blue);
-            Debug.DrawLine(cellPos, cellPosEnd, Color.red);
-
-            WorldPositionDebug.text = "World Position: " + pos.ToString();
-            CellPositionDebug.text = "Cell Position: " + cellPos.ToString();
-            WorldCellPositionDebug.text = "Center Position: " + worldCellPos.ToString();
-            //Debug.Log("pos: " + pos);
-            //Debug.Log("cellPos: " + cellPos);
-        }
-        if (Input.GetMouseButtonDown(0))
-        {
-            //if (EventSystem.current.IsPointerOverGameObject())
-            //    return;
-
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit clickHit))
+            if (pickedObject != null)
             {
-                Vector3 hitCellPosition = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(clickHit.point));
-
-                if (IsClickOnRaisedBed(clickHit, out Container clickedBed))
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
                 {
-                    hitCellPosition.y = 0f + clickedBed.Definition.Depth;
+                    inputPosition.x = hit.point.x;
+                    inputPosition.z = hit.point.z;
 
-                    PlantDefinition pDef = PlantManifest.GetPlantDefinition("Plant01");
-
-                    Plant p = Instantiate(pDef.Actor, hitCellPosition, Quaternion.identity, clickedBed.transform);
-                    p.PlantBed = clickedBed;
-                    p.Definition = pDef;
-                }
-                else
-                {
-                    ContainerDefinition cDef = ContainerManifest.GetContainerDefinition("RaisedBed");
-                    hitCellPosition.y = 0f;
-                    
-                    Container c = Instantiate(cDef.Actor, hitCellPosition, 
-                        Quaternion.identity, transform);
-
-                    c.Definition = cDef;
+                    pickedObject.transform.position = inputPosition;
                 }
             }
         }
+
+        //if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
+        //{
+        //    Vector3 pos = hit.point;
+
+        //    Vector3Int cellPos = EditorGrid.WorldToCell(pos);
+
+        //    Vector3 worldCellPos = EditorGrid.GetCellCenterWorld(cellPos);
+
+        //    var posEnd = pos;
+        //    posEnd.y = posEnd.y + 1f;
+
+        //    var cellPosEnd = cellPos;
+        //    cellPosEnd.y = cellPosEnd.y + 1;
+
+        //    Debug.DrawLine(pos, posEnd, Color.blue);
+        //    Debug.DrawLine(cellPos, cellPosEnd, Color.red);
+
+        //    WorldPositionDebug.text = "World Position: " + pos.ToString();
+        //    CellPositionDebug.text = "Cell Position: " + cellPos.ToString();
+        //    WorldCellPositionDebug.text = "Center Position: " + worldCellPos.ToString();
+        //    //Debug.Log("pos: " + pos);
+        //    //Debug.Log("cellPos: " + cellPos);
+        //}
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    //if (EventSystem.current.IsPointerOverGameObject())
+        //    //    return;
+
+        //    if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit clickHit))
+        //    {
+        //        Vector3 hitCellPosition = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(clickHit.point));
+
+        //        if (IsClickOnRaisedBed(clickHit, out Container clickedBed))
+        //        {
+        //            hitCellPosition.y = 0f + clickedBed.Definition.Depth;
+
+        //            PlantDefinition pDef = PlantManifest.GetPlantDefinition("Plant01");
+
+        //            Plant p = Instantiate(pDef.Actor, hitCellPosition, Quaternion.identity, clickedBed.transform);
+        //            p.PlantBed = clickedBed;
+        //            p.Definition = pDef;
+        //        }
+        //        else
+        //        {
+        //            ContainerDefinition cDef = ContainerManifest.GetContainerDefinition("RaisedBed");
+        //            hitCellPosition.y = 0f;
+
+        //            Container c = Instantiate(cDef.Actor, hitCellPosition,
+        //                Quaternion.identity, transform);
+
+        //            c.Definition = cDef;
+        //        }
+        //    }
+        //}
     }
 
     public void SetConstructionMode(ConstructionState state)
@@ -143,7 +166,71 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
     public void OnItemSelected(SelectableListItem item, bool selected)
     {
         Debug.Log("CEselected " + item.id + " " + selected);
+
+        if (pickedObject != null)
+        {
+            Destroy(pickedObject);
+            pickedObject = null;
+        }
+
+        switch (ToolsManager.SelectedTool.name)
+        {
+            case "Container":
+                SpawnContainer(item.id);
+                break;
+            case "Landscaping":
+                SpawnLandscaping(item.id);
+                break;
+            case "Plant":
+                SpawnPlant(item.id);
+                break;
+            default:
+                break;
+        }
     }
+
+    protected void SpawnContainer(string name)
+    {
+        ContainerDefinition cDef = ContainerManifest.GetContainerDefinition(name);
+
+        Container c = Instantiate(cDef.Actor, inputPosition,
+            Quaternion.identity, transform);
+
+        c.Definition = cDef;
+
+        pickedObject = c.gameObject;
+        pickedObject.transform.position = inputPosition;
+        
+    }
+
+    protected void SpawnLandscaping(string name)
+    {
+        //ContainerDefinition cDef = ContainerManifest.GetContainerDefinition(name);
+
+        //Container c = Instantiate(cDef.Actor, inputPosition,
+        //    Quaternion.identity, transform);
+
+        //c.Definition = cDef;
+
+        //pickedObject = c.gameObject;
+        //pickedObject.transform.position = inputPosition;
+    }
+
+    protected void SpawnPlant(string name)
+    {
+        PlantDefinition pDef = PlantManifest.GetPlantDefinition(name);
+
+        Plant p = Instantiate(pDef.Actor, inputPosition,
+            Quaternion.identity, transform);
+
+        p.Definition = pDef;
+        p.Picked = true;
+
+        pickedObject = p.gameObject;
+        pickedObject.transform.position = inputPosition;
+        pickedObject.transform.localScale = new Vector3(1f, 1f, 1f);
+    }
+
 
     protected bool IsClickOnRaisedBed(RaycastHit clickhit, out Container bed)
     {

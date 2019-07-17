@@ -22,6 +22,8 @@ public class Plant : MonoBehaviour
     protected PlantDefinition definition;
     public PlantDefinition Definition { get { return definition; } set { definition = value; } }
 
+    public bool Picked { get; set; }
+
     /// <summary>
     /// Eventually we'll need to raycast from the sun to the plant to check the actual sunlight level, but this will do for now.
     /// </summary>
@@ -48,6 +50,9 @@ public class Plant : MonoBehaviour
 
     protected void Update()
     {
+        if (Picked)
+            return;
+
         CurrentGrowthRate = (Photosynthesis() / 100) * Definition.GrowthRate * Time.deltaTime;
 
         // We work out how much we'll grow by this tick through

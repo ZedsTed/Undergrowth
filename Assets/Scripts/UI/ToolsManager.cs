@@ -22,6 +22,7 @@ public class ToolsManager : MonoBehaviour
     /// </summary>
     [SerializeField]
     protected ToolToggle selectedTool;
+    public ToolToggle SelectedTool => selectedTool;
 
     /// <summary>
     /// Deselected tool is the most recently deselected toggle.
@@ -240,11 +241,11 @@ public class ToolsManager : MonoBehaviour
 
         panel.onItemSelected += ConstructionEditor.Instance.OnItemSelected;
 
-        int containerDefCount = ConstructionEditor.Instance.ContainerManifest.containerDefinitions.Count;
+        int landscapingDefCount = ConstructionEditor.Instance.LandscapingManifest.landscapingDefinitions.Count;
 
         SelectableListItem item = (Resources.Load("Prefabs/UI/HorizontalListItem") as GameObject).GetComponent<SelectableListItem>();
 
-        for (int i = 0, iC = containerDefCount; i < iC; ++i)
+        for (int i = 0, iC = landscapingDefCount; i < iC; ++i)
         {
             item.id = ConstructionEditor.Instance.LandscapingManifest.GetLandscapingDefinition(i).LandscapingName;
             panel.AddPrefab(item);
