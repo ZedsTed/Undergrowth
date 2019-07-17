@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c13d8d28a4d3b304898e1b63b67a9b04, type: 3}
   m_Name: SandySoil
   m_EditorClassIdentifier: 
-  actor: {fileID: 0}
+  actor: {fileID: 5351288989116999982, guid: f8c58ff99313cd5478137a736266127d, type: 3}
   landscapingName: Sandy Soil

@@ -220,15 +220,15 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
 
     protected void SpawnLandscaping(string name)
     {
-        //ContainerDefinition cDef = ContainerManifest.GetContainerDefinition(name);
+        LandscapingDefinition lDef = LandscapingManifest.GetLandscapingDefinition(name);
 
-        //Container c = Instantiate(cDef.Actor, inputPosition,
-        //    Quaternion.identity, transform);
+        Landscaping l = Instantiate(lDef.Actor, inputPosition,
+            Quaternion.identity, transform);
 
-        //c.Definition = cDef;
+        l.Definition = lDef;
 
-        //pickedObject = c.gameObject;
-        //pickedObject.transform.position = inputPosition;
+        pickedObject = l.gameObject;
+        pickedObject.transform.position = inputPosition;
     }
 
     protected void SpawnPlant(string name)

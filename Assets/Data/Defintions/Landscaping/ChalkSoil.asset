@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c13d8d28a4d3b304898e1b63b67a9b04, type: 3}
   m_Name: ChalkSoil
   m_EditorClassIdentifier: 
-  actor: {fileID: 0}
+  actor: {fileID: 7484530197952075313, guid: 33757b72fefffb3458499bc24be77f45, type: 3}
   landscapingName: Chalk Soil
