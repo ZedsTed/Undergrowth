@@ -52,10 +52,15 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
     public GameObject PickedObject { get { return pickedObject; } protected set { pickedObject = value; } }
 
     protected Vector3 inputPosition;
+    protected Vector3 previousInputPosition;
+
+    public float lerpFactor1;
+    public float lerpFactor2;
 
     protected void Start()
     {
         inputPosition = new Vector3(0f, 0f, 0f);
+        previousInputPosition = new Vector3(0f, 0f, 0f);
     }
 
 
@@ -67,9 +72,12 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
             {
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
                 {
-                    inputPosition.x = hit.point.x;
-                    inputPosition.z = hit.point.z;
-
+                    Vector3 hitCellPosition = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(hit.point));
+                   
+                    previousInputPosition = Vector3.Lerp(previousInputPosition, (hitCellPosition - inputPosition) * 0.6f, 33f * Time.deltaTime);
+                    inputPosition += previousInputPosition;
+                    inputPosition.y = 0f;
+                
                     pickedObject.transform.position = inputPosition;
                 }
             }
