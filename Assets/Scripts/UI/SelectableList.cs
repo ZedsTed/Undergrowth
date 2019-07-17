@@ -8,7 +8,9 @@ public class SelectableList : MonoBehaviour
 {
     public List<SelectableListItem> Items { get; } = new List<SelectableListItem>();
 
-    public List<SelectableListItem> Selection { get; } = new List<SelectableListItem>();
+    [SerializeField]
+    protected List<SelectableListItem> selection = new List<SelectableListItem>();
+    public List<SelectableListItem> Selection { get { return selection; } set { selection = value; } }
 
     /// <summary>
     /// Invoked when an item is added to our selectable list.
@@ -48,9 +50,17 @@ public class SelectableList : MonoBehaviour
     /// </summary>
     public Action<SelectableListItem, bool> onItemSelected;
 
-    protected bool canSelectMultiple;
-    protected bool canSelectNone;
-    protected bool canSelectAny;
+    [SerializeField]
+    protected bool canSelectMultiple = false;
+    public bool CanSelectMultiple => canSelectMultiple;
+
+    [SerializeField]
+    protected bool canSelectNone = true;
+    public bool CanSelectNone => canSelectNone;
+
+    [SerializeField]
+    protected bool canSelectAny = true;
+    public bool CanSelectAny => canSelectAny;
 
 
     public bool IsSelecting { get; protected set; }
@@ -81,7 +91,7 @@ public class SelectableList : MonoBehaviour
             Selection.Add(item);
 
             if (!silent && onItemSelected != null)
-                onItemSelected(item, true);
+                onItemSelected.Invoke(item, true);
 
             IsSelecting = false;
 
@@ -147,7 +157,7 @@ public class SelectableList : MonoBehaviour
         {
             SelectableListItem selected = Selection[i];
 
-            if (selected = null)
+            if (selected == null)
             {
                 Selection.RemoveAt(i);
             }
@@ -404,5 +414,14 @@ public class SelectableList : MonoBehaviour
         onItemPointerExit?.Invoke(item, eventData);
     }
 
+    private void OnItemSelected(SelectableListItem listItem, bool selected)
+    {
+        SelectableListItem item = listItem as SelectableListItem;
+
+        if (item == null)
+            return;
+
+        onItemSelected?.Invoke(item, selected);
+    }
     #endregion
 }

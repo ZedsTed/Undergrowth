@@ -134,6 +134,11 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
         }
     }
 
+    public void OnItemSelected(SelectableListItem item, bool selected)
+    {
+        Debug.Log("CEselected " + item.id + " " + selected);
+    }
+
     protected bool IsClickOnRaisedBed(RaycastHit clickhit, out Container bed)
     {
         // Check if it's in our parents (should be)

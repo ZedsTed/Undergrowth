@@ -200,13 +200,13 @@ public class ToolsManager : MonoBehaviour
             switch (selectedTool.name)
             {
                 case "Container":
-                    PopulateContainerSelectableList();
+                    SetupContainerSelectableList();
                     break;
                 case "Landscaping":
-                    PopulateLandscapingSelectableList();
+                    SetupLandscapingSelectableList();
                     break;
                 case "Plant":
-                    PopulatePlantSelectableList();
+                    SetupPlantSelectableList();
                     break;
                 default:
                     Debug.LogWarning("[ToolsManager] Spawned a selectable list for a tool that doesn't need one.");
@@ -215,10 +215,12 @@ public class ToolsManager : MonoBehaviour
         }
     }
 
-    protected void PopulateContainerSelectableList()
+    protected void SetupContainerSelectableList()
     {
         if (panel == null)
             return;
+
+        panel.onItemSelected += ConstructionEditor.Instance.OnItemSelected;
 
         int containerDefCount = ConstructionEditor.Instance.ContainerManifest.containerDefinitions.Count;
 
@@ -231,17 +233,19 @@ public class ToolsManager : MonoBehaviour
         }
     }
 
-    protected void PopulateLandscapingSelectableList()
+    protected void SetupLandscapingSelectableList()
     {
 
     }
 
-    protected void PopulatePlantSelectableList()
+    protected void SetupPlantSelectableList()
     {
         if (panel == null)
             return;
 
         int plantDefCount = ConstructionEditor.Instance.PlantManifest.plantDefinitions.Count;
+
+        panel.onItemSelected += ConstructionEditor.Instance.OnItemSelected;
 
         SelectableListItem item = (Resources.Load("Prefabs/UI/HorizontalListItem") as GameObject).GetComponent<SelectableListItem>();
 
@@ -254,6 +258,9 @@ public class ToolsManager : MonoBehaviour
 
     public void DespawnSelectableList()
     {
+        if (panel == null)
+            return; 
+
         Debug.Log("Destroying list");
 
         DestroyImmediate(panel.gameObject);

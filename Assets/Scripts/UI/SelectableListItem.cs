@@ -36,7 +36,7 @@ public class SelectableListItem : Selectable, IPointerClickHandler, IPointerDown
     public Action<SelectableListItem, PointerEventData> onPointerExit;
 
 
-    public Action<bool> onSelected;
+    public Action<SelectableListItem, bool> onSelected;
 
     public Action<bool> onEnabled;
 
@@ -44,7 +44,7 @@ public class SelectableListItem : Selectable, IPointerClickHandler, IPointerDown
 
     protected bool isSelectable = true;
 
-
+    [SerializeField]
     protected bool isSelected = false;
     public bool IsSelected => isSelected;
 
@@ -77,7 +77,7 @@ public class SelectableListItem : Selectable, IPointerClickHandler, IPointerDown
             SetSelected(true);
             isSelected = true;
 
-            onSelected?.Invoke(true);
+            onSelected?.Invoke(this, true);
 
             EventSystem.current.SetSelectedGameObject(gameObject);
 
@@ -101,9 +101,11 @@ public class SelectableListItem : Selectable, IPointerClickHandler, IPointerDown
         if (CanDeselectItem())
         {
             SetSelected(false);
-            isSelectable = false;
+            isSelected = false;
 
-            onSelected?.Invoke(false);
+            onSelected?.Invoke(this, false);
+
+            DoStateTransition(SelectionState.Normal, false);
 
             return true;
         }
@@ -183,7 +185,10 @@ public class SelectableListItem : Selectable, IPointerClickHandler, IPointerDown
 
     protected void SetSelected(bool selected)
     {
-        // do some selection shit.
+        if (IsSelected)
+            DoStateTransition(SelectionState.Selected, true);
+        else
+            DoStateTransition(SelectionState.Normal, true);
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -253,6 +258,7 @@ public class SelectableListItem : Selectable, IPointerClickHandler, IPointerDown
 
         onPointerExit?.Invoke(this, eventData);
 
-        DoStateTransition(SelectionState.Normal, false);
+        if (!IsSelected)
+            DoStateTransition(SelectionState.Normal, false);
     }
 }
