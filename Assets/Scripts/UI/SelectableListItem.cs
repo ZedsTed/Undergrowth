@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -8,6 +9,8 @@ using UnityEngine.UI;
 public class SelectableListItem : Selectable, IPointerClickHandler, IPointerDownHandler
 {
     public string id = string.Empty;
+
+    public TextMeshProUGUI text;
 
     /// <summary>
     /// Fired whenever this item is clicked by the player.
@@ -57,6 +60,8 @@ public class SelectableListItem : Selectable, IPointerClickHandler, IPointerDown
     protected override void Start()
     {
         base.Start();
+
+        text.text = id;
     }
 
     public void SetSelectable(bool isSelectable)

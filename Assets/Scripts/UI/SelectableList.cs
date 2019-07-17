@@ -227,7 +227,7 @@ public class SelectableList : MonoBehaviour
         item.list = Items;
 
         if (setParent)        
-            item.transform.SetParent(transform.parent, false);     
+            item.transform.SetParent(transform, false);     
 
         if (index <= 0)        
             Items.Insert(0, item);

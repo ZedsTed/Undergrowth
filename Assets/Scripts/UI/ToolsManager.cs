@@ -37,7 +37,7 @@ public class ToolsManager : MonoBehaviour
     public Toggle WaterToggle;
     public Toggle RemoveToggle;
 
-    protected GameObject panel;
+    protected SelectableList panel;
 
     /// <summary>
     /// Lock Toggle On means if the player selects outside of the toggle ui, we want to lock the deselected toggle on in the Update method.
@@ -48,30 +48,30 @@ public class ToolsManager : MonoBehaviour
 
     protected void Start()
     {
-        ContainerToggle.onValueChanged.AddListener(delegate
-        {
-            OnToggleChanged(ContainerToggle);
-        });
+        //ContainerToggle.onValueChanged.AddListener(delegate
+        //{
+        //    OnToggleChanged(ContainerToggle);
+        //});
 
-        LandscapingToggle.onValueChanged.AddListener(delegate
-        {
-            OnToggleChanged(LandscapingToggle);
-        });
+        //LandscapingToggle.onValueChanged.AddListener(delegate
+        //{
+        //    OnToggleChanged(LandscapingToggle);
+        //});
 
-        PlantToggle.onValueChanged.AddListener(delegate
-        {
-            OnToggleChanged(PlantToggle);
-        });
+        //PlantToggle.onValueChanged.AddListener(delegate
+        //{
+        //    OnToggleChanged(PlantToggle);
+        //});
 
-        WaterToggle.onValueChanged.AddListener(delegate
-        {
-            OnToggleChanged(WaterToggle);
-        });
+        //WaterToggle.onValueChanged.AddListener(delegate
+        //{
+        //    OnToggleChanged(WaterToggle);
+        //});
 
-        RemoveToggle.onValueChanged.AddListener(delegate
-        {
-            OnToggleChanged(RemoveToggle);
-        });
+        //RemoveToggle.onValueChanged.AddListener(delegate
+        //{
+        //    OnToggleChanged(RemoveToggle);
+        //});
     }
 
     protected void Update()
@@ -85,13 +85,42 @@ public class ToolsManager : MonoBehaviour
         {
             if (!selectedTool.toggle.isOn)
                 DespawnSelectableList();
+
+            if (!ToolsGroup.AnyTogglesOn())
+                DespawnSelectableList();
         }
     }
 
-    protected void OnToggleChanged(Toggle toggle)
-    {
-        Debug.Log("OnToggleChanged");
+    //protected void OnToggleChanged(Toggle toggle)
+    //{
+    //    Debug.Log("OnToggleChanged");
 
+    //    switch (toggle.name)
+    //    {
+    //        case "Container":
+    //        case "Landscaping":
+    //        case "Plant":
+    //            ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.Placing);
+    //            SpawnSelectableList(toggle);
+    //            break;
+    //        case "Water":
+    //            ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.Watering);
+    //            DespawnSelectableList();
+    //            break;
+    //        case "Remove":
+    //            ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.Removing);
+    //            DespawnSelectableList();
+    //            break;
+    //        default:
+    //            ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.None);
+    //            DespawnSelectableList();
+    //            break;
+    //    }
+
+   // }
+
+    protected void SetContructionEditorMode(Toggle toggle)
+    {
         switch (toggle.name)
         {
             case "Container":
@@ -113,7 +142,6 @@ public class ToolsManager : MonoBehaviour
                 DespawnSelectableList();
                 break;
         }
-
     }
 
     public void SetClickedTool(ToolToggle tool)
@@ -134,6 +162,8 @@ public class ToolsManager : MonoBehaviour
         {
             lockToggleOn = false;
         }
+
+        SetContructionEditorMode(tool.toggle);
     }
 
     public void SetDeselectedTool(ToolToggle tool)
@@ -156,20 +186,77 @@ public class ToolsManager : MonoBehaviour
     /// <param name="tool"></param>
     protected void SpawnSelectableList(Toggle toggle)
     {
-        // If we already have a panel spawned, return
+        // If we already have a panel spawned and it's parented to the selected toggle, return
         if (panel != null && panel.transform.parent == toggle.transform)
             return;
-        else
+        else if (panel != null) // otherwise, destroy it and we'll spawn our new one.
             DespawnSelectableList();
 
 
         if (panel == null)
-            panel = Instantiate(Resources.Load("Prefabs/UI/HorizontalItemList") as GameObject, toggle.transform);
+        {
+            panel = Instantiate(Resources.Load("Prefabs/UI/HorizontalList") as GameObject, toggle.transform).GetComponent<SelectableList>();
+
+            switch (selectedTool.name)
+            {
+                case "Container":
+                    PopulateContainerSelectableList();
+                    break;
+                case "Landscaping":
+                    PopulateLandscapingSelectableList();
+                    break;
+                case "Plant":
+                    PopulatePlantSelectableList();
+                    break;
+                default:
+                    Debug.LogWarning("[ToolsManager] Spawned a selectable list for a tool that doesn't need one.");
+                    break;
+            }
+        }
+    }
+
+    protected void PopulateContainerSelectableList()
+    {
+        if (panel == null)
+            return;
+
+        int containerDefCount = ConstructionEditor.Instance.ContainerManifest.containerDefinitions.Count;
+
+        SelectableListItem item = (Resources.Load("Prefabs/UI/HorizontalListItem") as GameObject).GetComponent<SelectableListItem>();
+
+        for (int i = 0, iC = containerDefCount; i < iC; ++i)
+        {
+            item.id = ConstructionEditor.Instance.ContainerManifest.GetContainerDefinition(i).ContainerName;
+            panel.AddPrefab(item);
+        }
+    }
+
+    protected void PopulateLandscapingSelectableList()
+    {
+
+    }
+
+    protected void PopulatePlantSelectableList()
+    {
+        if (panel == null)
+            return;
+
+        int plantDefCount = ConstructionEditor.Instance.PlantManifest.plantDefinitions.Count;
+
+        SelectableListItem item = (Resources.Load("Prefabs/UI/HorizontalListItem") as GameObject).GetComponent<SelectableListItem>();
+
+        for (int i = 0, iC = plantDefCount; i < iC; ++i)
+        {
+            item.id = ConstructionEditor.Instance.PlantManifest.GetPlantDefinition(i).PlantName;
+            panel.AddPrefab(item);
+        }       
     }
 
     public void DespawnSelectableList()
     {
-        DestroyImmediate(panel);
+        Debug.Log("Destroying list");
+
+        DestroyImmediate(panel.gameObject);
         panel = null;
     }
 
@@ -181,7 +268,7 @@ public class ToolsManager : MonoBehaviour
     {
         Debug.Log("OnNonToolClick");
         lockToggleOn = true;
-        OnToggleChanged(selectedTool.toggle);
+        SetContructionEditorMode(selectedTool.toggle);
     }
 
     /// <summary>
@@ -193,14 +280,14 @@ public class ToolsManager : MonoBehaviour
         Debug.Log("OnToolMultipleClick");
 
         if (selectedTool == clickedTool)
-            lockToggleOn = false;        
+            lockToggleOn = false;
 
         if (!selectedTool.toggle.isOn)
         {
             DespawnSelectableList();
             ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.None);
         }
-        
+
     }
 
 

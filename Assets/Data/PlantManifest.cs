@@ -9,11 +9,19 @@ public class PlantManifest : ScriptableObject
 
     public PlantDefinition GetPlantDefinition(string name)
     {
-        for (int i = plantDefinitions.Count; i--> 0;)
+        for (int i = plantDefinitions.Count; i-- > 0;)
         {
             if (plantDefinitions[i].PlantName == name)
                 return plantDefinitions[i];
         }
+
+        return null;
+    }
+
+    public PlantDefinition GetPlantDefinition(int index)
+    {
+        if (index >= 0 && index < plantDefinitions.Count)
+            return plantDefinitions[index];
 
         return null;
     }
