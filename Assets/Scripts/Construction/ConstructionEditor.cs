@@ -214,8 +214,7 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
         c.Definition = cDef;
 
         pickedObject = c.gameObject;
-        pickedObject.transform.position = inputPosition;
-        
+        pickedObject.transform.position = inputPosition;     
     }
 
     protected void SpawnLandscaping(string name)
@@ -246,6 +245,7 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
         pickedObject.transform.localScale = new Vector3(1f, 1f, 1f);
     }
 
+   
 
     protected bool IsClickOnRaisedBed(RaycastHit clickhit, out Container bed)
     {
