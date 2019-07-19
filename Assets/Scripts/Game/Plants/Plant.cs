@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Plant : MonoBehaviour
+public class Plant : Actor
 {
     protected Container plantBed;
     public Container PlantBed { get { return plantBed; } set { plantBed = value; } }
@@ -22,7 +22,7 @@ public class Plant : MonoBehaviour
     protected PlantDefinition definition;
     public PlantDefinition Definition { get { return definition; } set { definition = value; } }
 
-    public bool Picked { get; set; }
+    
 
     /// <summary>
     /// Eventually we'll need to raycast from the sun to the plant to check the actual sunlight level, but this will do for now.

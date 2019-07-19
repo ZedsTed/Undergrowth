@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Container : MonoBehaviour
+public class Landscaping : Actor
 {
-    protected ContainerDefinition definition;
-    public ContainerDefinition Definition { get { return definition; } set { definition = value; } }
+    protected LandscapingDefinition definition;
+    public LandscapingDefinition Definition { get { return definition; } set { definition = value; } }
 
     // Eventually this will be split into multiple variables such as Nitrogen, Potash etc.
     [Tooltip("Soil Fertility of the bed")]
@@ -30,23 +30,5 @@ public class Container : MonoBehaviour
     void Update()
     {
         
-    }
-
-    public bool OnTryPlant(Plant plant)
-    {
-        if (SoilUsage >= 1)
-            return false;
-
-        OnPlant(plant);
-
-        return true;
-    }
-
-    /// <summary>
-    /// Called when a plant is successfully planted in the bed.
-    /// </summary>
-    public void OnPlant(Plant plant)
-    {
-        plant.Sow();
-    }
+    }   
 }
