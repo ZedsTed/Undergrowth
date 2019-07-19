@@ -194,8 +194,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f99e306cccfbaa849a4ee4ff9f1b483e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PostOutline: {fileID: 4800000, guid: 2e3177f9338de5b40a7623f9639e71b9, type: 3}
   DrawSimple: {fileID: 4800000, guid: 3f19cb0cdc5f02842b8d5991dadb45ee, type: 3}
+  postMaterial: {fileID: 2100000, guid: 49768f48fa6cfbd4a84db326b33b967d, type: 2}
 --- !u!1 &2238868981776452441
 GameObject:
   m_ObjectHideFlags: 0

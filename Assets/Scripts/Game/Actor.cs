@@ -15,6 +15,18 @@ public class Actor : MonoBehaviour
     public virtual bool CanBeDeleted()
     { return false; }
 
-
-
+    /// <summary>
+    /// Sets the layer for the gameobject and all its children to be illuminated.
+    /// </summary>
+    /// <param name="highlight">True to highlight it, false to revert to default layer.</param>
+    public virtual void SetLayerForHighlight(bool highlight)
+    {
+        for (int i = gameObject.transform.childCount; i-- > 0;)
+        {
+            if (highlight)
+                gameObject.transform.GetChild(i).gameObject.layer = LayerMask.NameToLayer("PostProcessOutline");
+            else
+                gameObject.transform.GetChild(i).gameObject.layer = LayerMask.NameToLayer("Default");
+        }
+    }
 }

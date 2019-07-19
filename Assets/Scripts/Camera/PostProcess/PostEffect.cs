@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class PostEffect : MonoBehaviour
 {
-    Camera attachedCamera;
-    public Shader PostOutline;
+    Camera attachedCamera;   
     public Shader DrawSimple;
     Camera tempCam;
-    Material postMaterial;
+    public Material postMaterial;
 
     // Start is called before the first frame update
     protected void Start()
@@ -17,8 +16,6 @@ public class PostEffect : MonoBehaviour
         tempCam = new GameObject("PostEffectCamera").AddComponent<Camera>();
         tempCam.transform.parent = transform;
         tempCam.enabled = false;
-
-        postMaterial = new Material(PostOutline);
     }
 
     protected void OnRenderImage(RenderTexture source, RenderTexture destination)

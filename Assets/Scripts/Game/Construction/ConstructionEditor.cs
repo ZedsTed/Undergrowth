@@ -48,8 +48,8 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
 
     public Action<ConstructionState> onConstructionModeChanged;
 
-    protected GameObject pickedObject;
-    public GameObject PickedObject { get { return pickedObject; } protected set { pickedObject = value; } }
+    protected Actor pickedActor;
+    public Actor PickedObject { get { return pickedActor; } protected set { pickedActor = value; } }
 
     protected Vector3 inputPosition;
     protected Vector3 previousInputPosition;
@@ -68,82 +68,32 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
     {
         if (mode == ConstructionState.Placing)
         {
-            if (pickedObject != null)
+            if (pickedActor != null)
             {
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
                 {
                     Vector3 hitCellPosition = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(hit.point));
-                   
+
                     previousInputPosition = Vector3.Lerp(previousInputPosition, (hitCellPosition - inputPosition) * 0.6f, 33f * Time.deltaTime);
                     inputPosition += previousInputPosition;
                     inputPosition.y = 0f;
-                
-                    pickedObject.transform.position = inputPosition;
+
+                    pickedActor.transform.position = inputPosition;
+
+
+
 
                     if (Input.GetMouseButtonDown(0))
                     {
                         hitCellPosition.y = 0f;
-                        pickedObject.transform.position = hitCellPosition;
-                        pickedObject = null;
+                        pickedActor.transform.position = hitCellPosition;
+                        pickedActor.SetLayerForHighlight(false);
+                        pickedActor.Picked = false;
+                        pickedActor = null;
                     }
                 }
             }
         }
-
-        //if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
-        //{
-        //    Vector3 pos = hit.point;
-
-        //    Vector3Int cellPos = EditorGrid.WorldToCell(pos);
-
-        //    Vector3 worldCellPos = EditorGrid.GetCellCenterWorld(cellPos);
-
-        //    var posEnd = pos;
-        //    posEnd.y = posEnd.y + 1f;
-
-        //    var cellPosEnd = cellPos;
-        //    cellPosEnd.y = cellPosEnd.y + 1;
-
-        //    Debug.DrawLine(pos, posEnd, Color.blue);
-        //    Debug.DrawLine(cellPos, cellPosEnd, Color.red);
-
-        //    WorldPositionDebug.text = "World Position: " + pos.ToString();
-        //    CellPositionDebug.text = "Cell Position: " + cellPos.ToString();
-        //    WorldCellPositionDebug.text = "Center Position: " + worldCellPos.ToString();
-        //    //Debug.Log("pos: " + pos);
-        //    //Debug.Log("cellPos: " + cellPos);
-        //}
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    //if (EventSystem.current.IsPointerOverGameObject())
-        //    //    return;
-
-        //    if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit clickHit))
-        //    {
-        //        Vector3 hitCellPosition = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(clickHit.point));
-
-        //        if (IsClickOnRaisedBed(clickHit, out Container clickedBed))
-        //        {
-        //            hitCellPosition.y = 0f + clickedBed.Definition.Depth;
-
-        //            PlantDefinition pDef = PlantManifest.GetPlantDefinition("Plant01");
-
-        //            Plant p = Instantiate(pDef.Actor, hitCellPosition, Quaternion.identity, clickedBed.transform);
-        //            p.PlantBed = clickedBed;
-        //            p.Definition = pDef;
-        //        }
-        //        else
-        //        {
-        //            ContainerDefinition cDef = ContainerManifest.GetContainerDefinition("RaisedBed");
-        //            hitCellPosition.y = 0f;
-
-        //            Container c = Instantiate(cDef.Actor, hitCellPosition,
-        //                Quaternion.identity, transform);
-
-        //            c.Definition = cDef;
-        //        }
-        //    }
-        //}
     }
 
     public void SetConstructionMode(ConstructionState state)
@@ -182,10 +132,10 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
     {
         Debug.Log("CEselected " + item.id + " " + selected);
 
-        if (pickedObject != null)
+        if (pickedActor != null)
         {
-            Destroy(pickedObject);
-            pickedObject = null;
+            Destroy(pickedActor);
+            pickedActor = null;
         }
 
         switch (ToolsManager.SelectedTool.name)
@@ -202,6 +152,9 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
             default:
                 break;
         }
+
+        if (pickedActor != null && pickedActor.gameObject.layer != LayerMask.NameToLayer("PostProcessOutline"))
+            pickedActor.SetLayerForHighlight(true);
     }
 
     protected void SpawnContainer(string name)
@@ -213,8 +166,8 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
 
         c.Definition = cDef;
 
-        pickedObject = c.gameObject;
-        pickedObject.transform.position = inputPosition;     
+        pickedActor = c;
+        pickedActor.transform.position = inputPosition;
     }
 
     protected void SpawnLandscaping(string name)
@@ -225,9 +178,10 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
             Quaternion.identity, transform);
 
         l.Definition = lDef;
+        l.Picked = true;
 
-        pickedObject = l.gameObject;
-        pickedObject.transform.position = inputPosition;
+        pickedActor = l;
+        pickedActor.transform.position = inputPosition;
     }
 
     protected void SpawnPlant(string name)
@@ -240,12 +194,12 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
         p.Definition = pDef;
         p.Picked = true;
 
-        pickedObject = p.gameObject;
-        pickedObject.transform.position = inputPosition;
-        pickedObject.transform.localScale = new Vector3(1f, 1f, 1f);
+        pickedActor = p;
+        pickedActor.transform.position = inputPosition;
+        pickedActor.transform.localScale = new Vector3(1f, 1f, 1f);
     }
 
-   
+
 
     protected bool IsClickOnRaisedBed(RaycastHit clickhit, out Container bed)
     {
