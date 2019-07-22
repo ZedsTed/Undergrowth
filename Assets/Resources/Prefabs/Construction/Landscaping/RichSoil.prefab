@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1399753413033378121}
   m_Layer: 0
   m_Name: Mesh
-  m_TagString: Untagged
+  m_TagString: Landscaping
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 5861974767293949657}
   m_Layer: 0
   m_Name: RichSoil
-  m_TagString: Untagged
+  m_TagString: Landscaping
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -151,7 +151,7 @@ GameObject:
   - component: {fileID: 1939639067068940608}
   m_Layer: 10
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: Landscaping
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

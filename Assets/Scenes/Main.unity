@@ -2459,14 +2459,9 @@ PrefabInstance:
       objectReference: {fileID: 983479015}
     - target: {fileID: 1404400211245615847, guid: 4f059dfc2a1e738419d9a5156fe67072,
         type: 3}
-      propertyPath: lerpFactor1
-      value: 0.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 1404400211245615847, guid: 4f059dfc2a1e738419d9a5156fe67072,
-        type: 3}
-      propertyPath: lerpFactor2
-      value: 0.55
-      objectReference: {fileID: 0}
+      propertyPath: postEffect
+      value: 
+      objectReference: {fileID: 1504997037}
     - target: {fileID: 6730030423791670349, guid: 4f059dfc2a1e738419d9a5156fe67072,
         type: 3}
       propertyPath: Sun
@@ -3399,6 +3394,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toolsManager: {fileID: 0}
   toggle: {fileID: 1480338650}
+--- !u!114 &1504997037 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7479751119808953249, guid: 86f12815767c12f47b156091597f2d64,
+    type: 3}
+  m_PrefabInstance: {fileID: 9806426}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f99e306cccfbaa849a4ee4ff9f1b483e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1556379419
 GameObject:
   m_ObjectHideFlags: 0

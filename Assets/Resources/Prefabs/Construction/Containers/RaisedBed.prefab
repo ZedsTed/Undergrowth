@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7881954201140342147}
   m_Layer: 0
   m_Name: RaisedBed
-  m_TagString: Untagged
+  m_TagString: Container
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -60,7 +60,7 @@ GameObject:
   - component: {fileID: 1510501476245154382}
   m_Layer: 10
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: Container
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -103,6 +103,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: RaisedBedMesh
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: cba099e86cb24e14c9541c35825d4a1b,
+        type: 3}
+      propertyPath: m_TagString
+      value: Container
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: cba099e86cb24e14c9541c35825d4a1b,
         type: 3}

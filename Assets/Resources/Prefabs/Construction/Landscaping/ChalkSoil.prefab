@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5049342531315849649}
   m_Layer: 10
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: Landscaping
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 6336208352807678977}
   m_Layer: 0
   m_Name: Mesh
-  m_TagString: Untagged
+  m_TagString: Landscaping
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 7484530197952075313}
   m_Layer: 0
   m_Name: ChalkSoil
-  m_TagString: Untagged
+  m_TagString: Landscaping
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

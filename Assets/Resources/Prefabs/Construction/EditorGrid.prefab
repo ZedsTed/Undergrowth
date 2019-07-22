@@ -70,6 +70,9 @@ MonoBehaviour:
   WorldCellPositionDebug: {fileID: 0}
   previousMode: 0
   mode: 0
+  postEffect: {fileID: 0}
+  lerpFactor1: 0.6
+  lerpFactor2: 0.55
 --- !u!114 &874980416846663035
 MonoBehaviour:
   m_ObjectHideFlags: 0

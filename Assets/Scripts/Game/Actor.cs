@@ -23,6 +23,9 @@ public class Actor : MonoBehaviour
     {
         for (int i = gameObject.transform.childCount; i-- > 0;)
         {
+            if (gameObject.transform.GetChild(i).gameObject.layer == LayerMask.NameToLayer("EditorColliders"))
+                continue;
+
             if (highlight)
                 gameObject.transform.GetChild(i).gameObject.layer = LayerMask.NameToLayer("PostProcessOutline");
             else

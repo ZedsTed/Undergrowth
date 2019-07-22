@@ -50,6 +50,11 @@ public class PostEffect : MonoBehaviour
         tempRT.Release();
     }
 
+    public void SetColor(Color color)
+    {
+        postMaterial.SetColor("_Color", color);
+    }
+
     // Update is called once per frame
     void Update()
     {
