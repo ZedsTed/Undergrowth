@@ -157,6 +157,8 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
             pickedActor.SetLayerForHighlight(true);
     }
 
+    #region Actor Spawning
+
     protected void SpawnContainer(string name)
     {
         ContainerDefinition cDef = ContainerManifest.GetContainerDefinition(name);
@@ -200,6 +202,15 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
     }
 
 
+    #endregion
+
+    protected bool IsValidPosition()
+    {
+
+
+
+        return false;
+    }
 
     protected bool IsClickOnRaisedBed(RaycastHit clickhit, out Container bed)
     {
