@@ -60,6 +60,7 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
 
     protected Vector3 inputPosition;
     protected Vector3 previousInputPosition;
+    protected Vector3 editorGridWorldPosition;
 
     public float lerpFactor1;
     public float lerpFactor2;
@@ -71,15 +72,17 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
     }
 
 
+
     protected void Update()
     {
         if (mode == ConstructionState.Placing)
         {
             if (pickedActor != null)
             {
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
+                if (!IsPointerOverUI())
                 {
-                    Vector3 hitCellPosition = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(hit.point));
+                    //Debug.Log(pointerEventData.pointerCurrentRaycast.worldPosition);
+                    Vector3 hitCellPosition = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(editorGridWorldPosition));
 
                     previousInputPosition = Vector3.Lerp(previousInputPosition, (hitCellPosition - inputPosition) * 0.6f, 33f * Time.deltaTime);
                     inputPosition += previousInputPosition;
@@ -144,10 +147,13 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
     {
         Debug.Log("CEselected " + item.id + " " + selected);
 
-        if (pickedActor != null)
+        if (pickedActor != null && !selected)
         {
-            Destroy(pickedActor);
+            Debug.Log("deselect");
+            Destroy(pickedActor.gameObject);
             pickedActor = null;
+
+            return;
         }
 
         switch (ToolsManager.SelectedTool.name)
@@ -165,7 +171,7 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
                 break;
         }
 
-        if (pickedActor != null && pickedActor.gameObject.layer != LayerMask.NameToLayer("PostProcessOutline"))
+        if (selected && pickedActor != null && pickedActor.gameObject.layer != LayerMask.NameToLayer("PostProcessOutline"))
             pickedActor.SetLayerForHighlight(true);
     }
 
@@ -252,7 +258,7 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
                 // If we have any container ones, and we haven't already returned, then we have a valid placement.
                 for (int i = sceneColliders.Count; i-- > 0;)
                 {
-                    if (sceneColliders[i].CompareTag("Container") || sceneColliders[i].CompareTag("Plant"))
+                    if (sceneColliders[i].CompareTag("Plant"))
                         return false;
                     else if (sceneColliders[i].CompareTag("Landscaping"))
                         return true;
@@ -354,6 +360,40 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
 
         return sceneColliders.Count > 0 ? true : false;
     }
+
+    protected List<RaycastResult> raycastResults = new List<RaycastResult>();
+    protected PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
+    protected RaycastResult pointerRaycastResult;
+    
+    /// <summary>
+    /// Checks whether the current pointer position is over a gameobject whose root transform is a Canvas.
+    /// </summary>
+    /// <returns>True if pointer is over UI, false if anything else.</returns>
+    protected bool IsPointerOverUI()
+    {
+        raycastResults.Clear();        
+
+        pointerEventData.position = Input.mousePosition;
+        EventSystem.current.RaycastAll(pointerEventData, raycastResults);
+
+        for (int i = raycastResults.Count; i-- > 0;)
+        {
+            pointerRaycastResult = raycastResults[i];
+
+            if (pointerRaycastResult.gameObject.transform.root.name.Contains("Canvas"))
+            {
+                return true;
+            }
+            else if (pointerRaycastResult.gameObject.CompareTag("EditorGrid"))
+            {
+                editorGridWorldPosition = pointerRaycastResult.worldPosition;
+            }
+              
+        }
+
+        return false;
+    }
+
 
     protected bool IsClickOnRaisedBed(RaycastHit clickhit, out Container bed)
     {

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6730030423791670349}
   m_Layer: 0
   m_Name: EditorGrid
-  m_TagString: Untagged
+  m_TagString: EditorGrid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -116,7 +116,7 @@ GameObject:
   - component: {fileID: 6451795525544274591}
   m_Layer: 0
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: EditorGrid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
