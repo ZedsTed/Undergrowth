@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameTime : Singleton<GameTime>
+public class GameTime : SingletonDontCreate<GameTime>
 {
     [SerializeField]
     protected bool paused;

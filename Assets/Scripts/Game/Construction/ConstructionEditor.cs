@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine.EventSystems;
 using System;
 
-public class ConstructionEditor : Singleton<ConstructionEditor>
+public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 {
     [SerializeField]
     protected ContainerManifest containerManifest;
@@ -54,6 +54,7 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
     public PostEffect postEffect;
 
     public Action<ConstructionState> onConstructionModeChanged;
+    public Action<GameObject> onRaycastHitEditorCollider;
 
     protected Actor pickedActor;
     public Actor PickedObject { get { return pickedActor; } protected set { pickedActor = value; } }
@@ -77,9 +78,10 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
     {
         if (mode == ConstructionState.Placing)
         {
-            if (pickedActor != null)
+
+            if (!IsPointerOverUI())
             {
-                if (!IsPointerOverUI())
+                if (pickedActor != null)
                 {
                     //Debug.Log(pointerEventData.pointerCurrentRaycast.worldPosition);
                     Vector3 hitCellPosition = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(editorGridWorldPosition));
@@ -106,7 +108,7 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
                     {
                         postEffect.SetColor(Color.red);
                     }
-                }
+                }                
             }
         }
     }
@@ -364,14 +366,14 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
     protected List<RaycastResult> raycastResults = new List<RaycastResult>();
     protected PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
     protected RaycastResult pointerRaycastResult;
-    
+
     /// <summary>
     /// Checks whether the current pointer position is over a gameobject whose root transform is a Canvas.
     /// </summary>
     /// <returns>True if pointer is over UI, false if anything else.</returns>
     protected bool IsPointerOverUI()
     {
-        raycastResults.Clear();        
+        raycastResults.Clear();
 
         pointerEventData.position = Input.mousePosition;
         EventSystem.current.RaycastAll(pointerEventData, raycastResults);
@@ -388,7 +390,11 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
             {
                 editorGridWorldPosition = pointerRaycastResult.worldPosition;
             }
-              
+            else if (pickedActor == null && pointerRaycastResult.gameObject.layer == LayerMask.NameToLayer("EditorColliders"))
+            {
+                onRaycastHitEditorCollider?.Invoke(pointerRaycastResult.gameObject.transform.parent.gameObject);
+            }
+
         }
 
         return false;
