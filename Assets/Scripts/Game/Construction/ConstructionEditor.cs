@@ -394,24 +394,4 @@ public class ConstructionEditor : Singleton<ConstructionEditor>
         return false;
     }
 
-
-    protected bool IsClickOnRaisedBed(RaycastHit clickhit, out Container bed)
-    {
-        // Check if it's in our parents (should be)
-        bed = clickhit.transform.gameObject.GetComponentInParent<Container>();
-        if (bed != null)
-        {
-            return true;
-        }
-
-        // Check if it's in our children (bad if it is, not a good prefab setup.
-        bed = clickhit.transform.gameObject.GetComponentInChildren<Container>();
-        if (bed != null)
-        {
-            Debug.LogWarning(bed.Definition.ContainerName + " has a bad collider setup for its actor/prefab.");
-            return true;
-        }
-
-        return false;
-    }
 }
