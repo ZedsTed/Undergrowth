@@ -54,7 +54,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     public PostEffect postEffect;
 
     public Action<ConstructionState> onConstructionModeChanged;
-    public Action<GameObject> onRaycastHitEditorCollider;
+    public Action<List<GameObject>> onRaycastHitEditorCollider;
 
     protected Actor pickedActor;
     public Actor PickedObject { get { return pickedActor; } protected set { pickedActor = value; } }
@@ -78,7 +78,6 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     {
         if (mode == ConstructionState.Placing)
         {
-
             if (!IsPointerOverUI())
             {
                 if (pickedActor != null)
@@ -101,7 +100,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
                             pickedActor.transform.position = hitCellPosition;
                             pickedActor.SetLayerForHighlight(false);
                             pickedActor.Picked = false;
-                            pickedActor = null;
+                            pickedActor = null;                            
                         }
                     }
                     else
@@ -366,7 +365,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     protected List<RaycastResult> raycastResults = new List<RaycastResult>();
     protected PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
     protected RaycastResult pointerRaycastResult;
-
+    protected List<GameObject> hitColliders = new List<GameObject>();
     /// <summary>
     /// Checks whether the current pointer position is over a gameobject whose root transform is a Canvas.
     /// </summary>
@@ -374,6 +373,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     protected bool IsPointerOverUI()
     {
         raycastResults.Clear();
+        hitColliders.Clear();
 
         pointerEventData.position = Input.mousePosition;
         EventSystem.current.RaycastAll(pointerEventData, raycastResults);
@@ -390,12 +390,17 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
             {
                 editorGridWorldPosition = pointerRaycastResult.worldPosition;
             }
-            else if (pickedActor == null && pointerRaycastResult.gameObject.layer == LayerMask.NameToLayer("EditorColliders"))
-            {
-                onRaycastHitEditorCollider?.Invoke(pointerRaycastResult.gameObject.transform.parent.gameObject);
-            }
 
+            if (pickedActor == null && (pointerRaycastResult.gameObject.layer == LayerMask.NameToLayer("EditorColliders") || pointerRaycastResult.gameObject.CompareTag("EditorGrid")))
+            {                
+                // Let's tell everyone we've hit something of note.
+
+                hitColliders.Add(pointerRaycastResult.gameObject);
+            }
         }
+
+        if (hitColliders.Count > 0)
+            onRaycastHitEditorCollider?.Invoke(hitColliders);
 
         return false;
     }

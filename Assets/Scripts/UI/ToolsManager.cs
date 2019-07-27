@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
 
-public class ToolsManager : MonoBehaviour
+public class ToolsManager : SingletonDontCreate<ToolsManager>
 {
     public ToggleGroup ToolsGroup;
 
@@ -49,30 +49,7 @@ public class ToolsManager : MonoBehaviour
 
     protected void Start()
     {
-        //ContainerToggle.onValueChanged.AddListener(delegate
-        //{
-        //    OnToggleChanged(ContainerToggle);
-        //});
-
-        //LandscapingToggle.onValueChanged.AddListener(delegate
-        //{
-        //    OnToggleChanged(LandscapingToggle);
-        //});
-
-        //PlantToggle.onValueChanged.AddListener(delegate
-        //{
-        //    OnToggleChanged(PlantToggle);
-        //});
-
-        //WaterToggle.onValueChanged.AddListener(delegate
-        //{
-        //    OnToggleChanged(WaterToggle);
-        //});
-
-        //RemoveToggle.onValueChanged.AddListener(delegate
-        //{
-        //    OnToggleChanged(RemoveToggle);
-        //});
+       
     }
 
     protected void Update()
@@ -91,34 +68,7 @@ public class ToolsManager : MonoBehaviour
                 DespawnSelectableList();
         }
     }
-
-    //protected void OnToggleChanged(Toggle toggle)
-    //{
-    //    Debug.Log("OnToggleChanged");
-
-    //    switch (toggle.name)
-    //    {
-    //        case "Container":
-    //        case "Landscaping":
-    //        case "Plant":
-    //            ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.Placing);
-    //            SpawnSelectableList(toggle);
-    //            break;
-    //        case "Water":
-    //            ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.Watering);
-    //            DespawnSelectableList();
-    //            break;
-    //        case "Remove":
-    //            ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.Removing);
-    //            DespawnSelectableList();
-    //            break;
-    //        default:
-    //            ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.None);
-    //            DespawnSelectableList();
-    //            break;
-    //    }
-
-   // }
+ 
 
     protected void SetContructionEditorMode(Toggle toggle)
     {

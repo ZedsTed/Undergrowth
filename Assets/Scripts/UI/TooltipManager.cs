@@ -8,124 +8,200 @@ using UnityEngine.UI;
 
 public class TooltipManager : SingletonDontCreate<TooltipManager>, IPointerEnterHandler, IPointerExitHandler
 {
-    protected Tooltip tooltipInstance;
-    public Tooltip ToolTipInstance => tooltipInstance;
-
     protected string tooltipPath = "Prefabs/UI/Tooltip";
-
 
     public Action<PointerEventData> onPointerEnter;
     public Action<PointerEventData> onPointerExit;
 
 
+    public Dictionary<GameObject, Tooltip> tooltips = new Dictionary<GameObject, Tooltip>();
+
 
     // Start is called before the first frame update
     void Start()
-    {
+    {        
         ConstructionEditor.Instance.onRaycastHitEditorCollider += OnRaycastEditorObject;
     }
 
     // Update is called once per frame
     void LateUpdate()
     {
-        if (tooltipInstance != null)
+        if (tooltips.Count > 0)
         {
-            tooltipInstance.transform.position = Input.mousePosition;
+            transform.position = Input.mousePosition;
         }
     }
 
- 
-   
+
+
 
     protected Tooltip Load()
-    {        
+    {
         return (Resources.Load(tooltipPath) as GameObject).GetComponent<Tooltip>();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
-    {        
+    {
+        if (tooltips.ContainsKey(eventData.pointerCurrentRaycast.gameObject))
+            return;
+
         TooltipData data = eventData.pointerCurrentRaycast.gameObject.GetComponent<TooltipData>();
         // we want to get actor component.
         // then test the type of the stored actor
         // then spawn the tooltip with the actor data.
 
         if (data)
-        {            
-            SpawnTooltip(data.text, eventData.position);
-        }    
+        {// TODO: Have SpawnTooltip add the tooltip and gameobject to the dictionary instead.
+            tooltips.Add(eventData.pointerCurrentRaycast.gameObject, 
+                SpawnTooltip(eventData.pointerCurrentRaycast.gameObject, data.text, eventData.position));
+        }
 
         onPointerEnter?.Invoke(eventData);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        DestroyTooltip();
+        if (eventData.pointerCurrentRaycast.gameObject == null)
+            return;
+
+        tooltips.Clear();
+
+        for(int i = transform.childCount; i--> 0;)
+        {
+            Destroy(transform.GetChild(i).gameObject);
+        }
+
+        //if (tooltips.TryGetValue(eventData.pointerCurrentRaycast.gameObject, out Tooltip t))
+        //{
+        //    Destroy(t.gameObject);
+        //    tooltips.Remove(eventData.pointerCurrentRaycast.gameObject);
+        //}
 
         onPointerExit?.Invoke(eventData);
     }
 
-    protected GameObject raycastObject;
-    protected void OnRaycastEditorObject(GameObject gameObject)
+    protected List<GameObject> toRemove = new List<GameObject>();
+    protected void OnRaycastEditorObject(List<GameObject> gameObjects)
     {
-        // If the given object is the same as the stored raycast object, then no point in spawning.
-        if (raycastObject == gameObject)
-            return;
+        for (int i = gameObjects.Count; i-- > 0;)
+        {
+            GameObject gameObject = gameObjects[i];
+            
+            // If we don't have it in our collection.
+            if (!tooltips.ContainsKey(gameObject))
+            {
+                Tooltip t = ParseHitGameObjectForType(gameObject);
 
-        raycastObject = gameObject;
-        Actor actor = raycastObject.GetComponent<Actor>();
+                if (t != null)
+                    tooltips.Add(gameObject, t);
+
+            }
+        }
+
+        toRemove.Clear();
+        // Check if we have any in our collection that aren't in the latest raycast.
+        foreach (GameObject gameObject in tooltips.Keys)
+        {
+            //Debug.Log(gameObject.transform.parent.gameObject.name);
+            if (!gameObjects.Contains(gameObject))
+            {
+                toRemove.Add(gameObject);
+                // Destroy the corresponding tooltip here.
+                
+            }
+        }
+
+        if (toRemove.Count > 0)
+        {
+            for(int i = toRemove.Count; i--> 0;)
+            {
+                Destroy(tooltips[toRemove[i]].gameObject);
+                tooltips.Remove(toRemove[i]);
+            }
+        }
+
+
+        // TODO: Spawn a tooltip for each time we're called. Maintain a hashset of each tooltip/gameobject we're spawned for and then remove them if they're not on that hashset/list.
+        // If the given object is the same as the stored raycast object, then no point in spawning.
+        //if (raycastObject == gameObject)
+        //    return;
+
+
+
+    }
+
+    //protected void SpawnNewTooltipInstance(string tooltipText, Vector2 position)
+    //{
+    //    DestroyTooltip();
+
+    //    tooltipInstance = Instantiate(Load(), transform);
+
+    //    tooltipInstance.transform.position = new Vector3(position.x, position.y, 0f);
+    //    tooltipInstance.Text = tooltipText;
+    //}
+
+    protected Tooltip SpawnTooltip(GameObject gameObject, string tooltipText, Vector2 position)
+    {
+        Tooltip tooltip = Instantiate(Load(), transform);
+
+        tooltip.transform.position = new Vector3(position.x, position.y, 0f);
+        tooltip.Text = tooltipText;
+
+        return tooltip;
+    }
+
+    //protected void DestroyTooltip()
+    //{
+    //    if (tooltipInstance != null)
+    //    {
+    //        DestroyTooltip(tooltipInstance.gameObject);
+    //    }
+    //}
+
+    protected void DestroyTooltip(GameObject gameObject)
+    {
+        Destroy(gameObject);
+        gameObject = null;
+    }
+
+    protected Tooltip ParseHitGameObjectForType(GameObject gameObject)
+    {
+        Actor actor = gameObject.GetComponentInParent<Actor>();
 
         if (actor == null)
         {
-            Debug.Log("[Tooltip] Actor doesn't exist on this raycast object.");
-            return;
+            //Debug.Log("[Tooltip] Actor doesn't exist on this raycast object.");
+            return null;
         }
         else if (actor is Container)
         {
-            SpawnTooltipForContainer(actor as Container);
+            return SpawnTooltipForContainer(actor as Container);
         }
         else if (actor is Landscaping)
         {
-            SpawnTooltipForLandscaping(actor as Landscaping);
+            return SpawnTooltipForLandscaping(actor as Landscaping);
         }
         else if (actor is Plant)
         {
-            SpawnTooltipForPlant(actor as Plant);
+            return SpawnTooltipForPlant(actor as Plant);
         }
-    }
 
-    protected void SpawnTooltip(string tooltipText, Vector2 position)
-    {
-        DestroyTooltip();
-
-        tooltipInstance = Instantiate(Load(), transform);
-
-        tooltipInstance.transform.position = new Vector3(position.x, position.y, 0f);
-        tooltipInstance.Text = tooltipText;
-    }
-
-    protected void DestroyTooltip()
-    {
-        if (tooltipInstance != null)
-        {
-            Destroy(tooltipInstance.gameObject);
-            tooltipInstance = null;
-            raycastObject = null;
-        }
+        return null;
     }
 
 
-    protected void SpawnTooltipForContainer(Container container)
+    protected Tooltip SpawnTooltipForContainer(Container container)
     {
-        SpawnTooltip(container.Definition.ContainerName, Input.mousePosition);
+        return SpawnTooltip(container.gameObject, container.Definition.ContainerName, Input.mousePosition);
     }
 
-    protected void SpawnTooltipForLandscaping(Landscaping landscaping)
+    protected Tooltip SpawnTooltipForLandscaping(Landscaping landscaping)
     {
-        SpawnTooltip(landscaping.Definition.LandscapingName, Input.mousePosition);
+        return SpawnTooltip(landscaping.gameObject, landscaping.Definition.LandscapingName, Input.mousePosition);
     }
 
     protected StringBuilder sb = new StringBuilder();
-    protected void SpawnTooltipForPlant(Plant plant)
+    protected Tooltip SpawnTooltipForPlant(Plant plant)
     {
         sb.Clear();
         sb.AppendLine(plant.Definition.PlantName);
@@ -133,7 +209,7 @@ public class TooltipManager : SingletonDontCreate<TooltipManager>, IPointerEnter
         sb.AppendLine("Growth: " + plant.CurrentGrowth + "/" + plant.Definition.MaxGrowth);
         sb.AppendLine("Growth Rate: " + plant.CurrentGrowthRate);
 
-        SpawnTooltip(sb.ToString(), Input.mousePosition);
+        return SpawnTooltip(plant.gameObject, sb.ToString(), Input.mousePosition);
     }
 
 

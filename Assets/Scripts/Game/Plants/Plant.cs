@@ -50,6 +50,7 @@ public class Plant : Actor
 
     protected void Update()
     {
+        //return; // DEBUG
         if (Picked)
             return;
 
