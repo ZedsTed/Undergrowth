@@ -7,6 +7,7 @@ using UnityEngine.Rendering.PostProcessing;
 
 public class CameraController : MonoBehaviour
 {
+    public new Camera camera;
     /// <summary>
     /// Distance from the screen edge for mouse movement of camera.
     /// </summary>
@@ -81,13 +82,13 @@ public class CameraController : MonoBehaviour
         initialRotation = transform.rotation;
 
         zoomLimit.x = 15;
-        zoomLimit.y = 65;       
+        zoomLimit.y = 65;
     }
 
 
     private void Update()
     {
-        
+
 
 
     }
@@ -108,10 +109,10 @@ public class CameraController : MonoBehaviour
         if (IsCameraMovementBeingInput())
         {
             if (Input.GetKey(KeyCode.W) /*|| Input.mousePosition.y >= Screen.height - ScreenEdgeBorderThickness*/)
-                panMovement += new Vector3(0f, 0f, 1f) * panSpeed * Time.unscaledDeltaTime;
+                panMovement += transform.forward * panSpeed * Time.unscaledDeltaTime;
 
             if (Input.GetKey(KeyCode.S) /*|| Input.mousePosition.y <= ScreenEdgeBorderThickness*/)
-                panMovement -= new Vector3(0f, 0f, 1f) * panSpeed * Time.unscaledDeltaTime;
+                panMovement -= transform.forward * panSpeed * Time.unscaledDeltaTime;
 
             if (Input.GetKey(KeyCode.A) /*|| Input.mousePosition.x <= ScreenEdgeBorderThickness*/)
                 panMovement -= transform.right * panSpeed * Time.unscaledDeltaTime;
@@ -163,7 +164,7 @@ public class CameraController : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(2) || Input.GetKeyDown(KeyCode.LeftControl))
             {
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2)), out RaycastHit hit))
                     pivotPoint = hit.point;
             }
             if (Input.GetMouseButton(2) || Input.GetKey(KeyCode.LeftControl))

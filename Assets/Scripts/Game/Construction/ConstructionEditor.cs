@@ -178,11 +178,11 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
     public void OnItemSelected(SelectableListItem item, bool selected)
     {
-        Debug.Log("CEselected " + item.id + " " + selected);
+       // Debug.Log("CEselected " + item.id + " " + selected);
 
         if (pickedActor != null && !selected)
         {
-            Debug.Log("deselect");
+            //Debug.Log("deselect");
             Destroy(pickedActor.gameObject);
             pickedActor = null;
 

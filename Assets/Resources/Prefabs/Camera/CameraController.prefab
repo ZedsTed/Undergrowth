@@ -203,7 +203,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7108049988796454519}
-  - component: {fileID: 5452517935039172240}
+  - component: {fileID: 8817479163447285917}
   m_Layer: 0
   m_Name: CameraController
   m_TagString: Untagged
@@ -226,7 +226,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5452517935039172240
+--- !u!114 &8817479163447285917
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -235,21 +235,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 2238868981776452441}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 670b45d0e24ab3e4cbc55d43e0f45d44, type: 3}
+  m_Script: {fileID: 11500000, guid: 274e57879bf91fa4cb1975bd58f3ca2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ScreenEdgeBorderThickness: 0
-  IsoMode: 1
-  FreeMode: 0
-  minPanSpeed: 8
-  maxPanSpeed: 10
-  panAcceleration: 5
-  zoomSpeed: 10
-  rotationSmoothing: 0.2
-  enableMovementLimits: 1
-  heightLimit: {x: 2, y: 20}
-  lengthLimit: {x: -20, y: 20}
-  widthLimit: {x: -20, y: 20}
-  RotationEnabled: 1
-  rotateSpeed: 0.2
-  pivotPoint: {x: 0, y: 0, z: 0}
+  orbitMouseButton: 1
+  elevation: 30
+  elevationInvert: 0
+  elevationSpeed: 480
+  elevationMin: 10
+  elevationMax: 80
+  elevationSmooth: 6
+  azimuth: 40
+  azimuthInvert: 0
+  azimuthSpeed: 720
+  azimuthSmooth: 6
+  distance: 20
+  distanceInvert: 0
+  distanceSpeed: 2000
+  distanceMin: 5
+  distanceMax: 50
+  distanceSmooth: 4
+  pan: {x: 0, y: 0, z: 0}
+  panSpeedMax: 10
+  panSmooth: 20
+  panPlaneRotation: {x: 0, y: 0, z: 0}
+  panPlaneOriginDistance: 0
+  target: {fileID: 0}
+  targetTrackPosition: 0
+  targetTrackRotationY: 0
+  targetPositionOffset: {x: 0, y: 0, z: 0}
