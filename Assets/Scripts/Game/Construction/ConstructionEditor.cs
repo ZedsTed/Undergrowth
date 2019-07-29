@@ -76,9 +76,9 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
     protected void Update()
     {
-        if (mode == ConstructionState.Placing)
+        if (!IsPointerOverUI())
         {
-            if (!IsPointerOverUI())
+            if (mode == ConstructionState.Placing)
             {
                 if (pickedActor != null)
                 {
@@ -96,18 +96,32 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
                         postEffect.SetColor(Color.green);
                         if (Input.GetMouseButtonDown(0))
                         {
-                            hitCellPosition.y = 0f;
-                            pickedActor.transform.position = hitCellPosition;
-                            pickedActor.SetLayerForHighlight(false);
-                            pickedActor.Picked = false;
-                            pickedActor = null;                            
+                            OnActorPlaced(hitCellPosition);
                         }
                     }
                     else
                     {
                         postEffect.SetColor(Color.red);
                     }
-                }                
+                }
+            }
+            else if (mode == ConstructionState.Watering)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    for (int i = raycastResults.Count; i-- > 0;)
+                    {
+                        Actor actor = raycastResults[i].gameObject.GetComponentInParent<Actor>();
+                        if (actor == null)
+                            continue;
+
+                        if (!(actor is Landscaping))
+                            continue;                        
+
+                        // TODO: Change to some sort of variable quantity.
+                        (actor as Landscaping).OnWatered(1f);
+                    }
+                }
             }
         }
     }
@@ -156,6 +170,10 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
             return;
         }
+        else if (!selected)
+        {   // At this point we've done everything we want to with a deselection.
+            return;
+        }
 
         switch (ToolsManager.SelectedTool.name)
         {
@@ -174,6 +192,16 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
         if (selected && pickedActor != null && pickedActor.gameObject.layer != LayerMask.NameToLayer("PostProcessOutline"))
             pickedActor.SetLayerForHighlight(true);
+    }
+
+    protected void OnActorPlaced(Vector3 cellPosition)
+    {
+        cellPosition.y = 0f;
+        pickedActor.transform.position = cellPosition;
+        pickedActor.SetLayerForHighlight(false);
+        pickedActor.OnPlaced();
+        pickedActor.Picked = false;
+        pickedActor = null;
     }
 
     #region Actor Spawning
@@ -247,9 +275,14 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
                 for (int i = sceneColliders.Count; i-- > 0;)
                 {
                     if (sceneColliders[i].CompareTag("Landscaping") || sceneColliders[i].CompareTag("Plant"))
+                    {
                         return false;
+                    }
                     else if (sceneColliders[i].CompareTag("Container"))
+                    {
+                        pickedActor.transform.parent = sceneColliders[i].transform.parent.gameObject.transform;
                         return true;
+                    }
                 }
             }
             else if (pickedActor is Plant)
@@ -260,9 +293,14 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
                 for (int i = sceneColliders.Count; i-- > 0;)
                 {
                     if (sceneColliders[i].CompareTag("Plant"))
+                    {
                         return false;
+                    }
                     else if (sceneColliders[i].CompareTag("Landscaping"))
+                    {
+                        pickedActor.transform.parent = sceneColliders[i].transform.parent.gameObject.transform;
                         return true;
+                    }
                 }
             }
         }
@@ -392,7 +430,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
             }
 
             if (pickedActor == null && (pointerRaycastResult.gameObject.layer == LayerMask.NameToLayer("EditorColliders") || pointerRaycastResult.gameObject.CompareTag("EditorGrid")))
-            {                
+            {
                 // Let's tell everyone we've hit something of note.
 
                 hitColliders.Add(pointerRaycastResult.gameObject);

@@ -139,6 +139,36 @@ MonoBehaviour:
   SoilFertility: 0
   Water: 0
   SoilUsage: 0
+  dryWetSoil:
+    serializedVersion: 2
+    key0: {r: 0.313, g: 0.26452973, b: 0.228177, a: 1}
+    key1: {r: 0.132, g: 0.08671623, b: 0.046464, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 65535
+    atime3: 65535
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  meshRenderer: {fileID: 5351728888081070536}
 --- !u!1 &9163068232749438428
 GameObject:
   m_ObjectHideFlags: 0

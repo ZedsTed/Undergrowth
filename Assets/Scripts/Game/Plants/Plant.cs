@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 public class Plant : Actor
 {
-    protected Container plantBed;
-    public Container PlantBed { get { return plantBed; } set { plantBed = value; } }
+    protected Landscaping landscaping;
+    public Landscaping Landscaping { get { return landscaping; } set { landscaping = value; } }
 
     [SerializeField]
     protected PlantDefinition.LifeCycle currentLifeCycle;
@@ -32,10 +33,9 @@ public class Plant : Actor
     protected float SunlightLevel => EnvironmentData.Instance.SunIntensity;
 
     /// <summary>
-    /// 0 - 1 value for current water level.
-    /// </summary>
-    [SerializeField]
-    protected float waterLevel;
+    /// 0 - 1 value for current water level in the container.
+    /// </summary>    
+    public float WaterLevel { get { return landscaping.Water; } }
 
     [Tooltip("The current scaled growth rate that this plant does have.")]
     public float CurrentGrowthRate;
@@ -46,7 +46,12 @@ public class Plant : Actor
     // Start is called before the first frame update
     void Start()
     {
-        
+       
+    }
+
+    public override void OnPlaced()
+    {
+        landscaping = GetComponentInParent<Landscaping>();        
     }
 
     protected void Update()
@@ -216,6 +221,21 @@ public class Plant : Actor
                 break;
         }
 
-        return waterLevel - moistureNeed;
+        return WaterLevel - moistureNeed;
+    }
+
+    StringBuilder sb;
+    public override string ToString()
+    {
+        if (sb == null)
+            sb = new StringBuilder();
+
+        sb.Clear();
+        sb.AppendLine(definition.PlantName);
+        sb.AppendLine(currentLifeCycle.ToString());
+        sb.AppendLine("Growth: " + (CurrentGrowth / definition.MaxGrowth).ToString("P1"));
+        sb.AppendLine("Growth Rate: " + CurrentGrowthRate); // TODO: Make me per in-game minute or something.
+
+        return sb.ToString();
     }
 }

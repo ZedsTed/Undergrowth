@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using static MathsUtils;
+using UnityEngine.Rendering.PostProcessing;
 
 
 public class CameraController : MonoBehaviour
@@ -80,7 +81,7 @@ public class CameraController : MonoBehaviour
         initialRotation = transform.rotation;
 
         zoomLimit.x = 15;
-        zoomLimit.y = 65;
+        zoomLimit.y = 65;       
     }
 
 

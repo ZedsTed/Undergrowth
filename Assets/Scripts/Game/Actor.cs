@@ -15,6 +15,11 @@ public class Actor : MonoBehaviour
     public virtual bool CanBeDeleted()
     { return false; }
 
+    public virtual void OnPlaced()
+    {
+
+    }
+
     /// <summary>
     /// Sets the layer for the gameobject and all its children to be illuminated.
     /// </summary>

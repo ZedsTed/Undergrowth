@@ -104,11 +104,11 @@ public class TooltipManager : SingletonDontCreate<TooltipManager>, IPointerEnter
                 }
                 else if (actor is Landscaping)
                 {
-                    t.Text = GetTextForLandscaping(actor as Landscaping);
+                    t.Text = actor.ToString();
                 }
                 else if (actor is Plant)
                 {
-                    t.Text = GetTextForPlant(actor as Plant);
+                    t.Text = actor.ToString();
                 }
             }
         }
@@ -183,13 +183,13 @@ public class TooltipManager : SingletonDontCreate<TooltipManager>, IPointerEnter
 
     protected Tooltip SpawnTooltipForLandscaping(Landscaping landscaping)
     {
-        return SpawnTooltip(landscaping.gameObject, GetTextForLandscaping(landscaping), Input.mousePosition);
+        return SpawnTooltip(landscaping.gameObject, landscaping.ToString(), Input.mousePosition);
     }
 
     
     protected Tooltip SpawnTooltipForPlant(Plant plant)
     {
-        return SpawnTooltip(plant.gameObject, GetTextForPlant(plant), Input.mousePosition);
+        return SpawnTooltip(plant.gameObject, plant.ToString(), Input.mousePosition);
     }
 
     protected StringBuilder sb = new StringBuilder();
@@ -199,19 +199,4 @@ public class TooltipManager : SingletonDontCreate<TooltipManager>, IPointerEnter
         return container.Definition.ContainerName;
     }
 
-    protected string GetTextForLandscaping(Landscaping landscaping)
-    {
-        return landscaping.Definition.LandscapingName;
-    }
-
-    protected string GetTextForPlant(Plant plant)
-    {
-        sb.Clear();
-        sb.AppendLine(plant.Definition.PlantName);
-        sb.AppendLine(plant.CurrentLifeCycle.ToString());
-        sb.AppendLine("Growth: " + plant.CurrentGrowth + "/" + plant.Definition.MaxGrowth);
-        sb.AppendLine("Growth Rate: " + plant.CurrentGrowthRate);
-
-        return sb.ToString();
-    }
 }
