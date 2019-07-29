@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentLifeCycle: 0
   SoilUsageNeed: 0
+  mesh: {fileID: 4524458465082621539}
   waterLevel: 0.8
   CurrentGrowthRate: 0
   CurrentGrowth: 0
@@ -174,6 +175,12 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: a3d01ea307c778e4b8509013a130dad7, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e2161584afaf272468fa20d42a180cc8, type: 3}
+--- !u!1 &4524458465082621539 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: e2161584afaf272468fa20d42a180cc8,
+    type: 3}
+  m_PrefabInstance: {fileID: 5614851938862327658}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &617348121350163568 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: e2161584afaf272468fa20d42a180cc8,

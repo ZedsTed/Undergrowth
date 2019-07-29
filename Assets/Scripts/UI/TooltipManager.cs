@@ -19,7 +19,7 @@ public class TooltipManager : SingletonDontCreate<TooltipManager>, IPointerEnter
 
     // Start is called before the first frame update
     void Start()
-    {        
+    {
         ConstructionEditor.Instance.onRaycastHitEditorCollider += OnRaycastEditorObject;
     }
 
@@ -52,7 +52,7 @@ public class TooltipManager : SingletonDontCreate<TooltipManager>, IPointerEnter
 
         if (data)
         {// TODO: Have SpawnTooltip add the tooltip and gameobject to the dictionary instead.
-            tooltips.Add(eventData.pointerCurrentRaycast.gameObject, 
+            tooltips.Add(eventData.pointerCurrentRaycast.gameObject,
                 SpawnTooltip(eventData.pointerCurrentRaycast.gameObject, data.text, eventData.position));
         }
 
@@ -66,16 +66,10 @@ public class TooltipManager : SingletonDontCreate<TooltipManager>, IPointerEnter
 
         tooltips.Clear();
 
-        for(int i = transform.childCount; i--> 0;)
+        for (int i = transform.childCount; i-- > 0;)
         {
             Destroy(transform.GetChild(i).gameObject);
         }
-
-        //if (tooltips.TryGetValue(eventData.pointerCurrentRaycast.gameObject, out Tooltip t))
-        //{
-        //    Destroy(t.gameObject);
-        //    tooltips.Remove(eventData.pointerCurrentRaycast.gameObject);
-        //}
 
         onPointerExit?.Invoke(eventData);
     }
@@ -86,15 +80,36 @@ public class TooltipManager : SingletonDontCreate<TooltipManager>, IPointerEnter
         for (int i = gameObjects.Count; i-- > 0;)
         {
             GameObject gameObject = gameObjects[i];
-            
+
             // If we don't have it in our collection.
-            if (!tooltips.ContainsKey(gameObject))
+            if (!tooltips.TryGetValue(gameObject, out Tooltip t))
             {
-                Tooltip t = ParseHitGameObjectForType(gameObject);
+                t = ParseHitGameObjectForType(gameObject);
 
                 if (t != null)
                     tooltips.Add(gameObject, t);
 
+            }
+            else // we have it in our collection, let's update it.
+            {
+                Actor actor = gameObject.GetComponentInParent<Actor>();
+                
+                if (actor == null)
+                {
+                    continue;
+                }
+                else if (actor is Container)
+                {
+                    t.Text = GetTextForContainer(actor as Container);
+                }
+                else if (actor is Landscaping)
+                {
+                    t.Text = GetTextForLandscaping(actor as Landscaping);
+                }
+                else if (actor is Plant)
+                {
+                    t.Text = GetTextForPlant(actor as Plant);
+                }
             }
         }
 
@@ -102,43 +117,22 @@ public class TooltipManager : SingletonDontCreate<TooltipManager>, IPointerEnter
         // Check if we have any in our collection that aren't in the latest raycast.
         foreach (GameObject gameObject in tooltips.Keys)
         {
-            //Debug.Log(gameObject.transform.parent.gameObject.name);
             if (!gameObjects.Contains(gameObject))
             {
                 toRemove.Add(gameObject);
-                // Destroy the corresponding tooltip here.
-                
             }
         }
 
         if (toRemove.Count > 0)
         {
-            for(int i = toRemove.Count; i--> 0;)
+            for (int i = toRemove.Count; i-- > 0;)
             {
                 Destroy(tooltips[toRemove[i]].gameObject);
                 tooltips.Remove(toRemove[i]);
             }
         }
-
-
-        // TODO: Spawn a tooltip for each time we're called. Maintain a hashset of each tooltip/gameobject we're spawned for and then remove them if they're not on that hashset/list.
-        // If the given object is the same as the stored raycast object, then no point in spawning.
-        //if (raycastObject == gameObject)
-        //    return;
-
-
-
     }
 
-    //protected void SpawnNewTooltipInstance(string tooltipText, Vector2 position)
-    //{
-    //    DestroyTooltip();
-
-    //    tooltipInstance = Instantiate(Load(), transform);
-
-    //    tooltipInstance.transform.position = new Vector3(position.x, position.y, 0f);
-    //    tooltipInstance.Text = tooltipText;
-    //}
 
     protected Tooltip SpawnTooltip(GameObject gameObject, string tooltipText, Vector2 position)
     {
@@ -149,14 +143,6 @@ public class TooltipManager : SingletonDontCreate<TooltipManager>, IPointerEnter
 
         return tooltip;
     }
-
-    //protected void DestroyTooltip()
-    //{
-    //    if (tooltipInstance != null)
-    //    {
-    //        DestroyTooltip(tooltipInstance.gameObject);
-    //    }
-    //}
 
     protected void DestroyTooltip(GameObject gameObject)
     {
@@ -192,16 +178,33 @@ public class TooltipManager : SingletonDontCreate<TooltipManager>, IPointerEnter
 
     protected Tooltip SpawnTooltipForContainer(Container container)
     {
-        return SpawnTooltip(container.gameObject, container.Definition.ContainerName, Input.mousePosition);
+        return SpawnTooltip(container.gameObject, GetTextForContainer(container), Input.mousePosition);
     }
 
     protected Tooltip SpawnTooltipForLandscaping(Landscaping landscaping)
     {
-        return SpawnTooltip(landscaping.gameObject, landscaping.Definition.LandscapingName, Input.mousePosition);
+        return SpawnTooltip(landscaping.gameObject, GetTextForLandscaping(landscaping), Input.mousePosition);
+    }
+
+    
+    protected Tooltip SpawnTooltipForPlant(Plant plant)
+    {
+        return SpawnTooltip(plant.gameObject, GetTextForPlant(plant), Input.mousePosition);
     }
 
     protected StringBuilder sb = new StringBuilder();
-    protected Tooltip SpawnTooltipForPlant(Plant plant)
+
+    protected string GetTextForContainer(Container container)
+    {
+        return container.Definition.ContainerName;
+    }
+
+    protected string GetTextForLandscaping(Landscaping landscaping)
+    {
+        return landscaping.Definition.LandscapingName;
+    }
+
+    protected string GetTextForPlant(Plant plant)
     {
         sb.Clear();
         sb.AppendLine(plant.Definition.PlantName);
@@ -209,52 +212,6 @@ public class TooltipManager : SingletonDontCreate<TooltipManager>, IPointerEnter
         sb.AppendLine("Growth: " + plant.CurrentGrowth + "/" + plant.Definition.MaxGrowth);
         sb.AppendLine("Growth Rate: " + plant.CurrentGrowthRate);
 
-        return SpawnTooltip(plant.gameObject, sb.ToString(), Input.mousePosition);
-    }
-
-
-    protected Container IsContainer(GameObject gameObject)
-    {
-        // Check if we have one as our parent (expected).
-        Container c = gameObject.GetComponentInParent<Container>();
-        if (c)
-            return c;
-
-        // Check if we have one as our child (not expected, but can happen).
-        c = gameObject.GetComponentInChildren<Container>();
-        if (c)
-            return c;
-
-        return null;
-    }
-
-    protected Landscaping IsLandscaping(GameObject gameObject)
-    {
-        // Check if we have one as our parent (expected).
-        Landscaping l = gameObject.GetComponentInParent<Landscaping>();
-        if (l)
-            return l;
-
-        // Check if we have one as our child (not expected, but can happen).
-        l = gameObject.GetComponentInChildren<Landscaping>();
-        if (l)
-            return l;
-
-        return null;
-    }
-
-    protected Plant IsPlant(GameObject gameObject)
-    {
-        // Check if we have one as our parent (expected).
-        Plant p = gameObject.GetComponentInParent<Plant>();
-        if (p)
-            return p;
-
-        // Check if we have one as our child (not expected, but can happen).
-        p = gameObject.GetComponentInChildren<Plant>();
-        if (p)
-            return p;
-
-        return null;
+        return sb.ToString();
     }
 }

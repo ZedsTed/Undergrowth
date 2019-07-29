@@ -22,7 +22,8 @@ public class Plant : Actor
     protected PlantDefinition definition;
     public PlantDefinition Definition { get { return definition; } set { definition = value; } }
 
-    
+    [SerializeField]
+    protected GameObject mesh;
 
     /// <summary>
     /// Eventually we'll need to raycast from the sun to the plant to check the actual sunlight level, but this will do for now.
@@ -65,7 +66,7 @@ public class Plant : Actor
 
         float normalizedGrowth = GetGrowthPercentage() / 100;
 
-        transform.localScale = new Vector3(normalizedGrowth, normalizedGrowth, normalizedGrowth);
+        mesh.transform.localScale = new Vector3(normalizedGrowth, normalizedGrowth, normalizedGrowth);
     }
     protected void FixedUpdate()
     {
