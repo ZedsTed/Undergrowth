@@ -116,14 +116,32 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
                             continue;
 
                         if (!(actor is Landscaping))
-                            continue;                        
+                            continue;
 
                         // TODO: Change to some sort of variable quantity.
                         (actor as Landscaping).OnWatered(1f);
                     }
                 }
             }
+            else if (mode == ConstructionState.Removing)
+            {
+                if (Input.GetMouseButton(0))
+                {
+                    for (int i = 0, iC = raycastResults.Count; i < iC; ++i)
+                    {
+                        if (raycastResults[i].gameObject.GetComponentInParent<Actor>())
+                        {
+                            Destroy(raycastResults[i].gameObject.transform.parent.gameObject);
+                        }
+                    }
+                }
+            }
         }
+        else
+        {
+
+        }
+
     }
 
     public void SetConstructionMode(ConstructionState state)
@@ -416,7 +434,12 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
         pointerEventData.position = Input.mousePosition;
         EventSystem.current.RaycastAll(pointerEventData, raycastResults);
 
-        for (int i = raycastResults.Count; i-- > 0;)
+        raycastResults.Sort((x, y) => x.distance.CompareTo(y.distance));
+
+        // Loop through from the start of the collection, 
+        // Now that we've done a sort, it's usually the case that 
+        // the object we need is the closest to the camera.
+        for (int i = 0, iC = raycastResults.Count; i < iC; ++i)
         {
             pointerRaycastResult = raycastResults[i];
 
@@ -436,6 +459,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
                 hitColliders.Add(pointerRaycastResult.gameObject);
             }
         }
+
 
         if (hitColliders.Count > 0)
             onRaycastHitEditorCollider?.Invoke(hitColliders);

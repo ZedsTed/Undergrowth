@@ -159,7 +159,7 @@ public class GameTime : SingletonDontCreate<GameTime>
             // Next day!
             ++dayCount;
             currentMinute = 0;
-            Debug.Log("Good morning!");
+            //Debug.Log("Good morning!");
         }
 
         //int min = currentMinute % 60;

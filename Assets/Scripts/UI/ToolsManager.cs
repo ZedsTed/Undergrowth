@@ -127,7 +127,7 @@ public class ToolsManager : SingletonDontCreate<ToolsManager>
 
     public void OnSelectableListClicked()
     {
-        Debug.Log("OnSelectableListClicked");
+        //Debug.Log("OnSelectableListClicked");
         lockToggleOn = true;
     }
 
@@ -225,7 +225,7 @@ public class ToolsManager : SingletonDontCreate<ToolsManager>
         if (panel == null)
             return; 
 
-        Debug.Log("Destroying list");
+       // Debug.Log("Destroying list");
 
         DestroyImmediate(panel.gameObject);
         panel = null;
@@ -237,7 +237,7 @@ public class ToolsManager : SingletonDontCreate<ToolsManager>
     /// </summary>
     protected void OnNonToolClick()
     {
-        Debug.Log("OnNonToolClick");
+       // Debug.Log("OnNonToolClick");
         lockToggleOn = true;
         SetContructionEditorMode(selectedTool.toggle);
     }
@@ -248,7 +248,7 @@ public class ToolsManager : SingletonDontCreate<ToolsManager>
     /// <param name="tool"></param>
     protected void OnToolMultipleClick(ToolToggle tool)
     {
-        Debug.Log("OnToolMultipleClick");
+        //Debug.Log("OnToolMultipleClick");
 
         if (selectedTool == clickedTool)
             lockToggleOn = false;

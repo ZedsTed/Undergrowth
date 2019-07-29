@@ -42,7 +42,7 @@ public class Landscaping : Actor
 
     public override void OnPlaced()
     {
-        Debug.Log("Placed");
+       // Debug.Log("Placed");
         container = GetComponentInParent<Container>();
     }
 

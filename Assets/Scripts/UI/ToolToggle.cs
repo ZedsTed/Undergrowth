@@ -24,7 +24,7 @@ public class ToolToggle : MonoBehaviour, ISelectHandler, IDeselectHandler, IPoin
         if (eventData.selectedObject == gameObject)
             toolsManager.SetSelectedTool(this);
 
-        Debug.Log("select"+eventData.selectedObject.name);
+        //Debug.Log("select"+eventData.selectedObject.name);
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -40,7 +40,7 @@ public class ToolToggle : MonoBehaviour, ISelectHandler, IDeselectHandler, IPoin
 
         EventSystem.current.SetSelectedGameObject(gameObject, eventData);
 
-        Debug.Log("click" + eventData.pointerCurrentRaycast.gameObject);
+        //Debug.Log("click" + eventData.pointerCurrentRaycast.gameObject);
     }
 
     public void OnDeselect(BaseEventData eventData)
@@ -51,6 +51,6 @@ public class ToolToggle : MonoBehaviour, ISelectHandler, IDeselectHandler, IPoin
             toolsManager.SetDeselectedTool(this);
         }
 
-        Debug.Log("deselect"+eventData.selectedObject.name);
+        //Debug.Log("deselect"+eventData.selectedObject.name);
     }
 }
