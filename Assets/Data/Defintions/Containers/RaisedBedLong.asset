@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actor: {fileID: 7881954201140342147, guid: 3483ce5105be2ad458d5d43b50f61e07, type: 3}
   containerName: RaisedBedLong
-  Width: 2
-  Length: 1
-  Depth: 0.25
+  containerSize: {x: 0, y: 0, z: 0}
+  containerSoilSize: {x: 1.9, y: 0.15, z: 0.9}
+  containerSoilOffset: {x: 0.5, y: 0.125, z: 0}

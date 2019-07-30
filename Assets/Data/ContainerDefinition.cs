@@ -17,10 +17,19 @@ public class ContainerDefinition : ScriptableObject
     public string ContainerName => containerName;
 
     [Header("Size")]
-    [Tooltip("Width of the bed")]
-    public float Width;
-    [Tooltip("Length of the bed")]
-    public float Length;
-    [Tooltip("Depth of the bed")]
-    public float Depth;
+    [Tooltip("Size of the container - external.")]
+    [SerializeField]
+    protected Vector3 containerSize;
+    public Vector3 ContainerSize => containerSize;
+    
+
+    [Tooltip("The size of the soil in the container - internal.")]
+    [SerializeField]
+    protected Vector3 containerSoilSize;
+    public Vector3 ContainerSoilSize => containerSoilSize;
+
+    [Tooltip("The offset of the soil in the container - internal.")]
+    [SerializeField]
+    protected Vector3 containerSoilOffset;
+    public Vector3 ContainerSoilOffset => containerSoilOffset;
 }

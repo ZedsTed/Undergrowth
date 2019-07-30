@@ -15,5 +15,4 @@ public class LandscapingDefinition : ScriptableObject
     [SerializeField]
     protected string landscapingName;
     public string LandscapingName => landscapingName;
-
 }

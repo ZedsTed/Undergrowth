@@ -85,7 +85,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
                     //Debug.Log(pointerEventData.pointerCurrentRaycast.worldPosition);
                     Vector3 hitCellPosition = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(editorGridWorldPosition));
 
-                    previousInputPosition = Vector3.Lerp(previousInputPosition, (hitCellPosition - inputPosition) * 0.6f, 33f * Time.deltaTime);
+                    previousInputPosition = Vector3.Lerp(previousInputPosition, (hitCellPosition - inputPosition) * 0.6f, 33f * Time.unscaledDeltaTime);
                     inputPosition += previousInputPosition;
                     inputPosition.y = 0f;
 
@@ -93,7 +93,8 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
                     if (IsValidPosition())
                     {
-                        postEffect.SetColor(Color.green);
+                        OnValidPosition();
+
                         if (Input.GetMouseButtonDown(0))
                         {
                             OnActorPlaced(hitCellPosition);
@@ -101,7 +102,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
                     }
                     else
                     {
-                        postEffect.SetColor(Color.red);
+                        OnInvalidPosition();
                     }
                 }
             }
@@ -178,7 +179,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
     public void OnItemSelected(SelectableListItem item, bool selected)
     {
-       // Debug.Log("CEselected " + item.id + " " + selected);
+        // Debug.Log("CEselected " + item.id + " " + selected);
 
         if (pickedActor != null && !selected)
         {
@@ -210,6 +211,52 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
         if (selected && pickedActor != null && pickedActor.gameObject.layer != LayerMask.NameToLayer("PostProcessOutline"))
             pickedActor.SetLayerForHighlight(true);
+    }
+
+    //Vector3 currentLerpedSize;
+    Vector3 previousLerpedSize;
+    protected void OnValidPosition()
+    {
+        postEffect.SetColor(Color.green);
+
+        if (pickedActor is Landscaping)
+        {
+            // Increase size
+            Vector3 size = (pickedActor as Landscaping).GetComponentInParent<Container>().Definition.ContainerSoilSize;
+            Vector3 pos = (pickedActor as Landscaping).GetComponentInParent<Container>().Definition.ContainerSoilOffset;
+
+            for (int i = pickedActor.transform.childCount; i-- > 0;)
+            {
+               // pickedActor.transform.GetChild(i).localScale = size;
+                pickedActor.transform.GetChild(i).localPosition = pos;
+
+                previousLerpedSize = Vector3.Lerp(previousLerpedSize, (size - pickedActor.transform.GetChild(i).localScale) * 0.2f, 15f * Time.unscaledDeltaTime);
+                pickedActor.transform.GetChild(i).localScale += previousLerpedSize;
+            }
+            
+        }
+    }
+
+    protected void OnInvalidPosition()
+    {
+        postEffect.SetColor(Color.red);
+
+        if (pickedActor is Landscaping)
+        {
+            // Revert it back.
+            Vector3 size = ContainerManifest.GetContainerDefinition("RaisedBed").ContainerSoilSize;
+            Vector3 pos = ContainerManifest.GetContainerDefinition("RaisedBed").ContainerSoilOffset;
+
+            for (int i = pickedActor.transform.childCount; i-- > 0;)
+            {
+               // pickedActor.transform.GetChild(i).localScale = size;
+                pickedActor.transform.GetChild(i).localPosition = pos;
+
+                previousLerpedSize = Vector3.Lerp(previousLerpedSize, (size - pickedActor.transform.GetChild(i).localScale) * 0.2f, 15f * Time.unscaledDeltaTime);
+                pickedActor.transform.GetChild(i).localScale += previousLerpedSize;
+            }
+
+        }
     }
 
     protected void OnActorPlaced(Vector3 cellPosition)
