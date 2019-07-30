@@ -154,6 +154,8 @@ public class CameraOrbit : MonoBehaviour
 
         input = planeQuaternion * input;
 
+        input = Quaternion.AngleAxis(azimuthCur, Vector3.up) * input;
+
         return input;
     }
 
