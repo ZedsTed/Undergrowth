@@ -19,9 +19,9 @@ public class Plant : Actor
     
     [Tooltip("How much soil is needed by the plant.")]
     public float SoilUsageNeed;
-
-    protected PlantDefinition definition;
-    public PlantDefinition Definition { get { return definition; } set { definition = value; } }
+    
+    public new PlantDefinition Definition
+    { get { return Definition as PlantDefinition; } set { Definition = value; } }
 
     [SerializeField]
     protected GameObject mesh;
@@ -97,19 +97,19 @@ public class Plant : Actor
         switch (currentLifeCycle)
         {
             case PlantDefinition.LifeCycle.Seed:
-                if (GetGrowthPercentage() > definition.GrowthThresholds[PlantDefinition.LifeCycle.Seed])
+                if (GetGrowthPercentage() > Definition.GrowthThresholds[PlantDefinition.LifeCycle.Seed])
                     CurrentLifeCycle = PlantDefinition.LifeCycle.Germination;
                 break;
             case PlantDefinition.LifeCycle.Germination:
-                if (GetGrowthPercentage() > definition.GrowthThresholds[PlantDefinition.LifeCycle.Germination])
+                if (GetGrowthPercentage() > Definition.GrowthThresholds[PlantDefinition.LifeCycle.Germination])
                     CurrentLifeCycle = PlantDefinition.LifeCycle.Seedling;
                 break;
             case PlantDefinition.LifeCycle.Seedling:
-                if (GetGrowthPercentage() > definition.GrowthThresholds[PlantDefinition.LifeCycle.Seedling])
+                if (GetGrowthPercentage() > Definition.GrowthThresholds[PlantDefinition.LifeCycle.Seedling])
                     CurrentLifeCycle = PlantDefinition.LifeCycle.Young;
                 break;
             case PlantDefinition.LifeCycle.Young:
-                if (GetGrowthPercentage() > definition.GrowthThresholds[PlantDefinition.LifeCycle.Young])
+                if (GetGrowthPercentage() > Definition.GrowthThresholds[PlantDefinition.LifeCycle.Young])
                     CurrentLifeCycle = PlantDefinition.LifeCycle.Mature;
                 break;           
         }
@@ -203,7 +203,7 @@ public class Plant : Actor
     {
         float moistureNeed = 0f;
 
-        switch (definition.MoistureNeed)
+        switch (Definition.MoistureNeed)
         {
             case PlantDefinition.Moisture.Any:
                 moistureNeed = float.MinValue;
@@ -231,9 +231,9 @@ public class Plant : Actor
             sb = new StringBuilder();
 
         sb.Clear();
-        sb.AppendLine(definition.PlantName);
+        sb.AppendLine(Definition.DescriptiveName);
         sb.AppendLine(currentLifeCycle.ToString());
-        sb.AppendLine("Growth: " + (CurrentGrowth / definition.MaxGrowth).ToString("P1"));
+        sb.AppendLine("Growth: " + (CurrentGrowth / Definition.MaxGrowth).ToString("P1"));
         sb.AppendLine("Growth Rate: " + CurrentGrowthRate); // TODO: Make me per in-game minute or something.
 
         return sb.ToString();

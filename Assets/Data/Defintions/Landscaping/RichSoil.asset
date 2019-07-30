@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: RichSoil
   m_EditorClassIdentifier: 
   actor: {fileID: 5861974767293949657, guid: 76feea9d824c1c14f847feb91859e653, type: 3}
-  landscapingName: Rich Soil
+  descriptiveName: Rich Soil
+  cost: 5
   drainageProfile:
     serializedVersion: 2
     m_Curve:

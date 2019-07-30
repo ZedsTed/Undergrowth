@@ -11,7 +11,7 @@ public class LandscapingManifest : ScriptableObject
     {
         for (int i = landscapingDefinitions.Count; i-- > 0;)
         {
-            if (landscapingDefinitions[i].LandscapingName == name)
+            if (landscapingDefinitions[i].DescriptiveName == name)
                 return landscapingDefinitions[i];
         }
 

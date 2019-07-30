@@ -11,7 +11,7 @@ public class ContainerManifest : ScriptableObject
     {
         for (int i = containerDefinitions.Count; i-- > 0;)
         {
-            if (containerDefinitions[i].ContainerName == name)
+            if (containerDefinitions[i].DescriptiveName == name)
                 return containerDefinitions[i];
         }
 

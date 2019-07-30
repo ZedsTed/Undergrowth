@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Container : Actor
-{
-    protected ContainerDefinition definition;
-    public ContainerDefinition Definition { get { return definition; } set { definition = value; } }
+{    
+    public new ContainerDefinition Definition
+    { get { return definition as ContainerDefinition; } set { definition = value; } }
 
     // Eventually this will be split into multiple variables such as Nitrogen, Potash etc.
     [Tooltip("Soil Fertility of the bed")]

@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Plant02
   m_EditorClassIdentifier: 
   actor: {fileID: 4677342252629306890, guid: 9be0c74b60589764d85caa58d3afa79e, type: 3}
-  plantName: Plant02
+  descriptiveName: Plant 02
+  cost: 10
   sunlightNeed: 2
   moistureNeed: 2
   growthRate: 4

@@ -263,8 +263,9 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     {
         cellPosition.y = 0f;
         pickedActor.transform.position = cellPosition;
-        pickedActor.SetLayerForHighlight(false);
-        pickedActor.OnPlaced();
+        pickedActor.SetLayerForHighlight(false);       
+        pickedActor.OnPlaced();        
+        Accounts.Instance.BuyItem(pickedActor.Definition.Cost);
         pickedActor.Picked = false;
         pickedActor = null;
     }

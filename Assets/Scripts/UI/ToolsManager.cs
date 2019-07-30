@@ -179,7 +179,7 @@ public class ToolsManager : SingletonDontCreate<ToolsManager>
 
         for (int i = 0, iC = containerDefCount; i < iC; ++i)
         {
-            item.id = ConstructionEditor.Instance.ContainerManifest.GetContainerDefinition(i).ContainerName;
+            item.id = ConstructionEditor.Instance.ContainerManifest.GetContainerDefinition(i).DescriptiveName;
             panel.AddPrefab(item);
         }
     }
@@ -197,7 +197,7 @@ public class ToolsManager : SingletonDontCreate<ToolsManager>
 
         for (int i = 0, iC = landscapingDefCount; i < iC; ++i)
         {
-            item.id = ConstructionEditor.Instance.LandscapingManifest.GetLandscapingDefinition(i).LandscapingName;
+            item.id = ConstructionEditor.Instance.LandscapingManifest.GetLandscapingDefinition(i).DescriptiveName;
             panel.AddPrefab(item);
         }
     }
@@ -215,7 +215,7 @@ public class ToolsManager : SingletonDontCreate<ToolsManager>
 
         for (int i = 0, iC = plantDefCount; i < iC; ++i)
         {
-            item.id = ConstructionEditor.Instance.PlantManifest.GetPlantDefinition(i).PlantName;
+            item.id = ConstructionEditor.Instance.PlantManifest.GetPlantDefinition(i).DescriptiveName;
             panel.AddPrefab(item);
         }       
     }

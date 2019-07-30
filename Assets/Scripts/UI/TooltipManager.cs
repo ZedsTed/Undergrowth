@@ -196,7 +196,7 @@ public class TooltipManager : SingletonDontCreate<TooltipManager>, IPointerEnter
 
     protected string GetTextForContainer(Container container)
     {
-        return container.Definition.ContainerName;
+        return container.Definition.DescriptiveName;
     }
 
 }

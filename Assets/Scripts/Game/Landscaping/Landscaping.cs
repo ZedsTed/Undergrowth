@@ -8,8 +8,9 @@ public class Landscaping : Actor
     protected Container container;
     public Container Container { get { return container; } set { container = value; } }
 
-    protected LandscapingDefinition definition;
-    public LandscapingDefinition Definition { get { return definition; } set { definition = value; } }
+    
+    public new LandscapingDefinition Definition
+    { get { return definition as LandscapingDefinition; } set { definition = value; } }
 
     // Eventually this will be split into multiple variables such as Nitrogen, Potash etc.
     [Tooltip("Soil Fertility of the bed")]
@@ -69,7 +70,7 @@ public class Landscaping : Actor
         // TODO: name this better, what does drainage amount truly represent?
         drainageProgress = Mathf.Clamp01(drainageProgress - (0.005f * Time.deltaTime));
 
-        Water = definition.drainageProfile.Evaluate(drainageProgress);
+        Water = Definition.drainageProfile.Evaluate(drainageProgress);
     }
 
     public void OnWatered(float amount)
@@ -100,7 +101,7 @@ public class Landscaping : Actor
             sb = new StringBuilder();
 
         sb.Clear();
-        sb.AppendLine(definition.LandscapingName);
+        sb.AppendLine(definition.DescriptiveName);
         sb.AppendLine("Water Level: " + Water.ToString("P"));
 
         return sb.ToString();

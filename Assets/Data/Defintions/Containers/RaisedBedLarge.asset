@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: RaisedBedLarge
   m_EditorClassIdentifier: 
   actor: {fileID: 7881954201140342147, guid: 5b532c7c3d8e689469d4e74d637c30bb, type: 3}
-  containerName: RaisedBedLarge
+  descriptiveName: Raised Bed Large
+  cost: 80
   containerSize: {x: 0, y: 0, z: 0}
   containerSoilSize: {x: 1.9, y: 0.15, z: 1.9}
   containerSoilOffset: {x: 0.5, y: 0.125, z: 0.5}

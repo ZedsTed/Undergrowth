@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: ChalkSoil
   m_EditorClassIdentifier: 
   actor: {fileID: 7484530197952075313, guid: 33757b72fefffb3458499bc24be77f45, type: 3}
-  landscapingName: Chalk Soil
+  descriptiveName: Chalk Soil
+  cost: 5
   drainageProfile:
     serializedVersion: 2
     m_Curve:

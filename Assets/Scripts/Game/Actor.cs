@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Actor : MonoBehaviour
 {
+    protected ActorDefinition definition;
+    public virtual ActorDefinition Definition { get { return definition; } set {definition = value; } }
+
     public bool Picked { get; set; }
 
     public virtual bool CanBeSelected()

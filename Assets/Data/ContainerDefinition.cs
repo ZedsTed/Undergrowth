@@ -3,19 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ContainerDefinition.asset", menuName = "Container Definition")]
-public class ContainerDefinition : ScriptableObject
+public class ContainerDefinition : ActorDefinition
 {
-    [Header("Actor")]
-    [Tooltip("Our visual representation of the container definition.")]
-    [SerializeField]
-    protected Container actor;
-    public Container Actor => actor;
-
-    [Tooltip("Name of our container.")]
-    [SerializeField]
-    protected string containerName;
-    public string ContainerName => containerName;
-
+    public Container Actor => actor as Container;
 
 
     [Header("Size")]

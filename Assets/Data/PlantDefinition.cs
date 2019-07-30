@@ -3,18 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "PlantDefinition.asset", menuName = "Plant Definition")]
-public class PlantDefinition : ScriptableObject
+public class PlantDefinition : ActorDefinition
 {
-    [Header("Actor")]
-    [Tooltip("Our visual representation of the plant definition.")]
-    [SerializeField]
-    protected Plant actor;
-    public Plant Actor => actor;
-
-    [Tooltip("Name of our plant.")]
-    [SerializeField]
-    protected string plantName;
-    public string PlantName => plantName;
+    public Plant Actor => actor as Plant;
 
     /// <summary>
     /// How much sunlight this plant needs.

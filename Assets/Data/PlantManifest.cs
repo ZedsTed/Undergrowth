@@ -11,7 +11,7 @@ public class PlantManifest : ScriptableObject
     {
         for (int i = plantDefinitions.Count; i-- > 0;)
         {
-            if (plantDefinitions[i].PlantName == name)
+            if (plantDefinitions[i].DescriptiveName == name)
                 return plantDefinitions[i];
         }
 
