@@ -16,6 +16,8 @@ public class ContainerDefinition : ScriptableObject
     protected string containerName;
     public string ContainerName => containerName;
 
+
+
     [Header("Size")]
     [Tooltip("Size of the container - external.")]
     [SerializeField]

@@ -6,6 +6,7 @@ using static MathsUtils;
 public class SunCycle : MonoBehaviour
 {
     public Light sun;
+    public AnimationCurve sunlightIntensity;
 
     protected Vector3 middayForward = new Vector3(0.0f, -0.9f, -0.4f);
 
@@ -28,7 +29,7 @@ public class SunCycle : MonoBehaviour
     /// </summary>
     protected void TrackSunIntensity()
     {
-        float intensity = Vector3.Dot(middayForward, transform.forward);
-        sun.intensity = intensity;
+        float time = Vector3.Dot(middayForward, transform.forward);
+        sun.intensity = sunlightIntensity.Evaluate(time);
     }
 }

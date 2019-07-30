@@ -23,6 +23,8 @@ public class Landscaping : Actor
 
     [Tooltip("The color gradient for the soil, dry to wet.")]
     public Gradient dryWetSoil;
+
+    protected float drainageProgress = 0f;
     
 
     [SerializeField]
@@ -42,8 +44,12 @@ public class Landscaping : Actor
 
     public override void OnPlaced()
     {
-       // Debug.Log("Placed");
         container = GetComponentInParent<Container>();
+        for (int i = transform.childCount; i-- > 0;)
+        {
+            transform.GetChild(i).localScale = container.Definition.ContainerSoilSize;
+            transform.GetChild(i).localPosition = container.Definition.ContainerSoilOffset;
+        }
     }
 
     // Update is called once per frame
@@ -58,7 +64,12 @@ public class Landscaping : Actor
         // TODO: This will need to be different based on the soil type.
         // TODO: Use a float curve to simulate a point where poor drainage 
         // soil holds onto a higher percentage of water than better drainage etc.
-        Water = Mathf.Clamp01(Water - (0.005f * Time.deltaTime));
+
+
+        // TODO: name this better, what does drainage amount truly represent?
+        drainageProgress = Mathf.Clamp01(drainageProgress - (0.005f * Time.deltaTime));
+
+        Water = definition.drainageProfile.Evaluate(drainageProgress);
     }
 
     public void OnWatered(float amount)
@@ -69,7 +80,7 @@ public class Landscaping : Actor
     protected void WaterSoil(float amount)
     {
         // TODO: Spare water would overflow into adjacent cells, and or drain out the bottom of container.
-        Water = Mathf.Clamp01(Water + amount);
+        drainageProgress = Mathf.Clamp01(drainageProgress + amount);
     }
 
     Color current;

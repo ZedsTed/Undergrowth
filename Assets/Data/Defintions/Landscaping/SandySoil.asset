@@ -14,3 +14,45 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actor: {fileID: 5351288989116999982, guid: f8c58ff99313cd5478137a736266127d, type: 3}
   landscapingName: Sandy Soil
+  drainageProfile:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.65392363
+      value: 0.20314421
+      inSlope: 0.4107797
+      outSlope: 0.4107797
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.09251065
+      outWeight: 0.46363792
+    - serializedVersion: 3
+      time: 0.8856562
+      value: 0.50209296
+      inSlope: 3.5454524
+      outSlope: 3.5454524
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.1314388
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

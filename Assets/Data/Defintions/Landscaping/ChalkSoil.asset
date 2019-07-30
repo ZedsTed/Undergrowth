@@ -14,3 +14,54 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actor: {fileID: 7484530197952075313, guid: 33757b72fefffb3458499bc24be77f45, type: 3}
   landscapingName: Chalk Soil
+  drainageProfile:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1.3176607
+      outSlope: 1.3176607
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.1240436
+    - serializedVersion: 3
+      time: 0.4376923
+      value: 0.22517246
+      inSlope: 0.1339097
+      outSlope: 0.1339097
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.65902084
+    - serializedVersion: 3
+      time: 0.58555984
+      value: 0.29231533
+      inSlope: 1.4108216
+      outSlope: 1.4108216
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.68321407
+      value: 0.543187
+      inSlope: 1.5001924
+      outSlope: 1.5001924
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.14851789
+      outWeight: 0.08813894
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 3.6951797
+      outSlope: 3.6951797
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.061847188
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

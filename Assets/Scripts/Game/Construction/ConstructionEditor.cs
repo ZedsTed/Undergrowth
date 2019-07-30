@@ -454,6 +454,9 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
             }
         }
 
+
+        
+
         // Remove any of our own colliders from the picked actor.
         for (int i = sceneColliders.Count; i-- > 0;)
         {
@@ -461,6 +464,8 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
                 sceneColliders.RemoveAt(i);
         }
 
+
+     
 
         return sceneColliders.Count > 0 ? true : false;
     }

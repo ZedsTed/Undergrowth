@@ -123,7 +123,7 @@ public class SelectableList : MonoBehaviour
 
     public bool Deselect(string itemID, bool silent = false)
     {
-        for(int i = Items.Count; i--> 0;)
+        for (int i = Items.Count; i-- > 0;)
         {
             if (Items[i].id == itemID)
                 return Deselect(Items[i], silent);
@@ -150,10 +150,10 @@ public class SelectableList : MonoBehaviour
         return false;
     }
 
-    
+
     public void ClearSelection(bool silent = false)
     {
-        for(int i = Selection.Count; i--> 0;)
+        for (int i = Selection.Count; i-- > 0;)
         {
             SelectableListItem selected = Selection[i];
 
@@ -169,7 +169,7 @@ public class SelectableList : MonoBehaviour
                     onItemSelected(selected, false);
             }
         }
-    } 
+    }
 
 
     #region Public List<SelectableListItem> interface
@@ -236,10 +236,10 @@ public class SelectableList : MonoBehaviour
 
         item.list = Items;
 
-        if (setParent)        
-            item.transform.SetParent(transform, false);     
+        if (setParent)
+            item.transform.SetParent(transform, false);
 
-        if (index <= 0)        
+        if (index <= 0)
             Items.Insert(0, item);
         else if (index >= Items.Count)
             Items.Add(item);
@@ -326,7 +326,7 @@ public class SelectableList : MonoBehaviour
 
         Items.Clear();
     }
-    
+
     #endregion
 
     #region Event handlers
@@ -343,10 +343,10 @@ public class SelectableList : MonoBehaviour
 
         onItemClick?.Invoke(item, eventData);
 
-        if (Selection.Contains(item))           
+        if (Selection.Contains(item))
             Deselect(item);
-        else
-            Select(item);
+
+        Select(item);
     }
 
     /// <summary>
