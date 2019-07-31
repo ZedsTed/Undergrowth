@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a06131585a924e4ab77b155eba9fcb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mesh: {fileID: 5832893692194812492}
   SoilFertility: 0
   Water: 0
   SoilUsage: 0
@@ -176,6 +177,12 @@ PrefabInstance:
       objectReference: {fileID: 2100010, guid: 27d05cd1825374599a2f9ce04c649102, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b5ec6b01481518849b5f65aca8259acb, type: 3}
+--- !u!1 &5832893692194812492 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: b5ec6b01481518849b5f65aca8259acb,
+    type: 3}
+  m_PrefabInstance: {fileID: 2581535649340074821}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7397655176807809119 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: b5ec6b01481518849b5f65aca8259acb,

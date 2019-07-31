@@ -7,6 +7,10 @@ public class Actor : MonoBehaviour
     protected ActorDefinition definition;
     public virtual ActorDefinition Definition { get { return definition; } set {definition = value; } }
 
+    [SerializeField]
+    protected GameObject mesh;
+    public GameObject Mesh => mesh;
+
     public bool Picked { get; set; }
 
     public virtual bool CanBeSelected()

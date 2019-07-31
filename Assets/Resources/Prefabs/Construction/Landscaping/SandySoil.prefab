@@ -166,6 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2b77c0f8acf6734b9c2722b8f060996, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mesh: {fileID: 7457778959928367841}
   SoilFertility: 0
   Water: 0
   SoilUsage: 0

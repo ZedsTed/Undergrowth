@@ -76,6 +76,9 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
     protected void Update()
     {
+        WorldCellPositionDebug.text = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(editorGridWorldPosition)).ToString();
+        WorldPositionDebug.text = editorGridWorldPosition.ToString();
+
         if (!IsPointerOverUI())
         {
             if (mode == ConstructionState.Placing)
@@ -179,11 +182,11 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
     public void OnItemSelected(SelectableListItem item, bool selected)
     {
-        // Debug.Log("CEselected " + item.id + " " + selected);
+        Debug.Log("CEselected " + item.id + " " + selected);
 
-        if (pickedActor != null && !selected)
+        if (pickedActor != null)
         {
-            //Debug.Log("deselect");
+            Debug.Log("deselect");
             Destroy(pickedActor.gameObject);
             pickedActor = null;
 
@@ -244,8 +247,8 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
         if (pickedActor is Landscaping)
         {
             // Revert it back.
-            Vector3 size = ContainerManifest.GetContainerDefinition("RaisedBed").ContainerSoilSize;
-            Vector3 pos = ContainerManifest.GetContainerDefinition("RaisedBed").ContainerSoilOffset;
+            Vector3 size = ContainerManifest.GetContainerDefinition("Raised Bed").ContainerSoilSize;
+            Vector3 pos = ContainerManifest.GetContainerDefinition("Raised Bed").ContainerSoilOffset;
 
             for (int i = pickedActor.transform.childCount; i-- > 0;)
             {
@@ -324,11 +327,12 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
     #endregion
 
-
+    protected List<KeyValuePair<Collider, float>> colliderDistances = new List<KeyValuePair<Collider, float>>();
     protected bool IsValidPosition()
     {
         if (IsCollidingWithWorld())
         {
+            colliderDistances.Clear();
             if (pickedActor is Container)
             {
                 return false;
@@ -400,7 +404,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
         actorColliders.AddRange(pickedActor.GetComponentsInChildren<Collider>(true));
 
         Collider c;
-        float colliderShrink = 0.975f; // We want to shrink our colliders just to make sure we have a proper intersect.
+        float colliderShrink = 0.8f; // We want to shrink our colliders just to make sure we have a proper intersect.
 
         // Sort them and then union to see what we intersect with.
         for (int i = actorColliders.Count; i-- > 0;)

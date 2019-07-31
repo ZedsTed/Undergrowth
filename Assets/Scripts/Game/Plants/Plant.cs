@@ -21,10 +21,9 @@ public class Plant : Actor
     public float SoilUsageNeed;
     
     public new PlantDefinition Definition
-    { get { return Definition as PlantDefinition; } set { Definition = value; } }
+    { get { return definition as PlantDefinition; } set { definition = value; } }
 
-    [SerializeField]
-    protected GameObject mesh;
+
 
     /// <summary>
     /// Eventually we'll need to raycast from the sun to the plant to check the actual sunlight level, but this will do for now.

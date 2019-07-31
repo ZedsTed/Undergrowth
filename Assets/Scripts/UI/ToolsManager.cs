@@ -38,6 +38,8 @@ public class ToolsManager : SingletonDontCreate<ToolsManager>
     public Toggle WaterToggle;
     public Toggle RemoveToggle;
 
+
+
     protected SelectableList panel;
 
     /// <summary>
@@ -77,7 +79,7 @@ public class ToolsManager : SingletonDontCreate<ToolsManager>
             case "Container":
             case "Landscaping":
             case "Plant":
-                ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.Placing);
+                ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.Placing);                
                 SpawnSelectableList(toggle);
                 break;
             case "Water":
@@ -225,8 +227,8 @@ public class ToolsManager : SingletonDontCreate<ToolsManager>
         if (panel == null)
             return; 
 
-       // Debug.Log("Destroying list");
-
+        Debug.Log("Destroying list");
+        panel.ClearSelection(); // clear our selection first, allows us to trigger things.
         DestroyImmediate(panel.gameObject);
         panel = null;
     }
