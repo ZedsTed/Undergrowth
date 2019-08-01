@@ -256,31 +256,32 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
     //Vector3 currentLerpedSize;
     Vector3 previousLerpedSize;
+    protected Container parentContainer;
     protected void OnValidPosition()
     {
         postEffect.SetColor(Color.green);
 
         if (pickedActor is Landscaping)
         {
-            // TODO: Remove GetComponent calls, optimise to cache it.
+            parentContainer = (pickedActor as Landscaping).GetComponentInParent<Container>();
 
-            Quaternion rot = (pickedActor as Landscaping).GetComponentInParent<Container>().transform.rotation;
+            // Grab parent rotation
+            Quaternion rot = parentContainer.transform.rotation;
 
-            // Increase size
-            Vector3 size =  (pickedActor as Landscaping).GetComponentInParent<Container>().Definition.ContainerSoilSize;
+            // Grab parent size definition
+            Vector3 size = parentContainer.Definition.ContainerSoilSize;
 
-            // Work out where we need to be in this container, what our offset from our snap position and out world position is so we can correctly position ourselves.
-            Vector3 snapToPos = (pickedActor as Landscaping).GetComponentInParent<Container>().SnapPoint.position;
-            Vector3 posOffset = pickedActor.transform.position - (pickedActor as Landscaping).SnapPoint.position;
+            // Work out where we need to be in this container, 
+            // what our offset from our snap position and out 
+            // world position it is so we can correctly position ourselves.
+            
+            Vector3 snapToPos = parentContainer.SnapPoint.position;
+            snapToPos.y = 0f;
+            Vector3 posOffset = (pickedActor as Landscaping).transform.position - (pickedActor as Landscaping).SnapPoint.position;
             posOffset.y = 0f;
-
-            //Debug.DrawLine(snapToPos, snapToPos * 2f, Color.black);
-            //Debug.DrawLine(posOffset, posOffset * 2f, Color.red);
-
-            //Debug.DrawLine(snapToPos - posOffset, (snapToPos - posOffset), Color.blue);
-
+           
             pickedActor.transform.position = snapToPos - posOffset;
-            hitCellPosition = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(snapToPos - posOffset)); // We now need to update our 'selected' cell so that when we place this item, it'll be place there.
+            hitCellPosition = snapToPos - posOffset; // We now need to update our 'selected' cell so that when we place this item, it'll be place there.
             pickedActor.transform.rotation = rot; // We don't want to lerp this, it'll look too clunky.
 
 

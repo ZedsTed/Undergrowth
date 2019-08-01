@@ -52,8 +52,7 @@ public class Landscaping : Actor
         container = GetComponentInParent<Container>();
         for (int i = transform.childCount; i-- > 0;)
         {
-            transform.GetChild(i).localScale = container.Definition.ContainerSoilSize;
-            transform.GetChild(i).localPosition = container.Definition.ContainerSoilOffset;
+            transform.GetChild(i).localScale = container.Definition.ContainerSoilSize;            
         }
     }
 
