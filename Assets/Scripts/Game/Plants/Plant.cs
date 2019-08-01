@@ -243,11 +243,11 @@ public class Plant : Actor
         sb.Clear();
         sb.AppendLine(Definition.DescriptiveName);
         sb.AppendLine(currentLifeCycle.ToString());
-        sb.AppendLine("Sunlight Satisfaction: " + sunlightSatisfaction);
-        sb.AppendLine("Water Satisfaction: " + moistureSatisfaction);
-        sb.AppendLine("Energy: " + energy);
-        sb.AppendLine("Growth: " + (CurrentGrowth / Definition.MaxGrowth).ToString("P1"));
-        sb.AppendLine("Growth Rate: " + CurrentGrowthRate); // TODO: Make me per in-game minute or something.
+        sb.AppendLine("Sunlight Satisfaction: " + sunlightSatisfaction.ToString("P2"));
+        sb.AppendLine("Water Satisfaction: " + moistureSatisfaction.ToString("P2"));
+        sb.AppendLine("Energy: " + energy.ToString("P2"));
+        sb.AppendLine("Growth: " + (CurrentGrowth / Definition.MaxGrowth).ToString("P2"));
+        sb.AppendLine("Growth Rate: " + (CurrentGrowthRate / ((Time.deltaTime / 60) / 60)).ToString("F2") + " per hour"); // TODO: Make me per in-game minute or something.
 
         return sb.ToString();
     }
