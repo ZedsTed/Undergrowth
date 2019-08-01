@@ -100,7 +100,12 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
                         if (Input.GetMouseButtonDown(0))
                         {
-                            OnActorPlaced(hitCellPosition);
+                            bool multiple = false;
+
+                            if (Input.GetKey(KeyCode.LeftControl))
+                                multiple = true;
+
+                            OnActorPlaced(hitCellPosition, multiple);
                         }
                     }
                     else
@@ -262,18 +267,36 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
         }
     }
 
-    protected void OnActorPlaced(Vector3 cellPosition)
+    protected void OnActorPlaced(Vector3 cellPosition, bool multiple = false)
     {
         cellPosition.y = 0f;
         pickedActor.transform.position = cellPosition;
-        pickedActor.SetLayerForHighlight(false);       
+        pickedActor.SetLayerForHighlight(false);
+        Accounts.Instance.BuyItem(pickedActor.Definition.Cost); // TODO: Need to add in a solution for if the player can't afford to buy
         pickedActor.OnPlaced();        
-        Accounts.Instance.BuyItem(pickedActor.Definition.Cost);
         pickedActor.Picked = false;
-        pickedActor = null;
+
+        if (multiple)
+            SpawnDuplicateActor(pickedActor);
+        else
+            pickedActor = null;
     }
 
     #region Actor Spawning
+
+    protected void SpawnDuplicateActor(Actor currentActor)
+    {
+        if (currentActor is Container)
+            SpawnContainer(currentActor.Definition.DescriptiveName);
+        else if (currentActor is Landscaping)
+            SpawnLandscaping(currentActor.Definition.DescriptiveName);
+        else if (currentActor is Plant)
+            SpawnPlant(currentActor.Definition.DescriptiveName);
+        else
+            Debug.LogError("[SpawnDuplicateActor] You are trying to spawn a duplicate actor of unknown type.");
+
+        pickedActor.SetLayerForHighlight(true);
+    }
 
     protected void SpawnContainer(string name)
     {
