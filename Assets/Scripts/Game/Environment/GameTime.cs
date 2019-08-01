@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -50,6 +51,8 @@ public class GameTime : SingletonDontCreate<GameTime>
     /// Can be used to tell how far through the day you are.
     /// </summary>
     public float CurrentMinuteAndSeconds { get { return currentMinute + (timeSinceLastMinute/60); } }
+
+    public Action<int> onNextDay;
 
     /// <summary>
     /// We use this struct to just hold the data that we need for a time warp enum state its accompanying speed.
@@ -136,18 +139,18 @@ public class GameTime : SingletonDontCreate<GameTime>
         }
     }
 
+    [SerializeField]
+    float t;
     protected void TrackTime()
     {
-        float t = Time.deltaTime / gameMinuteToRealSecond;
+        t = Time.deltaTime / gameMinuteToRealSecond;
+
+        timeSinceLastMinute += t;
 
         if (timeSinceLastMinute >= gameMinuteToRealSecond)
         {
-            timeSinceLastMinute = 0f;
+            timeSinceLastMinute -= gameMinuteToRealSecond; // Instead of setting to 0, we need to just deduct a minute. Otherwise the small remainders of deltaTime + timeSinceLastMinute on the frame that it goes over accumulate.
             OnMinutePassed();
-        }
-        else
-        {
-            timeSinceLastMinute += t;
         }
     }
 
@@ -158,6 +161,7 @@ public class GameTime : SingletonDontCreate<GameTime>
         {
             // Next day!
             ++dayCount;
+            onNextDay?.Invoke(dayCount);
             currentMinute = 0;
             //Debug.Log("Good morning!");
         }

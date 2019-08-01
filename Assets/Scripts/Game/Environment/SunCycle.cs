@@ -20,8 +20,8 @@ public class SunCycle : MonoBehaviour
     /// Rotates the sun in accordance with how far through the day we are.
     /// </summary>
     protected void TrackSunRotation()
-    {
-        transform.Rotate(Vector3.up * ((Time.deltaTime / GameTime.Instance.RealSecondsInDay) * 360.0f), Space.Self);
+    {        
+        transform.Rotate(Vector3.up, ((Time.deltaTime / GameTime.Instance.RealSecondsInDay) * 360.0f), Space.Self);
     }
 
     /// <summary>
