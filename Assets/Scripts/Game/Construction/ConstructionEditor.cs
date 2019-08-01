@@ -63,6 +63,15 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     protected Vector3 previousInputPosition;
     protected Vector3 editorGridWorldPosition;
 
+    [SerializeField]
+    protected float appliedRotationY = 0f;
+
+    [SerializeField]
+    protected float previousActorRotation;
+
+    [SerializeField]
+    protected float actorRotation;
+
     public float lerpFactor1;
     public float lerpFactor2;
 
@@ -70,6 +79,8 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     {
         inputPosition = new Vector3(0f, 0f, 0f);
         previousInputPosition = new Vector3(0f, 0f, 0f);
+
+       
     }
 
 
@@ -93,6 +104,24 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
                     inputPosition.y = 0f;
 
                     pickedActor.transform.position = inputPosition;
+
+                    
+
+                    if (Input.GetKeyDown(KeyCode.Z))
+                        appliedRotationY += -90f;
+
+                    if (Input.GetKeyDown(KeyCode.X))
+                        appliedRotationY += 90f;
+
+                    //Vector3 appliedRotation = new Vector3(0f, appliedRotationY, 0f);
+
+                    previousActorRotation = Mathf.Lerp(previousActorRotation, (appliedRotationY - actorRotation) * 0.6f, 33f * Time.unscaledDeltaTime);
+
+                    actorRotation += previousActorRotation;
+                    
+
+                    pickedActor.transform.rotation = Quaternion.Euler(0f, actorRotation, 0f);
+
 
                     if (IsValidPosition())
                     {
@@ -280,6 +309,8 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
             SpawnDuplicateActor(pickedActor);
         else
             pickedActor = null;
+
+        previousActorRotation = 0f;
     }
 
     #region Actor Spawning
