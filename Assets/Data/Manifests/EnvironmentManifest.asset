@@ -22,3 +22,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e396f4762585da44eb69f1e66fd02308, type: 2}
   - {fileID: 11400000, guid: 945e3f77ee836d54a9702caaaf8cd311, type: 2}
   - {fileID: 11400000, guid: 9e7e75d7aead713448cca50b5458809a, type: 2}
+  energyDefinition: {fileID: 11400000, guid: 9b8302fe4fb47534ca7f9aa0b0da5e24, type: 2}

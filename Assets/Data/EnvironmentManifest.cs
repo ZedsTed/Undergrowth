@@ -112,4 +112,5 @@ public class EnvironmentManifest : ScriptableObject
 
     #endregion
 
+    public EnergyDefinition energyDefinition;
 }

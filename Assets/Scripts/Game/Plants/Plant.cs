@@ -144,26 +144,29 @@ public class Plant : Actor
         sunlightSatisfaction = CalculateSunlightSatisfaction();
         moistureSatisfaction = CalculateMoistureSatisfaction();
 
-        // If we're within a window of healthy satisfaction, then energy is higher.
-        if (sunlightSatisfaction >= -0.05f && sunlightSatisfaction <= 0.05f)
-            energy += 0.5f;
-        else if (sunlightSatisfaction >= -0.15f && sunlightSatisfaction <= 0.15f)
-            energy += 0.35f;
-        else if (sunlightSatisfaction >= -0.25f && sunlightSatisfaction <= 0.25f)
-            energy += 0.15f;
-        else
-            energy += 0f;
+        energy = EnvironmentData.Instance.
+            EnvManifest.energyDefinition.Satisfaction.Evaluate(sunlightSatisfaction + moistureSatisfaction);
+
+        //// If we're within a window of healthy satisfaction, then energy is higher.
+        //if (sunlightSatisfaction >= -0.05f && sunlightSatisfaction <= 0.05f)
+        //    energy += 0.5f;
+        //else if (sunlightSatisfaction >= -0.15f && sunlightSatisfaction <= 0.15f)
+        //    energy += 0.35f;
+        //else if (sunlightSatisfaction >= -0.25f && sunlightSatisfaction <= 0.25f)
+        //    energy += 0.15f;
+        //else
+        //    energy += 0f;
 
 
-        // If we're within a window of healthy satisfaction, then things are good.
-        if (moistureSatisfaction >= -0.05f && moistureSatisfaction <= 0.05f)
-            energy += 0.5f;
-        else if (moistureSatisfaction >= -0.15f && moistureSatisfaction <= 0.15f)
-            energy += 0.35f;
-        else if (moistureSatisfaction >= -0.25f && moistureSatisfaction <= 0.25f)
-            energy += 0.15f;
-        else
-            energy += 0f;
+        //// If we're within a window of healthy satisfaction, then things are good.
+        //if (moistureSatisfaction >= -0.05f && moistureSatisfaction <= 0.05f)
+        //    energy += 0.5f;
+        //else if (moistureSatisfaction >= -0.15f && moistureSatisfaction <= 0.15f)
+        //    energy += 0.35f;
+        //else if (moistureSatisfaction >= -0.25f && moistureSatisfaction <= 0.25f)
+        //    energy += 0.15f;
+        //else
+        //    energy += 0f;
 
         return energy;
     }
@@ -176,7 +179,7 @@ public class Plant : Actor
     {
         //float sunlightNeed = 0f;
 
-        return EnvironmentData.Instance.SunManifest.EvaluateSunlightSatisfaction(Definition.SunlightNeed);
+        return EnvironmentData.Instance.EnvManifest.EvaluateSunlightSatisfaction(Definition.SunlightNeed);
 
         //switch (Definition.SunlightNeed)
         //{
@@ -206,7 +209,7 @@ public class Plant : Actor
     /// <returns></returns>
     protected float CalculateMoistureSatisfaction()
     {
-        return EnvironmentData.Instance.SunManifest.EvaluateWaterSatisfaction(Definition.MoistureNeed, WaterLevel);
+        return EnvironmentData.Instance.EnvManifest.EvaluateWaterSatisfaction(Definition.MoistureNeed, WaterLevel);
 
         //float moistureNeed = 0f;
 
