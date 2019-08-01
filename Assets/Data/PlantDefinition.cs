@@ -13,8 +13,8 @@ public class PlantDefinition : ActorDefinition
     [Header("Sunlight Needs")]
     [Tooltip("How much Sunlight this plant needs.")]
     [SerializeField]
-    protected Sunlight sunlightNeed;
-    public Sunlight SunlightNeed => sunlightNeed; 
+    protected SunlightDefinition.Sunlight sunlightNeed;
+    public SunlightDefinition.Sunlight SunlightNeed => sunlightNeed; 
 
     /// <summary>
     /// How much moisture/water the plant needs.
@@ -22,8 +22,8 @@ public class PlantDefinition : ActorDefinition
     [Header("Water Needs")]
     [Tooltip("How much Water this plant needs.")]
     [SerializeField]
-    protected Moisture moistureNeed;
-    public Moisture MoistureNeed => moistureNeed;
+    protected WaterDefinition.Moisture moistureNeed;
+    public WaterDefinition.Moisture MoistureNeed => moistureNeed;
 
     /// <summary>
     /// How fast this plant grows in optimal conditions for it.
@@ -50,8 +50,8 @@ public class PlantDefinition : ActorDefinition
     {
         [LifeCycle.Seed] = 0,
         [LifeCycle.Germination] = 4,
-        [LifeCycle.Seedling] = 20,
-        [LifeCycle.Young] = 40,
+        [LifeCycle.Seedling] = 8,
+        [LifeCycle.Young] = 20,
         [LifeCycle.Mature] = 80
     };
 
@@ -74,14 +74,6 @@ public class PlantDefinition : ActorDefinition
         Seeding
     }
 
-    public enum Sunlight
-    {
-        Any,
-        Full,
-        Partial,
-        Shade
-    }
-
     public enum Soil
     {
         Any,
@@ -89,14 +81,6 @@ public class PlantDefinition : ActorDefinition
         Clay,
         Loam,
         Sand
-    }
-
-    public enum Moisture
-    {
-        Any,
-        MoistDraining,
-        PoorlyDrained,
-        WellDrained
     }
 
     public enum Ph

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Accounts : Singleton<Accounts>
+public class Accounts : SingletonDontCreate<Accounts>
 {
     [Tooltip("Current balance of money.")]
     [SerializeField]

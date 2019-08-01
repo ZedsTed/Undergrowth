@@ -31,6 +31,10 @@ public class Plant : Actor
     [SerializeField]
     protected float SunlightLevel => EnvironmentData.Instance.SunIntensity;
 
+    protected float sunlightSatisfaction;
+    protected float moistureSatisfaction;
+    protected float energy;
+
     /// <summary>
     /// 0 - 1 value for current water level in the container.
     /// </summary>    
@@ -59,7 +63,7 @@ public class Plant : Actor
         if (Picked)
             return;
 
-        CurrentGrowthRate = (Photosynthesis() / 100) * Definition.GrowthRate * Time.deltaTime;
+        CurrentGrowthRate = (Photosynthesis()) * Definition.GrowthRate * GameConstants.Instance.GrowthMultiplier * Time.deltaTime;
 
         // We work out how much we'll grow by this tick through
         // checking the energy output and multiplying by its set growth rate.
@@ -132,13 +136,13 @@ public class Plant : Actor
     /// <returns></returns>
     float Photosynthesis()
     {
-        float energy = 0f;
+        energy = 0f;
 
         // we want to reflect how close to zero/equilibrium the sunlight and moisture levels are.
 
 
-        float sunlightSatisfaction = CalculateSunlightSatisfaction();
-        float moistureSatisfaction = CalculateMoistureSatisfaction();
+        sunlightSatisfaction = CalculateSunlightSatisfaction();
+        moistureSatisfaction = CalculateMoistureSatisfaction();
 
         // If we're within a window of healthy satisfaction, then energy is higher.
         if (sunlightSatisfaction >= -0.05f && sunlightSatisfaction <= 0.05f)
@@ -170,27 +174,29 @@ public class Plant : Actor
     /// <returns></returns>
     protected float CalculateSunlightSatisfaction()
     {
-        float sunlightNeed = 0f;
+        //float sunlightNeed = 0f;
 
-        switch (Definition.SunlightNeed)
-        {
-            case PlantDefinition.Sunlight.Any:
-                sunlightNeed = float.MinValue;
-                break;
-            case PlantDefinition.Sunlight.Full:
-                sunlightNeed = 1f;
-                break;
-            case PlantDefinition.Sunlight.Partial:
-                sunlightNeed = 0.5f;
-                break;
-            case PlantDefinition.Sunlight.Shade:
-                sunlightNeed = 0.25f;
-                break;
-            default:
-                break;
-        }
+        return EnvironmentData.Instance.SunManifest.EvaluateSunlightSatisfaction(Definition.SunlightNeed);
 
-        return SunlightLevel - sunlightNeed;        
+        //switch (Definition.SunlightNeed)
+        //{
+        //    case SunlightManifest.Sunlight.Any:
+        //        //EnvironmentData.SunManifest.Needs;
+        //        break;
+        //    case SunlightManifest.Sunlight.Full:
+        //        sunlightNeed = 1f;
+        //        break;
+        //    case SunlightManifest.Sunlight.Partial:
+        //        sunlightNeed = 0.5f;
+        //        break;
+        //    case SunlightManifest.Sunlight.Shade:
+        //        sunlightNeed = 0.25f;
+        //        break;
+        //    default:
+        //        break;
+        //}
+
+        //return SunlightLevel - sunlightNeed;        
     }
 
 
@@ -200,27 +206,29 @@ public class Plant : Actor
     /// <returns></returns>
     protected float CalculateMoistureSatisfaction()
     {
-        float moistureNeed = 0f;
+        return EnvironmentData.Instance.SunManifest.EvaluateWaterSatisfaction(Definition.MoistureNeed, WaterLevel);
 
-        switch (Definition.MoistureNeed)
-        {
-            case PlantDefinition.Moisture.Any:
-                moistureNeed = float.MinValue;
-                break;
-            case PlantDefinition.Moisture.MoistDraining:
-                moistureNeed = 1f;
-                break;
-            case PlantDefinition.Moisture.PoorlyDrained:
-                moistureNeed = 0.5f;
-                break;
-            case PlantDefinition.Moisture.WellDrained:
-                moistureNeed = 0.25f;
-                break;
-            default:
-                break;
-        }
+        //float moistureNeed = 0f;
 
-        return WaterLevel - moistureNeed;
+        //switch (Definition.MoistureNeed)
+        //{
+        //    case PlantDefinition.Moisture.Any:
+        //        moistureNeed = float.MinValue;
+        //        break;
+        //    case PlantDefinition.Moisture.MoistDraining:
+        //        moistureNeed = 1f;
+        //        break;
+        //    case PlantDefinition.Moisture.PoorlyDrained:
+        //        moistureNeed = 0.5f;
+        //        break;
+        //    case PlantDefinition.Moisture.WellDrained:
+        //        moistureNeed = 0.25f;
+        //        break;
+        //    default:
+        //        break;
+        //}
+
+        //return WaterLevel - moistureNeed;
     }
 
     StringBuilder sb;
@@ -232,6 +240,9 @@ public class Plant : Actor
         sb.Clear();
         sb.AppendLine(Definition.DescriptiveName);
         sb.AppendLine(currentLifeCycle.ToString());
+        sb.AppendLine("Sunlight Satisfaction: " + sunlightSatisfaction);
+        sb.AppendLine("Water Satisfaction: " + moistureSatisfaction);
+        sb.AppendLine("Energy: " + energy);
         sb.AppendLine("Growth: " + (CurrentGrowth / Definition.MaxGrowth).ToString("P1"));
         sb.AppendLine("Growth Rate: " + CurrentGrowthRate); // TODO: Make me per in-game minute or something.
 

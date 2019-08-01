@@ -11,4 +11,8 @@ public class EnvironmentData : SingletonDontCreate<EnvironmentData>
     protected SunCycle Sun;
     
     public float SunIntensity { get { return Sun.sun.intensity; } }
+
+    [SerializeField]
+    protected EnvironmentManifest sunManifest;
+    public EnvironmentManifest SunManifest => sunManifest;
 }
