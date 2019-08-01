@@ -7,6 +7,10 @@ public class Container : Actor
     public new ContainerDefinition Definition
     { get { return definition as ContainerDefinition; } set { definition = value; } }
 
+    [SerializeField]
+    protected Transform snapPoint;
+    public Transform SnapPoint => snapPoint;
+
     // Eventually this will be split into multiple variables such as Nitrogen, Potash etc.
     [Tooltip("Soil Fertility of the bed")]
     public float SoilFertility;

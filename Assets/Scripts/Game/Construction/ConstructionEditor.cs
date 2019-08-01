@@ -62,6 +62,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     protected Vector3 inputPosition;
     protected Vector3 previousInputPosition;
     protected Vector3 editorGridWorldPosition;
+    protected Vector3 hitCellPosition;
 
     [SerializeField]
     protected float appliedRotationY = 0f;
@@ -97,7 +98,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
                 if (pickedActor != null)
                 {
                     //Debug.Log(pointerEventData.pointerCurrentRaycast.worldPosition);
-                    Vector3 hitCellPosition = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(editorGridWorldPosition));
+                    hitCellPosition = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(editorGridWorldPosition));
 
                     previousInputPosition = Vector3.Lerp(previousInputPosition, (hitCellPosition - inputPosition) * 0.6f, 33f * Time.unscaledDeltaTime);
                     inputPosition += previousInputPosition;
@@ -112,8 +113,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
                     if (Input.GetKeyDown(KeyCode.X))
                         appliedRotationY += 90f;
-
-                    //Vector3 appliedRotation = new Vector3(0f, appliedRotationY, 0f);
+                                      
 
                     previousActorRotation = Mathf.Lerp(previousActorRotation, (appliedRotationY - actorRotation) * 0.6f, 33f * Time.unscaledDeltaTime);
 
@@ -224,6 +224,10 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
             Destroy(pickedActor.gameObject);
             pickedActor = null;
 
+            previousActorRotation = 0f;
+            actorRotation = 0f;
+            appliedRotationY = 0f;
+
             return;
         }
         else if (!selected)
@@ -258,16 +262,31 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
         if (pickedActor is Landscaping)
         {
+            // TODO: Remove GetComponent calls, optimise to cache it.
+
+            Quaternion rot = (pickedActor as Landscaping).GetComponentInParent<Container>().transform.rotation;
+
             // Increase size
-            Vector3 size = (pickedActor as Landscaping).GetComponentInParent<Container>().Definition.ContainerSoilSize;
-            Vector3 pos = (pickedActor as Landscaping).GetComponentInParent<Container>().Definition.ContainerSoilOffset;
+            Vector3 size =  (pickedActor as Landscaping).GetComponentInParent<Container>().Definition.ContainerSoilSize;
+
+            // Work out where we need to be in this container, what our offset from our snap position and out world position is so we can correctly position ourselves.
+            Vector3 snapToPos = (pickedActor as Landscaping).GetComponentInParent<Container>().SnapPoint.position;
+            Vector3 posOffset = pickedActor.transform.position - (pickedActor as Landscaping).SnapPoint.position;
+            posOffset.y = 0f;
+
+            //Debug.DrawLine(snapToPos, snapToPos * 2f, Color.black);
+            //Debug.DrawLine(posOffset, posOffset * 2f, Color.red);
+
+            //Debug.DrawLine(snapToPos - posOffset, (snapToPos - posOffset), Color.blue);
+
+            pickedActor.transform.position = snapToPos - posOffset;
+            hitCellPosition = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(snapToPos - posOffset)); // We now need to update our 'selected' cell so that when we place this item, it'll be place there.
+            pickedActor.transform.rotation = rot; // We don't want to lerp this, it'll look too clunky.
+
 
             for (int i = pickedActor.transform.childCount; i-- > 0;)
             {
-               // pickedActor.transform.GetChild(i).localScale = size;
-                pickedActor.transform.GetChild(i).localPosition = pos;
-
-                previousLerpedSize = Vector3.Lerp(previousLerpedSize, (size - pickedActor.transform.GetChild(i).localScale) * 0.2f, 15f * Time.unscaledDeltaTime);
+                previousLerpedSize = Vector3.Lerp(previousLerpedSize, (size - pickedActor.transform.GetChild(i).localScale) * 0.7f, 30f * Time.unscaledDeltaTime);
                 pickedActor.transform.GetChild(i).localScale += previousLerpedSize;
             }
             
@@ -289,7 +308,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
                // pickedActor.transform.GetChild(i).localScale = size;
                 pickedActor.transform.GetChild(i).localPosition = pos;
 
-                previousLerpedSize = Vector3.Lerp(previousLerpedSize, (size - pickedActor.transform.GetChild(i).localScale) * 0.2f, 15f * Time.unscaledDeltaTime);
+                previousLerpedSize = Vector3.Lerp(previousLerpedSize, (size - pickedActor.transform.GetChild(i).localScale) * 0.7f, 30f * Time.unscaledDeltaTime);
                 pickedActor.transform.GetChild(i).localScale += previousLerpedSize;
             }
 
@@ -308,9 +327,13 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
         if (multiple)
             SpawnDuplicateActor(pickedActor);
         else
+        {
             pickedActor = null;
 
-        previousActorRotation = 0f;
+            previousActorRotation = 0f;
+            actorRotation = 0f;
+            appliedRotationY = 0f;
+        }
     }
 
     #region Actor Spawning

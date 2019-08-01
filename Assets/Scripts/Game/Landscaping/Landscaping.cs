@@ -5,12 +5,16 @@ using UnityEngine;
 
 public class Landscaping : Actor
 {
+    public new LandscapingDefinition Definition
+    { get { return definition as LandscapingDefinition; } set { definition = value; } }
+
+    [SerializeField]
+    protected Transform snapPoint;
+    public Transform SnapPoint => snapPoint;
+
     protected Container container;
     public Container Container { get { return container; } set { container = value; } }
 
-    
-    public new LandscapingDefinition Definition
-    { get { return definition as LandscapingDefinition; } set { definition = value; } }
 
     // Eventually this will be split into multiple variables such as Nitrogen, Potash etc.
     [Tooltip("Soil Fertility of the bed")]
