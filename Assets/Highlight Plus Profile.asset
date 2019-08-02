@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e9253636bf2648bd813257f451f8486, type: 3}
   m_Name: Highlight Plus Profile
   m_EditorClassIdentifier: 
-  effectGroup: 0
+  effectGroup: 3
   effectGroupLayer:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 512
   alphaCutOff: 0
   cullBackFaces: 1
   fadeInDuration: 0
