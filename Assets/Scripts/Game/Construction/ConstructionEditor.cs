@@ -54,7 +54,8 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     public PostEffect postEffect;
 
     public Action<ConstructionState> onConstructionModeChanged;
-    public Action<List<GameObject>> onRaycastHitEditorCollider;
+    public Action<List<GameObject>> onRaycastHit;
+    public Action<GameObject> onRaycastHitUI;
 
     protected Actor pickedActor;
     public Actor PickedObject { get { return pickedActor; } protected set { pickedActor = value; } }
@@ -580,7 +581,9 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
             if (pointerRaycastResult.gameObject.transform.root.name.Contains("Canvas"))
             {
-                return true;
+                hitColliders.Add(pointerRaycastResult.gameObject);
+                onRaycastHit?.Invoke(hitColliders);
+                return true; // We're over UI, as it's the first thing we've hit we can add, invoke and just return to let the editor know we're over UI and don't want to do anything else.
             }
             else if (pointerRaycastResult.gameObject.CompareTag("EditorGrid"))
             {
@@ -597,7 +600,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
 
         if (hitColliders.Count > 0)
-            onRaycastHitEditorCollider?.Invoke(hitColliders);
+            onRaycastHit?.Invoke(hitColliders);
 
         return false;
     }
