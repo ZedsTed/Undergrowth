@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 
 public class RenderReplacementShaderToTexture : MonoBehaviour
-{    
+{   
+    
     public Shader replacementShader;
 
     [SerializeField]
