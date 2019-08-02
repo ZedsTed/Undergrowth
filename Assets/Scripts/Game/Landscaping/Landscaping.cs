@@ -40,7 +40,7 @@ public class Landscaping : Actor
     
 
     // Start is called before the first frame update
-    void Start()
+    protected void Start()
     {
         mpb = new MaterialPropertyBlock();
 
@@ -49,6 +49,8 @@ public class Landscaping : Actor
 
     public override void OnPlaced()
     {
+        base.OnPlaced();
+
         container = GetComponentInParent<Container>();
         for (int i = transform.childCount; i-- > 0;)
         {

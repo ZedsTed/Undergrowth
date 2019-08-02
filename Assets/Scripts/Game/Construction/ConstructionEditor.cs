@@ -51,8 +51,6 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     public List<Plant> Plants { get; protected set; } = new List<Plant>();
 
 
-    public PostEffect postEffect;
-
     public Action<ConstructionState> onConstructionModeChanged;
     public Action<List<GameObject>> onRaycastHit;
     public Action<GameObject> onRaycastHitUI;
@@ -229,6 +227,8 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
             actorRotation = 0f;
             appliedRotationY = 0f;
 
+            //Highlighter.Instance.RemoveHighlight(pickedActor.gameObject);
+
             return;
         }
         else if (!selected)
@@ -260,7 +260,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     protected Container parentContainer;
     protected void OnValidPosition()
     {
-        postEffect.SetColor(Color.green);
+        pickedActor.OnValidPosition();
 
         if (pickedActor is Landscaping)
         {
@@ -297,7 +297,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
     protected void OnInvalidPosition()
     {
-        postEffect.SetColor(Color.red);
+        pickedActor.OnInvalidPosition();
 
         if (pickedActor is Landscaping)
         {
@@ -325,6 +325,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
         Accounts.Instance.BuyItem(pickedActor.Definition.Cost); // TODO: Need to add in a solution for if the player can't afford to buy
         pickedActor.OnPlaced();        
         pickedActor.Picked = false;
+        
 
         if (multiple)
             SpawnDuplicateActor(pickedActor);

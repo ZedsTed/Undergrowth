@@ -54,6 +54,8 @@ public class Plant : Actor
 
     public override void OnPlaced()
     {
+        base.OnPlaced();
+
         landscaping = GetComponentInParent<Landscaping>();        
     }
 

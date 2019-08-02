@@ -6,8 +6,16 @@ public class Actor : MonoBehaviour
 {
     protected ActorDefinition definition;
     public virtual ActorDefinition Definition { get { return definition; } set {definition = value; } }
-      
 
+    [Header("Highlighting")]
+    [SerializeField]
+    protected HighlightPlus.HighlightEffect highlight;
+    public HighlightPlus.HighlightEffect Highlight => highlight;
+
+    public Color validPlace;
+    public Color invalidPlace;
+
+    [Header("Mesh")]
     [SerializeField]
     protected GameObject mesh;
     public GameObject Mesh => mesh;
@@ -25,7 +33,30 @@ public class Actor : MonoBehaviour
 
     public virtual void OnPlaced()
     {
+        highlight.highlighted = false;
+    }
 
+    public virtual void OnValidPosition()
+    {
+        if (highlight.glowHQColor != validPlace)
+            highlight.glowHQColor = validPlace;
+    }
+
+    public virtual void OnInvalidPosition()
+    {
+        if (highlight.glowHQColor != invalidPlace)
+            highlight.glowHQColor = invalidPlace;
+    }
+   
+    public virtual void OnSelected()
+    {
+        highlight.highlighted = true;
+        highlight.glowHQColor = validPlace;
+    }
+    
+    public virtual void OnDeselected()
+    {
+        highlight.highlighted = false;
     }
 
     /// <summary>

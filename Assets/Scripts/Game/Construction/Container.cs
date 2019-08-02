@@ -22,14 +22,7 @@ public class Container : Actor
     public float SoilUsage;
 
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        //var cPos = transform.position;
-        //cPos.y = definition.Depth / 2;
-        //transform.position = cPos;
-    }
-
+   
     // Update is called once per frame
     void Update()
     {

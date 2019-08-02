@@ -2574,7 +2574,7 @@ PrefabInstance:
         type: 3}
       propertyPath: postEffect
       value: 
-      objectReference: {fileID: 7479751119801899515}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f059dfc2a1e738419d9a5156fe67072, type: 3}
 --- !u!1 &1079954187
@@ -4390,8 +4390,8 @@ GameObject:
   - component: {fileID: 914556047}
   - component: {fileID: 4979672585842831324}
   - component: {fileID: 6160884489075721690}
-  - component: {fileID: 7479751119801899515}
   - component: {fileID: 5246569095292562280}
+  - component: {fileID: 1806987229726435405}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -4399,6 +4399,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1806987229726435405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1806987229726435404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f93165da2b26d8a49881e02b12422b88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectCamera: {fileID: 1912176808847002616}
+  renderMaterial: {fileID: 2100000, guid: c2da598184444594499c3880cf083a23, type: 2}
+  effectMaterial: {fileID: 2100000, guid: dd8b740a3ac790a4c81b3e25e14ec857, type: 2}
+  instantiateMaterials: 1
 --- !u!20 &1912176808847002616
 Camera:
   m_ObjectHideFlags: 0
@@ -4704,17 +4720,3 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 2919965974721344951}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7479751119801899515
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1806987229726435404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f99e306cccfbaa849a4ee4ff9f1b483e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DrawSimple: {fileID: 4800000, guid: 3f19cb0cdc5f02842b8d5991dadb45ee, type: 3}
-  postMaterial: {fileID: 2100000, guid: 49768f48fa6cfbd4a84db326b33b967d, type: 2}
