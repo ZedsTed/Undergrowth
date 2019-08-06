@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 577723b837a2d6b43b7c4a35b1a8fc74, type: 3}
-  m_Name: Plant02
+  m_Name: RootVeg
   m_EditorClassIdentifier: 
-  actor: {fileID: 4677342252629306890, guid: 9be0c74b60589764d85caa58d3afa79e, type: 3}
-  descriptiveName: Plant 02
+  actor: {fileID: 4677342252629306890, guid: 91a72b149e1c2e445ba9edd1cf23447d, type: 3}
+  descriptiveName: Root Vegetable
   cost: 10
-  sunlightNeed: 2
-  moistureNeed: 2
-  growthRate: 4
-  maxGrowth: 12
+  sunlightNeed: 1
+  moistureNeed: 3
+  growthRate: 0.05
+  maxGrowth: 2

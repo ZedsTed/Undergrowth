@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 577723b837a2d6b43b7c4a35b1a8fc74, type: 3}
-  m_Name: Plant05
+  m_Name: Cabbage
   m_EditorClassIdentifier: 
-  actor: {fileID: 4677342252629306890, guid: 9be0c74b60589764d85caa58d3afa79e, type: 3}
-  descriptiveName: Plant 05
+  actor: {fileID: 4677342252629306890, guid: b54f5aafc4d428443a23306b7befcb57, type: 3}
+  descriptiveName: Cabbage
   cost: 10
-  sunlightNeed: 0
-  moistureNeed: 0
-  growthRate: 0.02
-  maxGrowth: 40
+  sunlightNeed: 1
+  moistureNeed: 1
+  growthRate: 0.1
+  maxGrowth: 20

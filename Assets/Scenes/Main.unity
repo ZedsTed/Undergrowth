@@ -4687,10 +4687,10 @@ MonoBehaviour:
   azimuthInvert: 0
   azimuthSpeed: 720
   azimuthSmooth: 6
-  distance: 20
+  distance: 10
   distanceInvert: 0
   distanceSpeed: 2000
-  distanceMin: 5
+  distanceMin: 2.5
   distanceMax: 50
   distanceSmooth: 4
   pan: {x: 0, y: 0, z: 0}
