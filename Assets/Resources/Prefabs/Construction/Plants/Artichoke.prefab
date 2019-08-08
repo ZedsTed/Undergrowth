@@ -51,6 +51,7 @@ MonoBehaviour:
   validPlace: {r: 0.12595391, g: 1, b: 0, a: 1}
   invalidPlace: {r: 1, g: 0, b: 0, a: 1}
   mesh: {fileID: 5526745628925947553}
+  fruit: {fileID: 6966047125552369249}
   currentLifeCycle: 0
   SoilUsageNeed: 0
   CurrentGrowthRate: 0
@@ -347,6 +348,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 542a2b1369af06441b9f083751e1b302, type: 2}
+    - target: {fileID: 6863277180474079689, guid: 65831fadc0972a342b16fd9d151af2de,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65831fadc0972a342b16fd9d151af2de, type: 3}
 --- !u!1 &5526745628925947553 stripped
@@ -358,6 +364,12 @@ GameObject:
 --- !u!4 &8856794890076691634 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 65831fadc0972a342b16fd9d151af2de,
+    type: 3}
+  m_PrefabInstance: {fileID: 4581036893266622376}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &6966047125552369249 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6863277180474079689, guid: 65831fadc0972a342b16fd9d151af2de,
     type: 3}
   m_PrefabInstance: {fileID: 4581036893266622376}
   m_PrefabAsset: {fileID: 0}

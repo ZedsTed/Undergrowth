@@ -42,7 +42,7 @@ public class TooltipManager : SingletonDontCreate<TooltipManager>, IPointerEnter
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("[Tooltip] Entered: " + eventData.pointerCurrentRaycast.gameObject.name);
+        //Debug.Log("[Tooltip] Entered: " + eventData.pointerCurrentRaycast.gameObject.name);
         if (tooltips.ContainsKey(eventData.pointerCurrentRaycast.gameObject))
             return;
 
@@ -65,7 +65,7 @@ public class TooltipManager : SingletonDontCreate<TooltipManager>, IPointerEnter
         if (eventData.pointerCurrentRaycast.gameObject == null)
             return;
 
-        Debug.Log("[Tooltip] Exited: " + eventData.pointerCurrentRaycast.gameObject.name);
+        //Debug.Log("[Tooltip] Exited: " + eventData.pointerCurrentRaycast.gameObject.name);
 
         tooltips.Clear();
 

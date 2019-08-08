@@ -56,6 +56,16 @@ public class PlantDefinition : ActorDefinition
     };
 
 
+    // Probably more complex than needed atm.
+    //[Header("Reproduction Thresholds")]
+    //[Tooltip("Percentage of reproduction growth it takes to reach each threshold.")]
+    //public Dictionary<ReproductionCycle, int> ReproductionThresholds = new Dictionary<ReproductionCycle, int>
+    //{
+    //    [ReproductionCycle.Flowering] = 0, // At this point the flower is growing or grown.
+    //    [ReproductionCycle.Pollinated] = 25, // At this point the flower is pollinated (has been around long enough)
+    //    [ReproductionCycle.Seeding] = 80 // At this point it's basically fruiting
+    //};
+
     #region
     public enum LifeCycle
     {
@@ -69,7 +79,7 @@ public class PlantDefinition : ActorDefinition
     public enum ReproductionCycle
     {
         Flowering, // Plant will either Flower or Spore
-        Sporing, // Eventually we will have a base life cycle and then Flowering/Spore on top.
+        // Sporing, // Eventually we will have a base life cycle and then Flowering/Spore on top.
         Pollinated,
         Seeding
     }

@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class Plant : Actor
 {
+    [SerializeField]
+    protected MeshRenderer fruit;    
+
     protected Landscaping landscaping;
     public Landscaping Landscaping { get { return landscaping; } set { landscaping = value; } }
 
@@ -16,10 +19,12 @@ public class Plant : Actor
         set { currentLifeCycle = value; }
     }
 
-    
+    protected bool readyToHarvest = false;
+    public bool ReadyToHarvest => readyToHarvest;
+
     [Tooltip("How much soil is needed by the plant.")]
     public float SoilUsageNeed;
-    
+
     public new PlantDefinition Definition
     { get { return definition as PlantDefinition; } set { definition = value; } }
 
@@ -45,18 +50,21 @@ public class Plant : Actor
     [Tooltip("The current absolute growth of this plant.")]
     public float CurrentGrowth;
 
+    protected float storedEnergy;
+    public float StoredEnergy => storedEnergy;
+   
 
     // Start is called before the first frame update
     void Start()
     {
-       
+
     }
 
     public override void OnPlaced()
     {
         base.OnPlaced();
 
-        landscaping = GetComponentInParent<Landscaping>();        
+        landscaping = GetComponentInParent<Landscaping>();
     }
 
     protected void Update()
@@ -65,14 +73,13 @@ public class Plant : Actor
         if (Picked)
             return;
 
-        CurrentGrowthRate = (Photosynthesis()) * Definition.GrowthRate * GameConstants.Instance.GrowthMultiplier * Time.deltaTime;
+        Photosynthesis();
 
-        // We work out how much we'll grow by this tick through
-        // checking the energy output and multiplying by its set growth rate.
-        CurrentGrowth += CurrentGrowthRate;
-        CurrentGrowth = Mathf.Clamp(CurrentGrowth, 0f, Definition.MaxGrowth);
+        Grow();
 
         UpdateCurrentLifeCycle();
+
+        
 
         float normalizedGrowth = GetGrowthPercentage() / 100;
 
@@ -90,7 +97,32 @@ public class Plant : Actor
 
     protected void Grow()
     {
+        // If we have no stored energy
+        if (storedEnergy <= 0f)
+            return;
 
+        // Test if we have enough to grow, if not just give us the last bit.
+        float growthEnergy = storedEnergy > storedEnergy - (Definition.GrowthRate * GameConstants.Instance.GrowthMultiplier) ? (Definition.GrowthRate * GameConstants.Instance.GrowthMultiplier) : storedEnergy;
+
+        // Add our growth energy into growth rate.
+        CurrentGrowthRate = growthEnergy;
+
+        // Deduct the energy used from our stored energy.
+        storedEnergy = Mathf.Clamp01(storedEnergy - growthEnergy);
+
+        // We work out how much we'll grow by this tick through
+        // checking the energy output and multiplying by its set growth rate.
+        CurrentGrowth += CurrentGrowthRate;
+        CurrentGrowth = Mathf.Clamp(CurrentGrowth, 0f, Definition.MaxGrowth);
+    }
+
+    protected void Harvest(WorldNotification notification)
+    {
+        Debug.Log("Harvest");
+        if (fruit != null)
+        {
+            fruit.enabled = false;
+        }
     }
 
     /// <summary>
@@ -102,21 +134,37 @@ public class Plant : Actor
         switch (currentLifeCycle)
         {
             case PlantDefinition.LifeCycle.Seed:
-                if (GetGrowthPercentage() > Definition.GrowthThresholds[PlantDefinition.LifeCycle.Seed])
+                if (GetGrowthPercentage() > Definition.GrowthThresholds[PlantDefinition.LifeCycle.Germination])
                     CurrentLifeCycle = PlantDefinition.LifeCycle.Germination;
                 break;
             case PlantDefinition.LifeCycle.Germination:
-                if (GetGrowthPercentage() > Definition.GrowthThresholds[PlantDefinition.LifeCycle.Germination])
+                if (GetGrowthPercentage() > Definition.GrowthThresholds[PlantDefinition.LifeCycle.Seedling])
                     CurrentLifeCycle = PlantDefinition.LifeCycle.Seedling;
                 break;
             case PlantDefinition.LifeCycle.Seedling:
-                if (GetGrowthPercentage() > Definition.GrowthThresholds[PlantDefinition.LifeCycle.Seedling])
+                if (GetGrowthPercentage() > Definition.GrowthThresholds[PlantDefinition.LifeCycle.Young])
                     CurrentLifeCycle = PlantDefinition.LifeCycle.Young;
                 break;
             case PlantDefinition.LifeCycle.Young:
-                if (GetGrowthPercentage() > Definition.GrowthThresholds[PlantDefinition.LifeCycle.Young])
+                if (GetGrowthPercentage() > Definition.GrowthThresholds[PlantDefinition.LifeCycle.Mature])
+                {
                     CurrentLifeCycle = PlantDefinition.LifeCycle.Mature;
-                break;           
+                    OnLifeCycleMature();
+                }
+                break;
+        }
+    }
+
+    protected void OnLifeCycleMature()
+    {
+        readyToHarvest = true;
+        WorldNotification notification = NotificationManager.Instance.AddNotification(gameObject);
+
+        notification.onPressComplete += Harvest;
+
+        if (fruit != null)
+        {
+            fruit.enabled = true;            
         }
     }
 
@@ -133,10 +181,9 @@ public class Plant : Actor
     }
 
     /// <summary>
-    /// Goes through the photosynthesis process and returns the energy amount - a 0-1 value.
+    /// Goes through the photosynthesis process and adds the energy amount generated this frame to the stored energy.
     /// </summary>
-    /// <returns></returns>
-    float Photosynthesis()
+    protected void Photosynthesis()
     {
         energy = 0f;
 
@@ -149,28 +196,7 @@ public class Plant : Actor
         energy = EnvironmentData.Instance.
             EnvManifest.energyDefinition.Satisfaction.Evaluate(sunlightSatisfaction + moistureSatisfaction);
 
-        //// If we're within a window of healthy satisfaction, then energy is higher.
-        //if (sunlightSatisfaction >= -0.05f && sunlightSatisfaction <= 0.05f)
-        //    energy += 0.5f;
-        //else if (sunlightSatisfaction >= -0.15f && sunlightSatisfaction <= 0.15f)
-        //    energy += 0.35f;
-        //else if (sunlightSatisfaction >= -0.25f && sunlightSatisfaction <= 0.25f)
-        //    energy += 0.15f;
-        //else
-        //    energy += 0f;
-
-
-        //// If we're within a window of healthy satisfaction, then things are good.
-        //if (moistureSatisfaction >= -0.05f && moistureSatisfaction <= 0.05f)
-        //    energy += 0.5f;
-        //else if (moistureSatisfaction >= -0.15f && moistureSatisfaction <= 0.15f)
-        //    energy += 0.35f;
-        //else if (moistureSatisfaction >= -0.25f && moistureSatisfaction <= 0.25f)
-        //    energy += 0.15f;
-        //else
-        //    energy += 0f;
-
-        return energy;
+        storedEnergy = Mathf.Clamp01(storedEnergy + (energy * GameConstants.Instance.EnergyProductionMultiplier * Time.deltaTime));
     }
 
     /// <summary>
@@ -179,29 +205,7 @@ public class Plant : Actor
     /// <returns></returns>
     protected float CalculateSunlightSatisfaction()
     {
-        //float sunlightNeed = 0f;
-
         return EnvironmentData.Instance.EnvManifest.EvaluateSunlightSatisfaction(Definition.SunlightNeed);
-
-        //switch (Definition.SunlightNeed)
-        //{
-        //    case SunlightManifest.Sunlight.Any:
-        //        //EnvironmentData.SunManifest.Needs;
-        //        break;
-        //    case SunlightManifest.Sunlight.Full:
-        //        sunlightNeed = 1f;
-        //        break;
-        //    case SunlightManifest.Sunlight.Partial:
-        //        sunlightNeed = 0.5f;
-        //        break;
-        //    case SunlightManifest.Sunlight.Shade:
-        //        sunlightNeed = 0.25f;
-        //        break;
-        //    default:
-        //        break;
-        //}
-
-        //return SunlightLevel - sunlightNeed;        
     }
 
 
@@ -212,28 +216,6 @@ public class Plant : Actor
     protected float CalculateMoistureSatisfaction()
     {
         return EnvironmentData.Instance.EnvManifest.EvaluateWaterSatisfaction(Definition.MoistureNeed, WaterLevel);
-
-        //float moistureNeed = 0f;
-
-        //switch (Definition.MoistureNeed)
-        //{
-        //    case PlantDefinition.Moisture.Any:
-        //        moistureNeed = float.MinValue;
-        //        break;
-        //    case PlantDefinition.Moisture.MoistDraining:
-        //        moistureNeed = 1f;
-        //        break;
-        //    case PlantDefinition.Moisture.PoorlyDrained:
-        //        moistureNeed = 0.5f;
-        //        break;
-        //    case PlantDefinition.Moisture.WellDrained:
-        //        moistureNeed = 0.25f;
-        //        break;
-        //    default:
-        //        break;
-        //}
-
-        //return WaterLevel - moistureNeed;
     }
 
     StringBuilder sb;
@@ -248,6 +230,7 @@ public class Plant : Actor
         sb.AppendLine("Sunlight Satisfaction: " + sunlightSatisfaction.ToString("P2"));
         sb.AppendLine("Water Satisfaction: " + moistureSatisfaction.ToString("P2"));
         sb.AppendLine("Energy: " + energy.ToString("P2"));
+        sb.AppendLine("Stored Energy: " + storedEnergy.ToString("P2"));
         sb.AppendLine("Growth: " + (CurrentGrowth / Definition.MaxGrowth).ToString("P2"));
         sb.AppendLine("Growth Rate: " + (CurrentGrowthRate / ((Time.deltaTime / 60) / 60)).ToString("F2") + " per hour"); // TODO: Make me per in-game minute or something.
 

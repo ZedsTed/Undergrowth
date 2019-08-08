@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 
 
-public class CameraOrbit : MonoBehaviour
+public class CameraOrbit : SingletonDontCreate<CameraOrbit>
 {
+    public Camera mainCamera;
+
     [Header("Input")]
     public int orbitMouseButton = 1;
 

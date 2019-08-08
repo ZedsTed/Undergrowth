@@ -8,4 +8,8 @@ using UnityEngine;
 public class GameConstants : SingletonDontCreate<GameConstants>
 {
     public float GrowthMultiplier = 0.01f;
+
+    public float EnergyProductionMultiplier = 0.05f;
+
+    public float NotificationRingSpeed = 5f;
 }
