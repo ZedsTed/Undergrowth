@@ -29,7 +29,7 @@ public class NotificationManager : SingletonDontCreate<NotificationManager>
         {
             WorldNotification worldNotification = CreateNotification(gameObject.transform);
             worldNotification.notifier = gameObject;
-            worldNotification.onPressComplete += OnNotificationActioned;
+            worldNotification.onNotificationDone += OnNotificationActioned;
 
             worldNotifications.Add(gameObject, worldNotification);
 

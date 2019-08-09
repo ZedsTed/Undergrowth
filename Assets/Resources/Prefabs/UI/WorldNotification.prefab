@@ -207,8 +207,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb607edd6c386d54192ee1dddedf383b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  notifier: {fileID: 0}
+  background: {fileID: 1048877950115075185}
   button: {fileID: 1048877950115075184}
   ring: {fileID: 1048877951160394979}
+  icon: {fileID: 1048877950025938807}
+  notificationSpawnSpeed: 1.35
 --- !u!1 &1048877951160395005
 GameObject:
   m_ObjectHideFlags: 0
