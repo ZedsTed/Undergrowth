@@ -9,6 +9,8 @@ public class NotificationManager : SingletonDontCreate<NotificationManager>
     protected Dictionary<GameObject, WorldNotification> worldNotifications = new Dictionary<GameObject, WorldNotification>();
     public Dictionary<GameObject, WorldNotification> WorldNotifications => worldNotifications;
 
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -55,12 +57,12 @@ public class NotificationManager : SingletonDontCreate<NotificationManager>
         WorldNotification notification = Instantiate(Load(), this.transform);
 
         Vector3 pos = transform.position;
-        pos.y += 1.5f; // TODO: Allow Plant to pass in the plant/collider height to set this.
+        pos.y += 1.5f; 
 
         notification.transform.position = pos;
 
         return notification;
-    }
+    }   
 
 
     protected void OnNotificationActioned(WorldNotification notification)

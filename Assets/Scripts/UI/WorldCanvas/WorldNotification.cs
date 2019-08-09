@@ -20,13 +20,41 @@ public class WorldNotification : MonoBehaviour, IPointerDownHandler, IPointerUpH
     [SerializeField]
     protected Image ring;
 
+    [SerializeField]
+    protected float notificationSpawnSpeed = 1.35f;
+
     protected bool pressed = false;
+
+    Coroutine spawnTween;
+
+    Vector3 startingSpawnedPosition;
+    Vector3 finalSpawnedPosition;    
 
     // Start is called before the first frame update
     void Start()
     {
-        ring.fillAmount = 0f;   
+        ring.fillAmount = 0f;
+
+        startingSpawnedPosition = transform.position;
+        startingSpawnedPosition.y -= 1.5f;
+
+        finalSpawnedPosition = transform.position;
+
+        transform.position = startingSpawnedPosition;
+
+        if (spawnTween == null)
+            spawnTween = StartCoroutine(SpawnTween());
     }   
+
+    protected IEnumerator SpawnTween()
+    {
+        while (transform.position != finalSpawnedPosition)
+        {
+            transform.position = Vector3.Lerp(transform.position, finalSpawnedPosition, notificationSpawnSpeed * Time.unscaledDeltaTime);
+
+            yield return null;
+        }
+    }
 
     protected void Update()
     {
