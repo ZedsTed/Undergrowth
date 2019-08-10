@@ -288,11 +288,31 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
             for (int i = pickedActor.transform.childCount; i-- > 0;)
             {
-                previousLerpedSize = Vector3.Lerp(previousLerpedSize, (size - pickedActor.transform.GetChild(i).localScale) * 0.7f, 30f * Time.unscaledDeltaTime);
-                pickedActor.transform.GetChild(i).localScale += previousLerpedSize;
+                SetScale(pickedActor.transform.GetChild(i), size);
             }
             
         }
+    }
+
+    protected void SetScale(Transform transform, Vector3 size)
+    {
+        BoxCollider c = transform.gameObject.GetComponent<BoxCollider>();
+
+        if (c == null)
+        {
+            // Debug.Log("c is null on " + transform.gameObject.name);
+
+            previousLerpedSize = Vector3.Lerp(previousLerpedSize, (size - transform.localScale) * 0.7f, 30f *
+                   Time.unscaledDeltaTime);
+
+            transform.localScale += previousLerpedSize;
+            return;
+        }
+
+        previousLerpedSize = Vector3.Lerp(previousLerpedSize, (size - c.size) * 0.7f, 30f *
+                   Time.unscaledDeltaTime);
+
+        c.size += previousLerpedSize; 
     }
 
     protected void OnInvalidPosition()

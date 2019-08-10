@@ -54,7 +54,15 @@ public class Landscaping : Actor
         container = GetComponentInParent<Container>();
         for (int i = transform.childCount; i-- > 0;)
         {
-            transform.GetChild(i).localScale = container.Definition.ContainerSoilSize;            
+            BoxCollider c = transform.GetChild(i).gameObject.GetComponent<BoxCollider>();
+
+            if (c == null)
+            {
+                // Debug.Log("c is null on + " + transform.GetChild(i).gameObject.name);
+                transform.GetChild(i).localScale = container.Definition.ContainerSoilSize;
+            }
+            else
+                c.size = container.Definition.ContainerSoilSize;
         }
     }
 
