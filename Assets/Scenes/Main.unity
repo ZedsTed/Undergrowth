@@ -1717,7 +1717,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbb63f0eb7b2ec5438103995de8889ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GrowthMultiplier: 0.0002
+  GrowthMultiplier: 0.0006
   EnergyProductionMultiplier: 0.04
   NotificationRingSpeed: 1
 --- !u!114 &900099578
@@ -2685,11 +2685,6 @@ PrefabInstance:
       propertyPath: WorldCellPositionDebug
       value: 
       objectReference: {fileID: 983479015}
-    - target: {fileID: 1404400211245615847, guid: 4f059dfc2a1e738419d9a5156fe67072,
-        type: 3}
-      propertyPath: postEffect
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f059dfc2a1e738419d9a5156fe67072, type: 3}
 --- !u!1 &1079954187

@@ -99,6 +99,9 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
                     //Debug.Log(pointerEventData.pointerCurrentRaycast.worldPosition);
                     hitCellPosition = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(editorGridWorldPosition));
 
+                    GridHighlight.Instance.SetVisibility(true);
+                    GridHighlight.Instance.SetPosition(hitCellPosition);
+
                     previousInputPosition = Vector3.Lerp(previousInputPosition, (hitCellPosition - inputPosition) * 0.6f, 33f * Time.unscaledDeltaTime);
                     inputPosition += previousInputPosition;
                     inputPosition.y = 0f;
@@ -140,6 +143,10 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
                     {
                         OnInvalidPosition();
                     }
+                }
+                else
+                {
+                    GridHighlight.Instance.SetVisibility(false);
                 }
             }
             else if (mode == ConstructionState.Watering)
