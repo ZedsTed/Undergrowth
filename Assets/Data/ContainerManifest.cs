@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ContainerManifest.asset", menuName = "Container Manifest")]
+[CreateAssetMenu(fileName = "ContainerManifest.asset", menuName = "Data/Container Manifest")]
 public class ContainerManifest : ScriptableObject
 {
     public List<ContainerDefinition> containerDefinitions;

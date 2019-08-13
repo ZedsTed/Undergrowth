@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "LandscapingManifest.asset", menuName = "Landscaping Manifest")]
+[CreateAssetMenu(fileName = "LandscapingManifest.asset", menuName = "Data/Landscaping Manifest")]
 public class LandscapingManifest : ScriptableObject
 {
     public List<LandscapingDefinition> landscapingDefinitions;

@@ -9,6 +9,10 @@ using System;
 public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 {
     [SerializeField]
+    protected PropManifest propManifest;
+    public PropManifest PropManifest => propManifest;
+
+    [SerializeField]
     protected ContainerManifest containerManifest;
     public ContainerManifest ContainerManifest => containerManifest;
 
@@ -46,6 +50,8 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     protected ConstructionState mode;
     public ConstructionState Mode { get { return mode; } protected set { mode = value; } }
 
+
+    public List<Prop> Props { get; protected set; } = new List<Prop>();
     public List<Container> Containers { get; protected set; } = new List<Container>();
     public List<Landscaping> Landscapings { get; protected set; } = new List<Landscaping>();
     public List<Plant> Plants { get; protected set; } = new List<Plant>();
@@ -245,6 +251,9 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
         switch (ToolsManager.SelectedTool.name)
         {
+            case "Prop":
+                SpawnProp(item.id);
+                break;
             case "Container":
                 SpawnContainer(item.id);
                 break;
@@ -370,7 +379,9 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
     protected void SpawnDuplicateActor(Actor currentActor)
     {
-        if (currentActor is Container)
+        if (currentActor is Prop)
+            SpawnProp(currentActor.Definition.DescriptiveName);
+        else if (currentActor is Container)
             SpawnContainer(currentActor.Definition.DescriptiveName);
         else if (currentActor is Landscaping)
             SpawnLandscaping(currentActor.Definition.DescriptiveName);
@@ -380,6 +391,22 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
             Debug.LogError("[SpawnDuplicateActor] You are trying to spawn a duplicate actor of unknown type.");
 
         pickedActor.SetLayerForHighlight(true);
+    }
+
+    protected void SpawnProp(string name)
+    {
+        PropDefinition pDef = PropManifest.GetPropDefinition(name);
+
+        Prop p = Instantiate(pDef.Actor, inputPosition,
+            Quaternion.identity, transform);
+
+        Props.Add(p);
+
+        p.Definition = pDef;
+
+        pickedActor = p;
+        pickedActor.transform.position = inputPosition;
+
     }
 
     protected void SpawnContainer(string name)
@@ -483,9 +510,9 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
         }
         else
         {
-            // Only containers can be placed by themselves for the moment.
+            // Only containers or props can be placed by themselves for the moment.
             // TODO: eventually this will be landscaping of certain types as well.
-            if (pickedActor is Container)
+            if (pickedActor is Container || pickedActor is Prop)
                 return true;
         }
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "EnvironmentManifest.asset", menuName = "Environment Manifest")]
+[CreateAssetMenu(fileName = "EnvironmentManifest.asset", menuName = "Data/Environment Manifest")]
 public class EnvironmentManifest : ScriptableObject
 {
     #region Sunlight Satisfaction

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ContainerDefinition.asset", menuName = "Container Definition")]
+[CreateAssetMenu(fileName = "ContainerDefinition.asset", menuName = "Data/Container Definition")]
 public class ContainerDefinition : ActorDefinition
 {
     public Container Actor => actor as Container;

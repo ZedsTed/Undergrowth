@@ -100,6 +100,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5110065120016308864}
+  - component: {fileID: 2268625990225681920}
+  - component: {fileID: 4066401067253606999}
   m_Layer: 0
   m_Name: LampProp
   m_TagString: Prop
@@ -124,6 +126,107 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2268625990225681920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4364084449890648369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ec006eb0b25c74408e1fcd04d89e54c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlight: {fileID: 4066401067253606999}
+  validPlace: {r: 0, g: 1, b: 0, a: 1}
+  invalidPlace: {r: 1, g: 0, b: 0, a: 1}
+  mesh: {fileID: 6543338456951195811}
+--- !u!114 &4066401067253606999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4364084449890648369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 888380afc233049ce9e618f9f36c8ba8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 11400000, guid: e5a6396bb2fff2344b2ab66e8483c7e7, type: 2}
+  profileSync: 0
+  previewInEditor: 0
+  effectGroup: 0
+  effectGroupLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  alphaCutOff: 0
+  cullBackFaces: 1
+  ignoreObjectVisibility: 0
+  reflectionProbes: 0
+  ignore: 0
+  _highlighted: 1
+  fadeInDuration: 0.2
+  fadeOutDuration: 0.2
+  flipY: 0
+  constantWidth: 1
+  overlay: 0
+  overlayColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  overlayAnimationSpeed: 1
+  overlayMinIntensity: 0
+  overlayBlending: 1
+  outline: 1
+  outlineColor: {r: 0, g: 0, b: 0, a: 1}
+  outlineWidth: 2
+  outlineQuality: 2
+  outlineDownsampling: 2
+  outlineAlwaysOnTop: 0
+  outlineOptimalBlit: 1
+  outlineBlitDebug: 0
+  glow: 2
+  glowWidth: 0.25
+  glowQuality: 2
+  glowDownsampling: 1
+  glowHQColor: {r: 0.14792144, g: 1, b: 0, a: 1}
+  glowDithering: 1
+  glowMagicNumber1: 0.75
+  glowMagicNumber2: 0.5
+  glowAnimationSpeed: 1
+  glowAlwaysOnTop: 0
+  glowOptimalBlit: 1
+  glowBlitDebug: 0
+  glowPasses:
+  - offset: 4
+    alpha: 0.1
+    color: {r: 0.64, g: 1, b: 0, a: 1}
+  - offset: 3
+    alpha: 0.2
+    color: {r: 0.64, g: 1, b: 0, a: 1}
+  - offset: 2
+    alpha: 0.3
+    color: {r: 0.64, g: 1, b: 0, a: 1}
+  - offset: 1
+    alpha: 0.4
+    color: {r: 0.64, g: 1, b: 0, a: 1}
+  innerGlow: 0
+  innerGlowWidth: 1
+  innerGlowColor: {r: 1, g: 1, b: 1, a: 1}
+  innerGlowAlwaysOnTop: 0
+  targetFX: 0
+  targetFXTexture: {fileID: 0}
+  targetFXColor: {r: 1, g: 1, b: 1, a: 1}
+  targetFXCenter: {fileID: 0}
+  targetFXRotationSpeed: 50
+  targetFXInitialScale: 4
+  targetFXEndScale: 1.5
+  targetFXTransitionDuration: 0.5
+  targetFXStayDuration: 1.5
+  seeThrough: 0
+  seeThroughIntensity: 0.8
+  seeThroughTintAlpha: 0.5
+  seeThroughTintColor: {r: 1, g: 0, b: 0, a: 1}
+  rmsCount: 2
 --- !u!1 &4592713073883567802
 GameObject:
   m_ObjectHideFlags: 0
@@ -258,6 +361,12 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 6634be09d8c99024288c93a5312d9e7d, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03fb92f26bb7f544983511032e0f6dce, type: 3}
+--- !u!1 &6543338456951195811 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: 03fb92f26bb7f544983511032e0f6dce,
+    type: 3}
+  m_PrefabInstance: {fileID: 3021764437661307306}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7824373716001520304 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 03fb92f26bb7f544983511032e0f6dce,

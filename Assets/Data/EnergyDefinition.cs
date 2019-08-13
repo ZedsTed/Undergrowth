@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "EnergyDefinition.asset", menuName = "Energy Definition")]
+[CreateAssetMenu(fileName = "EnergyDefinition.asset", menuName = "Data/Energy Definition")]
 public class EnergyDefinition : ScriptableObject
 {
     [Tooltip("The energy creation according to water and sun satisfaction.")]

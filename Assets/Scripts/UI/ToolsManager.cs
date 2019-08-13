@@ -76,6 +76,7 @@ public class ToolsManager : SingletonDontCreate<ToolsManager>
     {
         switch (toggle.name)
         {
+            case "Prop":
             case "Container":
             case "Landscaping":
             case "Plant":
@@ -152,6 +153,9 @@ public class ToolsManager : SingletonDontCreate<ToolsManager>
 
             switch (selectedTool.name)
             {
+                case "Prop":
+                    SetupPropSelectableList();
+                    break;
                 case "Container":
                     SetupContainerSelectableList();
                     break;
@@ -165,6 +169,24 @@ public class ToolsManager : SingletonDontCreate<ToolsManager>
                     Debug.LogWarning("[ToolsManager] Spawned a selectable list for a tool that doesn't need one.");
                     break;
             }
+        }
+    }
+
+    protected void SetupPropSelectableList()
+    {
+        if (panel == null)
+            return;
+
+        panel.onItemSelected += ConstructionEditor.Instance.OnItemSelected;
+
+        int containerDefCount = ConstructionEditor.Instance.PropManifest.propDefinitions.Count;
+
+        SelectableListItem item = (Resources.Load("Prefabs/UI/HorizontalListItem") as GameObject).GetComponent<SelectableListItem>();
+
+        for (int i = 0, iC = containerDefCount; i < iC; ++i)
+        {
+            item.id = ConstructionEditor.Instance.PropManifest.GetPropDefinition(i).DescriptiveName;
+            panel.AddPrefab(item);
         }
     }
 

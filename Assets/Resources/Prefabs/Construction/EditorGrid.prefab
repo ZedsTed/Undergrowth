@@ -59,6 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f7996f87d3fe354fa402c374f07812d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  propManifest: {fileID: 11400000, guid: ba339859e04afd84392bfaf47906b0d4, type: 2}
   containerManifest: {fileID: 11400000, guid: 295c7e786b58fd546a353d7493371f55, type: 2}
   landscapingManifest: {fileID: 11400000, guid: fa5ecf419b14d9f48ba9457b3fe79721,
     type: 2}

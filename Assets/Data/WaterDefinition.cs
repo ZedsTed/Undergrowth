@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "WaterDefinition.asset", menuName = "Water Definition")]
+[CreateAssetMenu(fileName = "WaterDefinition.asset", menuName = "Data/Water Definition")]
 public class WaterDefinition : ScriptableObject
 {
     [Tooltip("Moisture/water needs..")]

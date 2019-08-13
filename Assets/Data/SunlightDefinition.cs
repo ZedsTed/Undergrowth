@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SunlightDefinition.asset", menuName = "Sunlight Definition")]
+[CreateAssetMenu(fileName = "SunlightDefinition.asset", menuName = "Data/Sunlight Definition")]
 public class SunlightDefinition : ScriptableObject
 {    
     [Tooltip("A good old descriptive name of the actor.")]

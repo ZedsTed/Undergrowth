@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "PlantManifest.asset", menuName = "Plant Manifest")]
+[CreateAssetMenu(fileName = "PlantManifest.asset", menuName = "Data/Plant Manifest")]
 public class PlantManifest : ScriptableObject
 {
     public List<PlantDefinition> plantDefinitions;

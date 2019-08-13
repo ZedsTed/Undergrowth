@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "PlantDefinition.asset", menuName = "Plant Definition")]
+[CreateAssetMenu(fileName = "PlantDefinition.asset", menuName = "Data/Plant Definition")]
 public class PlantDefinition : ActorDefinition
 {
     public Plant Actor => actor as Plant;

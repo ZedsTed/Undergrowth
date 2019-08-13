@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "LandscapingDefinition.asset", menuName = "Landscaping Definition")]
+[CreateAssetMenu(fileName = "LandscapingDefinition.asset", menuName = "Data/Landscaping Definition")]
 public class LandscapingDefinition : ActorDefinition
 {
     public Landscaping Actor => actor as Landscaping;    
