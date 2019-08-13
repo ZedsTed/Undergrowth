@@ -8,6 +8,7 @@ TagManager:
   - Landscaping
   - Plant
   - EditorGrid
+  - Prop
   layers:
   - Default
   - TransparentFX
