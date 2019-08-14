@@ -1952,6 +1952,7 @@ GameObject:
   - component: {fileID: 900099577}
   - component: {fileID: 900099575}
   - component: {fileID: 900099578}
+  - component: {fileID: 900099579}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -2015,6 +2016,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Sun: {fileID: 1435304247}
   envManifest: {fileID: 11400000, guid: 9c2408f9bab452d43a55345ef6721f64, type: 2}
+--- !u!114 &900099579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900099574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92aa0efaa536d554f801b85bfbf3986f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxStoragePerItem: 99
 --- !u!114 &914556047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2968,6 +2982,12 @@ PrefabInstance:
       propertyPath: WorldCellPositionDebug
       value: 
       objectReference: {fileID: 983479015}
+    - target: {fileID: 1404400211245615847, guid: 4f059dfc2a1e738419d9a5156fe67072,
+        type: 3}
+      propertyPath: itemManifest
+      value: 
+      objectReference: {fileID: 11400000, guid: 627cc73924b58624f8a7f23a02047b63,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f059dfc2a1e738419d9a5156fe67072, type: 3}
 --- !u!1 &1079954187

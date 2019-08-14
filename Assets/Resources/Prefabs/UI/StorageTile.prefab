@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1783330669917923426}
   - component: {fileID: 1783330669917923428}
-  - component: {fileID: 1783330669917923427}
+  - component: {fileID: 6453877363103534652}
   m_Layer: 5
   m_Name: StorageTileContent
   m_TagString: Untagged
@@ -45,7 +45,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1783330669917923425}
   m_CullTransparentMesh: 0
---- !u!114 &1783330669917923427
+--- !u!114 &6453877363103534652
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -54,7 +54,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1783330669917923425}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -98529514, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -65,13 +65,16 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Texture: {fileID: 2800000, guid: 2cc2e5d51d8016a49b213f3183648ca3, type: 3}
-  m_UVRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+  m_Sprite: {fileID: 21300000, guid: 568abb477c3c50142b64535382fbc663, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &1783330670218365765
 GameObject:
   m_ObjectHideFlags: 0
@@ -84,6 +87,7 @@ GameObject:
   - component: {fileID: 1783330670218365769}
   - component: {fileID: 1783330670218365768}
   - component: {fileID: 1783330670218365767}
+  - component: {fileID: 787748784318321682}
   m_Layer: 5
   m_Name: StorageTile
   m_TagString: Untagged
@@ -129,7 +133,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1783330670218365765}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -98529514, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -156,7 +160,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1783330670218365765}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1679637790, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
@@ -167,6 +171,20 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &787748784318321682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1783330670218365765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c261b57b41e3a3a42bc06c522bb88be1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  storedIcon: {fileID: 6453877363103534652}
+  storedQuantity: {fileID: 5595085095829996957}
 --- !u!1 &4250297664155984060
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,7 +198,7 @@ GameObject:
   - component: {fileID: 5595085095829996957}
   - component: {fileID: 7529890505851459891}
   m_Layer: 5
-  m_Name: StorageTileQuantity (1)
+  m_Name: StorageTileQuantityText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -334,7 +352,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4250297664155984060}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1741964061, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
@@ -394,7 +412,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7420957367898894739}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -98529514, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}

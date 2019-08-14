@@ -8,6 +8,8 @@ using System;
 
 public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 {
+    // TODO: Pop all of the below into a big ol' game class.
+ 
     [SerializeField]
     protected PropManifest propManifest;
     public PropManifest PropManifest => propManifest;
@@ -24,7 +26,9 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     protected PlantManifest plantManifest;
     public PlantManifest PlantManifest => plantManifest;
 
-
+    [SerializeField]
+    protected ItemManifest itemManifest;
+    public ItemManifest ItemManifest => itemManifest;
 
 
     public Grid EditorGrid;

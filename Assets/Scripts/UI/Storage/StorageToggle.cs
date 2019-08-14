@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class StorageToggle : MonoBehaviour//, ISelectHandler, IDeselectHandler, IPointerClickHandler
+public class StorageToggle : MonoBehaviour
 {
     [SerializeField]
     protected Toggle storageToggle;
@@ -18,30 +18,6 @@ public class StorageToggle : MonoBehaviour//, ISelectHandler, IDeselectHandler, 
         storageToggle.onValueChanged.AddListener((value) => 
         { SetStorageWindowVisibility(value); });
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    //public void OnPointerClick(PointerEventData eventData)
-    //{
-    //    if (eventData.pointerCurrentRaycast.gameObject == gameObject)
-    //        EventSystem.current.SetSelectedGameObject(gameObject, eventData);
-    //    else
-    //        EventSystem.current.SetSelectedGameObject(null);
-    //}
-
-    //public void OnSelect(BaseEventData eventData)
-    //{
-    //    SetStorageWindowVisibility(true);
-    //}
-
-    //public void OnDeselect(BaseEventData eventData)
-    //{
-    //    SetStorageWindowVisibility(false);
-    //}
 
     protected void SetStorageWindowVisibility(bool visibility)
     {
