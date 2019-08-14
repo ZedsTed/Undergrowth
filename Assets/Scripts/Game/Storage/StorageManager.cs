@@ -12,6 +12,7 @@ public class StorageManager : SingletonDontCreate<StorageManager>
     public int MaxStoragePerItem => maxStoragePerItem;
 
     public Action<StorageItem> onStorageItemAdded;
+    public Action<StorageItem> onStorageItemUpdated;
     public Action<StorageItem> onStorageItemRemoved;
 
     // Start is called before the first frame update
@@ -33,17 +34,17 @@ public class StorageManager : SingletonDontCreate<StorageManager>
         if (stock.TryGetValue(type, out StorageItem item))
         {
             success = item.AddQuantity(quantity);
-
+            onStorageItemAdded?.Invoke(item);
         }
         else
         {
             item = new StorageItem(quantity);
             stock.Add(type, item);
+
+            onStorageItemUpdated?.Invoke(item);
+
             success = true;
         }
-
-        onStorageItemAdded?.Invoke(item);
-
 
         return success;
     }

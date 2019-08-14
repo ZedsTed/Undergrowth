@@ -12,6 +12,7 @@ public class StorageManagerUI : MonoBehaviour
     protected void Start()
     {
         StorageManager.Instance.onStorageItemAdded += OnItemAdded;
+        StorageManager.Instance.onStorageItemUpdated += OnItemUpdated;
         StorageManager.Instance.onStorageItemRemoved += OnItemRemoved;
     }
 
@@ -26,14 +27,35 @@ public class StorageManagerUI : MonoBehaviour
     protected void OnItemAdded(StorageItem item)
     {
         StorageItemUI itemUI = Instantiate((Resources.Load("Prefabs/UI/StorageTile") as GameObject), transform).GetComponent<StorageItemUI>();
+
         itemUI.SetStoredIcon(item.Definition.Icon);
         itemUI.SetStoredQuantity(item.Quantity);
 
         items.Add(item.Definition.Type, itemUI);
     }
 
+    protected void OnItemUpdated(StorageItem item)
+    {
+        if (items.TryGetValue(item.Definition.Type, out StorageItemUI itemUI))
+        {
+            itemUI.SetStoredQuantity(item.Quantity);
+        }
+        else
+        {
+            Debug.LogError("[StorageManagerUI] Trying to update an item we don't have a key for: " + item.Definition.Type);
+        }
+    }
+
     protected void OnItemRemoved(StorageItem item)
     {
-
+        if (items.TryGetValue(item.Definition.Type, out StorageItemUI itemUI))
+        {
+            Destroy(itemUI.gameObject);
+            items.Remove(item.Definition.Type);
+        }
+        else
+        {
+            Debug.LogError("[StorageManagerUI] Trying to remove an item we don't have a key for: " + item.Definition.Type);
+        }
     }
 }
