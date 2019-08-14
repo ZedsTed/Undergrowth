@@ -272,15 +272,25 @@ public class ToolsManager : SingletonDontCreate<ToolsManager>
     /// <param name="tool"></param>
     protected void OnToolMultipleClick(ToolToggle tool)
     {
+        if (selectedTool == null)
+            return;
+
         //Debug.Log("OnToolMultipleClick");
 
         if (selectedTool == clickedTool)
             lockToggleOn = false;
+        else if (selectedTool == clickedTool && selectedTool.toggle.isOn)
+            lockToggleOn = true;
 
         if (!selectedTool.toggle.isOn)
         {
             DespawnSelectableList();
             ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.None);
+        }
+        else
+        {
+            SetContructionEditorMode(tool.toggle);
+            SpawnSelectableList(tool.toggle);
         }
 
     }

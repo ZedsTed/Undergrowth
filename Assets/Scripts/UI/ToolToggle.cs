@@ -16,13 +16,15 @@ public class ToolToggle : MonoBehaviour, ISelectHandler, IDeselectHandler, IPoin
     {
         toolsManager = GetComponentInParent<ToolsManager>();
         toggle = GetComponent<Toggle>();
+
+        toggle.onValueChanged.AddListener((value) => { OnToggleChanged(value); });
     }
 
     public void OnSelect(BaseEventData eventData)
     {
         // If we're being selected, let the tools manager know.
-        if (eventData.selectedObject == gameObject)
-            toolsManager.SetSelectedTool(this);
+        //if (eventData.selectedObject == gameObject)
+        //    toolsManager.SetSelectedTool(this);
 
         //Debug.Log("select"+eventData.selectedObject.name);
     }
@@ -30,7 +32,10 @@ public class ToolToggle : MonoBehaviour, ISelectHandler, IDeselectHandler, IPoin
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.pointerCurrentRaycast.gameObject == gameObject)
+        {
             toolsManager.SetClickedTool(this);
+            //EventSystem.current.SetSelectedGameObject(gameObject, eventData);
+        }
 
         if (eventData.pointerCurrentRaycast.gameObject.GetComponent<SelectableList>())
             toolsManager.OnSelectableListClicked();
@@ -38,7 +43,7 @@ public class ToolToggle : MonoBehaviour, ISelectHandler, IDeselectHandler, IPoin
         if (eventData.pointerCurrentRaycast.gameObject.GetComponentInParent<SelectableList>())
             toolsManager.OnSelectableListClicked();
 
-        EventSystem.current.SetSelectedGameObject(gameObject, eventData);
+        
 
         //Debug.Log("click" + eventData.pointerCurrentRaycast.gameObject);
     }
@@ -46,11 +51,24 @@ public class ToolToggle : MonoBehaviour, ISelectHandler, IDeselectHandler, IPoin
     public void OnDeselect(BaseEventData eventData)
     {
         // If we're being deselected, let the tools manager know.
-        if (eventData.selectedObject == gameObject)
+        //if (eventData.selectedObject == gameObject)
+        //{
+        //    toolsManager.SetDeselectedTool(this);           
+        //}
+
+        //Debug.Log("deselect"+eventData.selectedObject.name);
+    }
+
+    protected void OnToggleChanged(bool value)
+    {
+        if (value)
+        {
+            toolsManager.SetClickedTool(this);
+            toolsManager.SetSelectedTool(this);
+        }
+        else
         {
             toolsManager.SetDeselectedTool(this);
         }
-
-        //Debug.Log("deselect"+eventData.selectedObject.name);
     }
 }
