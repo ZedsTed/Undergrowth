@@ -2914,6 +2914,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: EditorGrid
       objectReference: {fileID: 0}
+    - target: {fileID: 2038038600258421187, guid: 4f059dfc2a1e738419d9a5156fe67072,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6736325526820726491, guid: 4f059dfc2a1e738419d9a5156fe67072,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2995,6 +3000,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 627cc73924b58624f8a7f23a02047b63,
         type: 2}
+    - target: {fileID: 4728455150766253185, guid: 4f059dfc2a1e738419d9a5156fe67072,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f059dfc2a1e738419d9a5156fe67072, type: 3}
 --- !u!1 &1079954187

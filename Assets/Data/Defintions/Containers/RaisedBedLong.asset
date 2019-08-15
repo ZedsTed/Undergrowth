@@ -16,5 +16,5 @@ MonoBehaviour:
   descriptiveName: Raised Bed Long
   cost: 60
   containerSize: {x: 0, y: 0, z: 0}
-  containerSoilSize: {x: 1.9, y: 0.15, z: 0.9}
+  containerSoilSize: {x: 2.9, y: 1, z: 0.9}
   containerSoilOffset: {x: 0.5, y: 0.125, z: 0}
