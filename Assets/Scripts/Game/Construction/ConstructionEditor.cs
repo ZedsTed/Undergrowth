@@ -9,7 +9,7 @@ using System;
 public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 {
     // TODO: Pop all of the below into a big ol' game class.
- 
+
     [SerializeField]
     protected PropManifest propManifest;
     public PropManifest PropManifest => propManifest;
@@ -90,7 +90,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
         inputPosition = new Vector3(0f, 0f, 0f);
         previousInputPosition = new Vector3(0f, 0f, 0f);
 
-       
+
     }
 
 
@@ -110,7 +110,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
                     UpdatePosition();
 
                     UpdateRotation();
-                    
+
 
 
                     if (IsValidPosition())
@@ -287,9 +287,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
         if (selected && pickedActor != null && pickedActor.gameObject.layer != LayerMask.NameToLayer("PostProcessOutline"))
             pickedActor.SetLayerForHighlight(true);
     }
-
-    //Vector3 currentLerpedSize;
-    Vector3 previousLerpedSize;
+       
     protected Container parentContainer;
     protected Landscaping parentLandscaping;
     protected void OnValidPosition()
@@ -310,19 +308,14 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
             // what our offset from our snap position and out 
             // world position it is so we can correctly position ourselves.
 
-            Vector3 snapToPos = parentContainer.SnapPoint.position;          
-           
+            Vector3 snapToPos = parentContainer.SnapPoint.position;
+
             pickedActor.transform.position = snapToPos;
+            pickedActor.Mesh.transform.position = snapToPos;
             hitCellPosition = snapToPos; // We now need to update our 'selected' cell so that when we place this item, it'll be place there.
             pickedActor.transform.rotation = rot; // We don't want to lerp this, it'll look too clunky.
 
             pickedActor.SetScale(size);
-
-            //for (int i = pickedActor.transform.childCount; i-- > 0;)
-            //{
-            //    SetScale(pickedActor.transform.GetChild(i), size);
-            //}
-
         }
         else if (pickedActor is Plant)
         {
@@ -330,7 +323,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
             Vector3 snapToPos = parentLandscaping.SnapPoint.position;
             hitCellPosition = snapToPos;
-            //snapToPos.y += parentContainer.transform.localScale.y / 2;
+
 
             pickedActor.transform.position = snapToPos;
         }
@@ -344,44 +337,10 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
         {
             // Revert it back.
             Vector3 size = ContainerManifest.GetContainerDefinition("Raised Bed").ContainerSoilSize;
-            Vector3 pos = ContainerManifest.GetContainerDefinition("Raised Bed").ContainerSoilOffset;
-
+            
             pickedActor.SetScale(size);
-
-            //for (int i = pickedActor.transform.childCount; i-- > 0;)
-            //{
-            //   // pickedActor.transform.GetChild(i).localScale = size;
-            //    //pickedActor.transform.GetChild(i).localPosition = new Vector3(0f, 0f, 0f);
-
-            //    SetScale(pickedActor.transform.GetChild(i), size);
-            //}
-
         }
     }
-
-    //protected void SetScale(Transform transform, Vector3 size)
-    //{
-    //    BoxCollider c = transform.gameObject.GetComponent<BoxCollider>();
-
-    //    if (c != null)
-    //    {
-    //        // Because the collider size will be specified as a specific value, whereas the rest of the actor - especially the mesh
-    //        // will have transform.localScale of 1 to start, we only want to figure out how much we should scale the collider by.
-    //        // e.g. if we had a mesh that was scale.y of 1, then it needed to be made a scale.y of 1.5, that's a 1.5x.
-    //        // if our collider was size.y of 0.35, the yMultiplier of that would be 1.5 and we'd get a (0.35 * 1.5) size.y value as
-    //        // our new collider vertical size.
-    //        float yMultiplier = size.y;
-    //        size.y = yMultiplier * c.size.y;
-    //        c.size = size;
-
-    //        return;
-    //    }
-
-    //    previousLerpedSize = Vector3.Lerp(previousLerpedSize, (size - transform.localScale) * 0.7f, 30f *
-    //               Time.unscaledDeltaTime);
-
-    //    transform.localScale = size;
-    //}
 
     protected void OnActorPlaced(Vector3 cellPosition, bool multiple = false)
     {
@@ -390,9 +349,9 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
         pickedActor.Mesh.transform.position = cellPosition;
         pickedActor.SetLayerForHighlight(false);
         Accounts.Instance.BuyItem(pickedActor.Definition.Cost); // TODO: Need to add in a solution for if the player can't afford to buy
-        pickedActor.OnPlaced();        
+        pickedActor.OnPlaced();
         pickedActor.Picked = false;
-        
+
 
         if (multiple)
             SpawnDuplicateActor(pickedActor);
@@ -495,9 +454,10 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     protected bool IsValidPosition()
     {
         if (IsCollidingWithWorld())
-        {            
+        {
             if (pickedActor is Container)
             {
+                // Containers are never valid if they're colliding with something
                 return false;
             }
             else if (pickedActor is Landscaping)
@@ -513,8 +473,23 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
                     }
                     else if (sceneColliders[i].CompareTag("Container"))
                     {
-                        pickedActor.transform.parent = sceneColliders[i].transform.parent.gameObject.transform;
-                        return true;
+                        if (pickedActor.CompareTag("EditorGrid"))
+                        {
+                            pickedActor.transform.parent = sceneColliders[i].transform.parent;
+                            return true;
+                        }   //If our container isn't this scene collider and the current input position is in its bounds, we want to switch to it.
+                        else if (pickedActor.transform.parent != sceneColliders[i].transform.parent &&
+                            sceneColliders[i].bounds.Contains(inputPosition))
+                        {
+                            pickedActor.transform.parent = sceneColliders[i].transform.parent;
+                            return true;
+                        }
+                        else if (pickedActor.transform.parent == sceneColliders[i].transform.parent &&
+                            sceneColliders[i].bounds.Contains(inputPosition))
+                        {   // at this point, we've checked if we've changed and we haven't so we're the same one.
+                            pickedActor.transform.parent = sceneColliders[i].transform.parent;
+                            return true;
+                        }
                     }
                 }
             }
@@ -549,6 +524,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
         return false;
     }
 
+    [SerializeField]
     protected List<Collider> sceneColliders = new List<Collider>();
     protected List<Collider> actorColliders = new List<Collider>();
     int colliderLayer;
@@ -623,7 +599,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
         }
 
 
-        
+
 
         // Remove any of our own colliders from the picked actor.
         for (int i = sceneColliders.Count; i-- > 0;)
@@ -632,8 +608,12 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
                 sceneColliders.RemoveAt(i);
         }
 
+        sceneColliders.Sort((x, y) =>
+        Vector3.Distance(x.gameObject.transform.position, pickedActor.gameObject.transform.position)
+        .CompareTo
+        (Vector3.Distance(y.gameObject.transform.position, pickedActor.gameObject.transform.position)));
 
-     
+
 
         return sceneColliders.Count > 0 ? true : false;
     }
