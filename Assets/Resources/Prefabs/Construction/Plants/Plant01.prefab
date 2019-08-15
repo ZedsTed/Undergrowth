@@ -185,7 +185,7 @@ CapsuleCollider:
   m_Radius: 0.15
   m_Height: 0.7
   m_Direction: 1
-  m_Center: {x: 0, y: 0.35, z: 0}
+  m_Center: {x: 0, y: 0.25, z: 0}
 --- !u!1001 &2152551977031702588
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -288,6 +288,16 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Plant
       objectReference: {fileID: 0}
+    - target: {fileID: 6863277180474079689, guid: e2161584afaf272468fa20d42a180cc8,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 97cc7a0c8bc4c614aa096f75fdb452d0, type: 2}
+    - target: {fileID: 6863277180474079689, guid: e2161584afaf272468fa20d42a180cc8,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: e2161584afaf272468fa20d42a180cc8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -296,7 +306,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: e2161584afaf272468fa20d42a180cc8,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.2
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: e2161584afaf272468fa20d42a180cc8,
         type: 3}
@@ -343,21 +353,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -1504981713932161579, guid: e2161584afaf272468fa20d42a180cc8,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: a3d01ea307c778e4b8509013a130dad7, type: 2}
-    - target: {fileID: 6863277180474079689, guid: e2161584afaf272468fa20d42a180cc8,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 97cc7a0c8bc4c614aa096f75fdb452d0, type: 2}
-    - target: {fileID: 6863277180474079689, guid: e2161584afaf272468fa20d42a180cc8,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: -8314718434910977720, guid: e2161584afaf272468fa20d42a180cc8,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -368,6 +363,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -1504981713932161579, guid: e2161584afaf272468fa20d42a180cc8,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: a3d01ea307c778e4b8509013a130dad7, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e2161584afaf272468fa20d42a180cc8, type: 3}
 --- !u!1 &4524458465082621539 stripped

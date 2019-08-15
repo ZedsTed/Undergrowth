@@ -52,18 +52,22 @@ public class Landscaping : Actor
         base.OnPlaced();
 
         container = GetComponentInParent<Container>();
-        for (int i = transform.childCount; i-- > 0;)
-        {
-            BoxCollider c = transform.GetChild(i).gameObject.GetComponent<BoxCollider>();
+        SetScale(container.Definition.ContainerSoilSize);
 
-            if (c == null)
-            {
-                // Debug.Log("c is null on + " + transform.GetChild(i).gameObject.name);
-                transform.GetChild(i).localScale = container.Definition.ContainerSoilSize;
-            }
-            else
-                c.size = container.Definition.ContainerSoilSize;
-        }
+        //for (int i = transform.childCount; i-- > 0;)
+        //{
+        //    BoxCollider c = transform.GetChild(i).gameObject.GetComponent<BoxCollider>();
+
+        //    if (c == null)
+        //    {
+        //        // Debug.Log("c is null on + " + transform.GetChild(i).gameObject.name);
+        //        transform.GetChild(i).localScale = container.Definition.ContainerSoilSize;
+        //    }
+        //    else
+        //    {
+        //        c.size = container.Definition.ContainerSoilSize;
+        //    }
+        //}
     }
 
     // Update is called once per frame

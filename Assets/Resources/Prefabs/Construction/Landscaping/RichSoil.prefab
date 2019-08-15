@@ -95,6 +95,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -158,6 +159,7 @@ MonoBehaviour:
   validPlace: {r: 0.12595391, g: 1, b: 0, a: 1}
   invalidPlace: {r: 1, g: 0, b: 0, a: 1}
   mesh: {fileID: 7771852414303650350}
+  boundsCollider: {fileID: 1939639067068940608}
   snapPoint: {fileID: 4866084040296423797}
   SoilFertility: 0
   Water: 0

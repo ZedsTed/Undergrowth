@@ -106,33 +106,11 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
             {
                 if (pickedActor != null)
                 {
-                    //Debug.Log(pointerEventData.pointerCurrentRaycast.worldPosition);
-                    hitCellPosition = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(editorGridWorldPosition));
 
-                    GridHighlight.Instance.SetVisibility(true);
-                    GridHighlight.Instance.SetPosition(hitCellPosition);
+                    UpdatePosition();
 
-                    previousInputPosition = Vector3.Lerp(previousInputPosition, (hitCellPosition - inputPosition) * 0.6f, 33f * Time.unscaledDeltaTime);
-                    inputPosition += previousInputPosition;
-                    inputPosition.y = 0f;
-
-                    pickedActor.transform.position = inputPosition;
-
+                    UpdateRotation();
                     
-
-                    if (Input.GetKeyDown(KeyCode.Z))
-                        appliedRotationY += -90f;
-
-                    if (Input.GetKeyDown(KeyCode.X))
-                        appliedRotationY += 90f;
-                                      
-
-                    previousActorRotation = Mathf.Lerp(previousActorRotation, (appliedRotationY - actorRotation) * 0.6f, 33f * Time.unscaledDeltaTime);
-
-                    actorRotation += previousActorRotation;
-                    
-
-                    pickedActor.transform.rotation = Quaternion.Euler(0f, actorRotation, 0f);
 
 
                     if (IsValidPosition())
@@ -196,6 +174,41 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
         }
 
+    }
+
+    protected void UpdatePosition()
+    {
+        //Debug.Log(pointerEventData.pointerCurrentRaycast.worldPosition);
+        hitCellPosition = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(editorGridWorldPosition));
+
+        hitCellPosition.y = 0f;
+
+        GridHighlight.Instance.SetVisibility(true);
+        GridHighlight.Instance.SetPosition(hitCellPosition);
+
+        previousInputPosition = Vector3.Lerp(previousInputPosition, (hitCellPosition - inputPosition) * 0.6f, 33f * Time.unscaledDeltaTime);
+        inputPosition += previousInputPosition;
+        inputPosition.y = 0f;
+
+        pickedActor.transform.position = hitCellPosition;
+        pickedActor.Mesh.transform.position = inputPosition;
+    }
+
+    protected void UpdateRotation()
+    {
+        if (Input.GetKeyDown(KeyCode.Z))
+            appliedRotationY += -90f;
+
+        if (Input.GetKeyDown(KeyCode.X))
+            appliedRotationY += 90f;
+
+
+        previousActorRotation = Mathf.Lerp(previousActorRotation, (appliedRotationY - actorRotation) * 0.6f, 33f * Time.unscaledDeltaTime);
+
+        actorRotation += previousActorRotation;
+
+
+        pickedActor.transform.rotation = Quaternion.Euler(0f, actorRotation, 0f);
     }
 
     public void SetConstructionMode(ConstructionState state)
@@ -278,6 +291,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     //Vector3 currentLerpedSize;
     Vector3 previousLerpedSize;
     protected Container parentContainer;
+    protected Landscaping parentLandscaping;
     protected void OnValidPosition()
     {
         pickedActor.OnValidPosition();
@@ -295,44 +309,31 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
             // Work out where we need to be in this container, 
             // what our offset from our snap position and out 
             // world position it is so we can correctly position ourselves.
-            
-            Vector3 snapToPos = parentContainer.SnapPoint.position;
-            snapToPos.y = 0f;
-            Vector3 posOffset = (pickedActor as Landscaping).transform.position - (pickedActor as Landscaping).SnapPoint.position;
-            posOffset.y = 0f;
+
+            Vector3 snapToPos = parentContainer.SnapPoint.position;          
            
-            pickedActor.transform.position = snapToPos - posOffset;
-            hitCellPosition = snapToPos - posOffset; // We now need to update our 'selected' cell so that when we place this item, it'll be place there.
+            pickedActor.transform.position = snapToPos;
+            hitCellPosition = snapToPos; // We now need to update our 'selected' cell so that when we place this item, it'll be place there.
             pickedActor.transform.rotation = rot; // We don't want to lerp this, it'll look too clunky.
 
+            pickedActor.SetScale(size);
 
-            for (int i = pickedActor.transform.childCount; i-- > 0;)
-            {
-                SetScale(pickedActor.transform.GetChild(i), size);
-            }
-            
+            //for (int i = pickedActor.transform.childCount; i-- > 0;)
+            //{
+            //    SetScale(pickedActor.transform.GetChild(i), size);
+            //}
+
         }
-    }
-
-    protected void SetScale(Transform transform, Vector3 size)
-    {
-        BoxCollider c = transform.gameObject.GetComponent<BoxCollider>();
-
-        if (c == null)
+        else if (pickedActor is Plant)
         {
-            // Debug.Log("c is null on " + transform.gameObject.name);
+            parentLandscaping = (pickedActor as Plant).GetComponentInParent<Landscaping>();
 
-            previousLerpedSize = Vector3.Lerp(previousLerpedSize, (size - transform.localScale) * 0.7f, 30f *
-                   Time.unscaledDeltaTime);
+            Vector3 snapToPos = parentLandscaping.SnapPoint.position;
+            hitCellPosition = snapToPos;
+            //snapToPos.y += parentContainer.transform.localScale.y / 2;
 
-            transform.localScale += previousLerpedSize;
-            return;
+            pickedActor.transform.position = snapToPos;
         }
-
-        previousLerpedSize = Vector3.Lerp(previousLerpedSize, (size - c.size) * 0.7f, 30f *
-                   Time.unscaledDeltaTime);
-
-        c.size += previousLerpedSize; 
     }
 
     protected void OnInvalidPosition()
@@ -345,22 +346,48 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
             Vector3 size = ContainerManifest.GetContainerDefinition("Raised Bed").ContainerSoilSize;
             Vector3 pos = ContainerManifest.GetContainerDefinition("Raised Bed").ContainerSoilOffset;
 
-            for (int i = pickedActor.transform.childCount; i-- > 0;)
-            {
-               // pickedActor.transform.GetChild(i).localScale = size;
-                pickedActor.transform.GetChild(i).localPosition = pos;
+            pickedActor.SetScale(size);
 
-                previousLerpedSize = Vector3.Lerp(previousLerpedSize, (size - pickedActor.transform.GetChild(i).localScale) * 0.7f, 30f * Time.unscaledDeltaTime);
-                pickedActor.transform.GetChild(i).localScale += previousLerpedSize;
-            }
+            //for (int i = pickedActor.transform.childCount; i-- > 0;)
+            //{
+            //   // pickedActor.transform.GetChild(i).localScale = size;
+            //    //pickedActor.transform.GetChild(i).localPosition = new Vector3(0f, 0f, 0f);
+
+            //    SetScale(pickedActor.transform.GetChild(i), size);
+            //}
 
         }
     }
 
+    //protected void SetScale(Transform transform, Vector3 size)
+    //{
+    //    BoxCollider c = transform.gameObject.GetComponent<BoxCollider>();
+
+    //    if (c != null)
+    //    {
+    //        // Because the collider size will be specified as a specific value, whereas the rest of the actor - especially the mesh
+    //        // will have transform.localScale of 1 to start, we only want to figure out how much we should scale the collider by.
+    //        // e.g. if we had a mesh that was scale.y of 1, then it needed to be made a scale.y of 1.5, that's a 1.5x.
+    //        // if our collider was size.y of 0.35, the yMultiplier of that would be 1.5 and we'd get a (0.35 * 1.5) size.y value as
+    //        // our new collider vertical size.
+    //        float yMultiplier = size.y;
+    //        size.y = yMultiplier * c.size.y;
+    //        c.size = size;
+
+    //        return;
+    //    }
+
+    //    previousLerpedSize = Vector3.Lerp(previousLerpedSize, (size - transform.localScale) * 0.7f, 30f *
+    //               Time.unscaledDeltaTime);
+
+    //    transform.localScale = size;
+    //}
+
     protected void OnActorPlaced(Vector3 cellPosition, bool multiple = false)
     {
-        cellPosition.y = 0f;
         pickedActor.transform.position = cellPosition;
+
+        pickedActor.Mesh.transform.position = cellPosition;
         pickedActor.SetLayerForHighlight(false);
         Accounts.Instance.BuyItem(pickedActor.Definition.Cost); // TODO: Need to add in a solution for if the player can't afford to buy
         pickedActor.OnPlaced();        
@@ -465,12 +492,10 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
     #endregion
 
-    protected List<KeyValuePair<Collider, float>> colliderDistances = new List<KeyValuePair<Collider, float>>();
     protected bool IsValidPosition()
     {
         if (IsCollidingWithWorld())
-        {
-            colliderDistances.Clear();
+        {            
             if (pickedActor is Container)
             {
                 return false;
