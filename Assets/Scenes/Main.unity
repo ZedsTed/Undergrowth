@@ -1681,6 +1681,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 743756180}
   m_CullTransparentMesh: 0
+--- !u!224 &787478158 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6201168444085098120, guid: d460272947ad11b4884955f5b5dda584,
+    type: 3}
+  m_PrefabInstance: {fileID: 6201168444055190632}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &830114188
 GameObject:
   m_ObjectHideFlags: 0
@@ -2000,6 +2006,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GrowthMultiplier: 0.0006
+  WaterDrainMultiplier: 0.001
   EnergyProductionMultiplier: 0.04
   NotificationRingSpeed: 1
 --- !u!114 &900099578
@@ -2094,7 +2101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 1
+  m_UiScaleMode: 0
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
@@ -5285,6 +5292,7 @@ GameObject:
   - component: {fileID: 1824030770}
   - component: {fileID: 1824030769}
   - component: {fileID: 1824030768}
+  - component: {fileID: 1824030772}
   m_Layer: 5
   m_Name: Popup Canvas
   m_TagString: Untagged
@@ -5321,7 +5329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 1
+  m_UiScaleMode: 0
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
@@ -5348,7 +5356,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 1
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: -1
   m_TargetDisplay: 0
@@ -5372,6 +5380,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1824030772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1824030767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2ed2626058734848bf691cf58d06904, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  content: {fileID: 787478158}
 --- !u!1 &1878773448
 GameObject:
   m_ObjectHideFlags: 0
@@ -5799,11 +5820,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: StorageWindow
-      objectReference: {fileID: 0}
-    - target: {fileID: 6201168443523147868, guid: d460272947ad11b4884955f5b5dda584,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6201168443523147869, guid: d460272947ad11b4884955f5b5dda584,
         type: 3}

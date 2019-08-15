@@ -123,6 +123,8 @@ public class Plant : Actor
         {
             fruit.enabled = false;
         }
+
+        StorageManager.Instance.AddStorageItem(Definition.Harvest, 1);
     }
 
     /// <summary>

@@ -19,3 +19,4 @@ MonoBehaviour:
   moistureNeed: 1
   growthRate: 0.1
   maxGrowth: 20
+  harvest: 3

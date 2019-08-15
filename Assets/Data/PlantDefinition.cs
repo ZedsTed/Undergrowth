@@ -55,6 +55,12 @@ public class PlantDefinition : ActorDefinition
         [LifeCycle.Mature] = 80
     };
 
+    [Header("Harvest Type")]
+    [Tooltip("Type of harvest that this plant provides.")]
+    [SerializeField]
+    protected ItemDefinition.ItemType harvest;
+    public ItemDefinition.ItemType Harvest => harvest;
+
 
     // Probably more complex than needed atm.
     //[Header("Reproduction Thresholds")]

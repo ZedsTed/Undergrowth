@@ -7,6 +7,9 @@ using UnityEngine.UI;
 
 public class StorageManagerUI : MonoBehaviour
 {
+    [SerializeField]
+    protected RectTransform content;
+
     protected Dictionary<ItemDefinition.ItemType, StorageItemUI> items = new Dictionary<ItemDefinition.ItemType, StorageItemUI>();
 
     protected void Start()
@@ -26,7 +29,9 @@ public class StorageManagerUI : MonoBehaviour
 
     protected void OnItemAdded(StorageItem item)
     {
-        StorageItemUI itemUI = Instantiate((Resources.Load("Prefabs/UI/StorageTile") as GameObject), transform).GetComponent<StorageItemUI>();
+        StorageItemUI itemUI = Instantiate((Resources.Load("Prefabs/UI/StorageTile") as GameObject), content).GetComponent<StorageItemUI>();
+
+        Debug.Log("Trying to add item");
 
         itemUI.SetStoredIcon(item.Definition.Icon);
         itemUI.SetStoredQuantity(item.Quantity);

@@ -34,14 +34,14 @@ public class StorageManager : SingletonDontCreate<StorageManager>
         if (stock.TryGetValue(type, out StorageItem item))
         {
             success = item.AddQuantity(quantity);
-            onStorageItemAdded?.Invoke(item);
+            onStorageItemUpdated?.Invoke(item);
         }
         else
         {
-            item = new StorageItem(quantity);
+            item = new StorageItem(quantity, ConstructionEditor.Instance.ItemManifest.GetItemDefinition(type));
             stock.Add(type, item);
 
-            onStorageItemUpdated?.Invoke(item);
+            onStorageItemAdded?.Invoke(item);
 
             success = true;
         }

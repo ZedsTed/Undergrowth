@@ -39,6 +39,9 @@ public class WorldNotification : MonoBehaviour, IPointerDownHandler, IPointerUpH
 
     protected bool pressed = false;
 
+    [SerializeField]
+    protected bool pressEventFired = false;
+
     Coroutine spawnTween;
     Coroutine doneTween;
 
@@ -100,7 +103,7 @@ public class WorldNotification : MonoBehaviour, IPointerDownHandler, IPointerUpH
 
         ring.fillAmount = Mathf.Lerp(ring.fillAmount, 1f, progress);
 
-        if (ring.fillAmount == 1f)
+        if (pressEventFired == false && ring.fillAmount == 1f)
         {
             OnRingComplete();
         }
@@ -120,6 +123,7 @@ public class WorldNotification : MonoBehaviour, IPointerDownHandler, IPointerUpH
             doneTween = StartCoroutine(DoneScaleTween());
 
         onPressComplete?.Invoke(this);
+        pressEventFired = true;
         // TODO: Add in a nice completion effect.        
     }
 
@@ -150,6 +154,11 @@ public class WorldNotification : MonoBehaviour, IPointerDownHandler, IPointerUpH
         }
 
         onNotificationDone?.Invoke(this);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+
     }
 
     public void OnPointerDown(PointerEventData eventData)

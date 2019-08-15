@@ -81,7 +81,7 @@ public class Landscaping : Actor
 
 
         // TODO: name this better, what does drainage amount truly represent?
-        drainageProgress = Mathf.Clamp01(drainageProgress - (0.005f * Time.deltaTime));
+        drainageProgress = Mathf.Clamp01(drainageProgress - (GameConstants.Instance.WaterDrainMultiplier * Time.deltaTime));
 
         Water = Definition.drainageProfile.Evaluate(drainageProgress);
     }

@@ -279,44 +279,12 @@ public class ToolsManager : SingletonDontCreate<ToolsManager>
 
         if (selectedTool == clickedTool)
             lockToggleOn = false;
-        else if (selectedTool == clickedTool && selectedTool.toggle.isOn)
-            lockToggleOn = true;
 
         if (!selectedTool.toggle.isOn)
         {
             DespawnSelectableList();
             ConstructionEditor.Instance.SetConstructionMode(ConstructionEditor.ConstructionState.None);
         }
-        else
-        {
-            SetContructionEditorMode(tool.toggle);
-            SpawnSelectableList(tool.toggle);
-        }
 
-    }
-
-
-    /// <summary>
-    /// Checks whether the gameobject passed is one of the tool toggle objects.
-    /// </summary>
-    /// <param name="gameObject"></param>
-    /// <returns></returns>
-    protected bool IsToolToggle(GameObject gameObject)
-    {
-        switch (gameObject.name)
-        {
-            case "Container":
-                return true;
-            case "Landscaping":
-                return true;
-            case "Plant":
-                return true;
-            case "Water":
-                return true;
-            case "Remove":
-                return true;
-            default:
-                return false;
-        }
     }
 }
