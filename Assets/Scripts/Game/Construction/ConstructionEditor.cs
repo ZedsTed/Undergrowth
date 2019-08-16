@@ -304,10 +304,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
             // Grab parent size definition
             Vector3 size = parentContainer.Definition.ContainerSoilSize;
 
-            // Work out where we need to be in this container, 
-            // what our offset from our snap position and out 
-            // world position it is so we can correctly position ourselves.
-
+            // Grab parent container snapping position
             Vector3 snapToPos = parentContainer.SnapPoint.position;
 
             pickedActor.transform.position = snapToPos;
@@ -321,11 +318,13 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
         {
             parentLandscaping = (pickedActor as Plant).GetComponentInParent<Landscaping>();
 
-            Vector3 snapToPos = parentLandscaping.SnapPoint.position;
-            hitCellPosition = snapToPos;
+            float snapToPosY = parentLandscaping.SnapPoint.position.y;
+            hitCellPosition.y = snapToPosY;
+            Vector3 vec = pickedActor.transform.position;
+            vec.y = snapToPosY;
 
 
-            pickedActor.transform.position = snapToPos;
+            pickedActor.transform.position = vec;
         }
     }
 
@@ -469,7 +468,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
                 {
                     if (sceneColliders[i].CompareTag("Landscaping") || sceneColliders[i].CompareTag("Plant"))
                     {
-                        return false;
+                        continue;
                     }
                     else if (sceneColliders[i].CompareTag("Container"))
                     {
