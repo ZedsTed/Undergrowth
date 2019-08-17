@@ -8,13 +8,51 @@ public class ShopManager : SingletonDontCreate<ShopManager>
     protected Dictionary<ItemDefinition.ItemType, ShopItem> stock = new Dictionary<ItemDefinition.ItemType, ShopItem>();
 
     [SerializeField]
-    protected int maxShopPerItem = 99;
-    public int MaxShopPerItem => maxShopPerItem;
+    protected int maxQuantityPerItem = 99;
+    public int MaxQuantityPerItem => maxQuantityPerItem;
 
     public Action<ShopItem> onShopItemAdded;
     public Action<ShopItem> onShopItemUpdated;
     public Action<ShopItem> onShopItemRemoved;
 
+
+    protected void Start()
+    {
+        SetupShop();
+    }
+
+    protected void SetupShop()
+    {
+        for (int i = 0, iC = ConstructionEditor.Instance.ShopManifest.stockedItems.Count; i < iC; ++i)
+        {
+            AddShopItem(ConstructionEditor.Instance.ShopManifest.GetItemDefinition(i).Type);   
+        }
+    }
+
+    protected void Update()
+    {
+        
+    }
+
+    public bool AddShopItem(ItemDefinition.ItemType type)
+    {
+        bool success = false;
+
+
+        ConstructionEditor.Instance.ShopManifest.GetItemDefinitionAndQuantity(type, out ItemDefinition itemDef, out int quantity);
+
+        if (itemDef == null)
+            return false;
+
+        ShopItem item = new ShopItem(itemDef, quantity);
+        stock.Add(type, item);
+
+        onShopItemAdded?.Invoke(item);
+
+        success = true;
+
+        return success;
+    }
 
     public bool AddShopItem(ItemDefinition.ItemType type, int quantity)
     {
@@ -27,7 +65,7 @@ public class ShopManager : SingletonDontCreate<ShopManager>
         }
         else
         {
-            item = new ShopItem(quantity, ConstructionEditor.Instance.ItemManifest.GetItemDefinition(type));
+            item = new ShopItem(ConstructionEditor.Instance.ShopManifest.GetItemDefinition(type), quantity);
             stock.Add(type, item);
 
             onShopItemAdded?.Invoke(item);
@@ -45,9 +83,15 @@ public class ShopManager : SingletonDontCreate<ShopManager>
             remainingQuantity = item.RemoveQuantity(quantity);
 
             if (remainingQuantity == 0)
+            {
                 stock.Remove(item.Definition.Type);
 
-            onShopItemRemoved?.Invoke(item);
+                onShopItemRemoved?.Invoke(item);
+            }
+            else
+            {
+                onShopItemUpdated?.Invoke(item);
+            }
 
             return true;
         }

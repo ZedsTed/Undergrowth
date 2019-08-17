@@ -18,7 +18,7 @@ public class ShopItem
         quantity = amount;
     }
 
-    public ShopItem(int amount, ItemDefinition def)
+    public ShopItem(ItemDefinition def, int amount)
     {
         quantity = amount;
         definition = def;
@@ -27,7 +27,7 @@ public class ShopItem
     public bool AddQuantity(int amount)
     {
         // TODO: Make this take off however much it can and then return the surplus.
-        if ((quantity + amount) > ShopManager.Instance.MaxShopPerItem)
+        if ((quantity + amount) > ShopManager.Instance.MaxQuantityPerItem)
         {
             Debug.LogWarning(definition.DescriptiveName + " tried to add " + amount + " which brought it to over max value.");
             return false;

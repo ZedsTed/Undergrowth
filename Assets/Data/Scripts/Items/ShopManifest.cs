@@ -4,15 +4,25 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "ShopManifest.asset", menuName = "Data/Shop Manifest")]
 public class ShopManifest : ScriptableObject
-{
-    public List<KeyValuePair<ItemDefinition, int>> itemDefinitions;
+{ 
+    public List<ShopItemDefinition> stockedItems;
+
+    //public bool AddItemDefinition(ItemDefinition itemDefinition, int quantity)
+    //{
+    //    if (GetItemDefinition(itemDefinition.Type, true) != null)
+    //        return false;
+
+    //    stockedItems.Add(new ShopItemDefinition());
+
+    //    return true;
+    //}
 
     public ItemDefinition GetItemDefinition(string name)
     {
-        for (int i = itemDefinitions.Count; i-- > 0;)
+        for (int i = stockedItems.Count; i-- > 0;)
         {            
-            if (itemDefinitions[i].Key.DescriptiveName == name)
-                return itemDefinitions[i].Key;
+            if (stockedItems[i].Item.DescriptiveName == name)
+                return stockedItems[i].Item;
         }
 
         Debug.LogError("[ShopManifest] Unable to find item of name: " + name);
@@ -22,33 +32,37 @@ public class ShopManifest : ScriptableObject
 
     public ItemDefinition GetItemDefinition(int index)
     {
-        if (index >= 0 && index < itemDefinitions.Count)
-            return itemDefinitions[index].Key;
+        if (index >= 0 && index < stockedItems.Count)
+            return stockedItems[index].Item;
 
         Debug.LogError("[ShopManifest] Unable to find item of index: " + index);
 
         return null;
     }
 
-    public ItemDefinition GetItemDefinition(ItemDefinition.ItemType itemType)
+    public ItemDefinition GetItemDefinition(ItemDefinition.ItemType itemType, bool supressError = false)
     {
-        for (int i = itemDefinitions.Count; i-- > 0;)
+        if (stockedItems.Count == 0)
+            return null;
+
+        for (int i = stockedItems.Count; i-- > 0;)
         {
-            if (itemDefinitions[i].Key.Type == itemType)
-                return itemDefinitions[i].Key;
+            if (stockedItems[i].Item.Type == itemType)
+                return stockedItems[i].Item;
         }
 
-        Debug.LogError("[ShopManifest] Unable to find item of type: " + itemType);
+        if (!supressError)
+            Debug.LogError("[ShopManifest] Unable to find item of type: " + itemType);
 
         return null;
     }
 
     public int GetItemDefinitionQuantity(ItemDefinition.ItemType itemType)
     {
-        for (int i = itemDefinitions.Count; i-- > 0;)
+        for (int i = stockedItems.Count; i-- > 0;)
         {
-            if (itemDefinitions[i].Key.Type == itemType)
-                return itemDefinitions[i].Value;
+            if (stockedItems[i].Item.Type == itemType)
+                return stockedItems[i].Quantity;
         }
 
         Debug.LogError("[ShopManifest] Unable to find item of type: " + itemType);
@@ -56,16 +70,22 @@ public class ShopManifest : ScriptableObject
         return 0;
     }
 
-    public KeyValuePair<ItemDefinition, int> GetItemDefinitionAndQuantity(ItemDefinition.ItemType itemType)
+    public void GetItemDefinitionAndQuantity(ItemDefinition.ItemType itemType, out ItemDefinition item, out int quantity)
     {
-        for (int i = itemDefinitions.Count; i-- > 0;)
+        for (int i = stockedItems.Count; i-- > 0;)
         {
-            if (itemDefinitions[i].Key.Type == itemType)
-                return itemDefinitions[i];
+            if (stockedItems[i].Item.Type == itemType)
+            {
+                item = stockedItems[i].Item;
+                quantity = stockedItems[i].Quantity;
+
+                return;
+            }
         }
 
         Debug.LogError("[ShopManifest] Unable to find item of type: " + itemType);
 
-        return default;
+        item = null;
+        quantity = 0;
     }
 }

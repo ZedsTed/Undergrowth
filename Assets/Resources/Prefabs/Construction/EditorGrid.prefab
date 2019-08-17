@@ -64,6 +64,8 @@ MonoBehaviour:
   landscapingManifest: {fileID: 11400000, guid: fa5ecf419b14d9f48ba9457b3fe79721,
     type: 2}
   plantManifest: {fileID: 11400000, guid: 6f2331ebcda479b45bd1417b4fe8265b, type: 2}
+  itemManifest: {fileID: 11400000, guid: 627cc73924b58624f8a7f23a02047b63, type: 2}
+  shopManifest: {fileID: 11400000, guid: 99b35e90b29cdf44b94228b3ceef5e1a, type: 2}
   EditorGrid: {fileID: 4728455150766253185}
   ToolsManager: {fileID: 0}
   WorldPositionDebug: {fileID: 0}
@@ -76,6 +78,7 @@ MonoBehaviour:
   actorRotation: 0
   lerpFactor1: 0.6
   lerpFactor2: 0.55
+  sceneColliders: []
 --- !u!114 &874980416846663035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,6 +162,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -295,6 +299,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0

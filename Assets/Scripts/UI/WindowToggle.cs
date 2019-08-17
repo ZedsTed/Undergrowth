@@ -10,20 +10,16 @@ public class WindowToggle : MonoBehaviour
     protected Toggle toggle;
 
     [SerializeField]
-    protected GameObject window;
+    protected WindowUI window;
 
     void Start()
     {
         toggle.onValueChanged.AddListener((value) => 
-        { SetStorageWindowVisibility(value); });
+        { SetContentVisibility(value); });
     }
 
-    protected void SetStorageWindowVisibility(bool visibility)
+    protected void SetContentVisibility(bool value)
     {
-        if (window.activeInHierarchy != visibility)
-        {
-            // Debug.Log("Setting storage window to: " + visibility);
-            window.SetActive(visibility);
-        }
+        window.SetContentVisibility(value);
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ShopManagerUI : MonoBehaviour
+public class ShopManagerUI : WindowUI
 {
     [SerializeField]
     protected RectTransform content;
@@ -14,17 +14,11 @@ public class ShopManagerUI : MonoBehaviour
 
     protected void Start()
     {
+        transform.localScale = hideScale;
+
         ShopManager.Instance.onShopItemAdded += OnItemAdded;
         ShopManager.Instance.onShopItemUpdated += OnItemUpdated;
         ShopManager.Instance.onShopItemRemoved += OnItemRemoved;
-    }
-
-    [ContextMenu("Add Item")]
-    public void TestItemAdd()
-    {
-        ShopItem item = new ShopItem(50, ConstructionEditor.Instance.ItemManifest.GetItemDefinition(ItemDefinition.ItemType.Fertiliser));
-
-        OnItemAdded(item);
     }
 
     protected void OnItemAdded(ShopItem item)

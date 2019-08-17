@@ -33,6 +33,7 @@ public class ItemDefinition : ScriptableObject
         Plant01Fruit,
         ArtichokeHarvest,
         CabbageHarvest,
-        Fertiliser
+        Fertiliser,
+        Mulch
     }
 }

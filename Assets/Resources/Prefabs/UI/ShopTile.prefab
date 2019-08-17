@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1783330669917923428}
   - component: {fileID: 6453877363103534652}
   m_Layer: 5
-  m_Name: StorageTileContent
+  m_Name: ShopTileContent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86,10 +86,10 @@ GameObject:
   - component: {fileID: 1783330670218365766}
   - component: {fileID: 1783330670218365769}
   - component: {fileID: 1783330670218365767}
-  - component: {fileID: 787748784318321682}
+  - component: {fileID: 5812589473345552654}
   - component: {fileID: 9050785485117172384}
   m_Layer: 5
-  m_Name: StorageTile
+  m_Name: ShopTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &787748784318321682
+--- !u!114 &5812589473345552654
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -153,7 +153,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1783330670218365765}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c261b57b41e3a3a42bc06c522bb88be1, type: 3}
+  m_Script: {fileID: 11500000, guid: 1919c2d89de92d647b8f2c0571d2f32d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   storedIcon: {fileID: 6453877363103534652}
@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: 5595085095829996957}
   - component: {fileID: 7529890505851459891}
   m_Layer: 5
-  m_Name: StorageTileQuantityText
+  m_Name: ShopTileQuantityText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -372,7 +372,7 @@ GameObject:
   - component: {fileID: 6998307973352221532}
   - component: {fileID: 1402556061983189095}
   m_Layer: 5
-  m_Name: StorageTileQuantity
+  m_Name: ShopTileQuantity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

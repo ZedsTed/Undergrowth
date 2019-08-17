@@ -30,6 +30,10 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     protected ItemManifest itemManifest;
     public ItemManifest ItemManifest => itemManifest;
 
+    [SerializeField]
+    protected ShopManifest shopManifest;
+    public ShopManifest ShopManifest => shopManifest;
+
 
     public Grid EditorGrid;
 

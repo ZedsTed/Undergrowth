@@ -169,6 +169,7 @@ GameObject:
   - component: {fileID: 6201168443523147869}
   - component: {fileID: 6201168443523147871}
   - component: {fileID: 6201168443523147870}
+  - component: {fileID: 1999579105370313252}
   m_Layer: 5
   m_Name: StorageWindow
   m_TagString: Untagged
@@ -232,6 +233,19 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &1999579105370313252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6201168443523147868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2ed2626058734848bf691cf58d06904, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  content: {fileID: 6201168444085098120}
 --- !u!1 &6201168444085098167
 GameObject:
   m_ObjectHideFlags: 0

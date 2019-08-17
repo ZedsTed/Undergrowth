@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class StorageManagerUI : MonoBehaviour
+public class StorageManagerUI : WindowUI
 {
     [SerializeField]
     protected RectTransform content;
@@ -14,6 +14,8 @@ public class StorageManagerUI : MonoBehaviour
 
     protected void Start()
     {
+        transform.localScale = hideScale;
+
         StorageManager.Instance.onStorageItemAdded += OnItemAdded;
         StorageManager.Instance.onStorageItemUpdated += OnItemUpdated;
         StorageManager.Instance.onStorageItemRemoved += OnItemRemoved;
