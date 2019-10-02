@@ -256,8 +256,9 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: 10
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: aaa6068b3804f2d4ea967ab57560a62d, type: 2}
+  m_sharedMaterial: {fileID: 4541760512704940129, guid: aaa6068b3804f2d4ea967ab57560a62d,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -289,7 +290,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_textAlignment: 257
+  m_textAlignment: 514
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -395,8 +396,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -5, y: 5}
-  m_SizeDelta: {x: 24, y: 24}
+  m_AnchoredPosition: {x: -2, y: 2}
+  m_SizeDelta: {x: 36, y: 36}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &6998307973352221532
 CanvasRenderer:
@@ -426,7 +427,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Texture: {fileID: 2800000, guid: 9bfcc39cce8ecc44e8e5e1fa53f43799, type: 3}
+  m_Texture: {fileID: 2800000, guid: a90a3893124a1ea48abb92f9257d1b85, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
