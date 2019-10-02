@@ -15,6 +15,8 @@ public class PropManifest : ScriptableObject
                 return propDefinitions[i];
         }
 
+        Debug.LogError("[GetPropDefintion] Unable to find a prop with name " + name + " in PropManifest");
+
         return null;
     }
 
@@ -22,6 +24,8 @@ public class PropManifest : ScriptableObject
     {
         if (index >= 0 && index < propDefinitions.Count)
             return propDefinitions[index];
+
+        Debug.LogError("[GetPropDefintion] Unable to find a prop at index " + index + " in PropManifest");
 
         return null;
     }

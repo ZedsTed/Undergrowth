@@ -15,6 +15,9 @@ public class LandscapingManifest : ScriptableObject
                 return landscapingDefinitions[i];
         }
 
+        Debug.LogError("[GetLandscapingDefinition] Unable to find Landscaping with name " + name + " in LandscapingManifest");
+
+
         return null;
     }
 
@@ -22,6 +25,8 @@ public class LandscapingManifest : ScriptableObject
     {
         if (index >= 0 && index < landscapingDefinitions.Count)
             return landscapingDefinitions[index];
+
+        Debug.LogError("[GetLandscapingDefinition] Unable to find Landscaping with index " + index + " in LandscapingManifest");
 
         return null;
     }

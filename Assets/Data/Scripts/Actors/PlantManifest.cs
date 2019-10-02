@@ -15,6 +15,8 @@ public class PlantManifest : ScriptableObject
                 return plantDefinitions[i];
         }
 
+        Debug.LogError("[GetPlantDefinition] Unable to find Plant with name " + name + " in PlantManifest");
+
         return null;
     }
 
@@ -22,6 +24,8 @@ public class PlantManifest : ScriptableObject
     {
         if (index >= 0 && index < plantDefinitions.Count)
             return plantDefinitions[index];
+
+        Debug.LogError("[GetPlantDefinition] Unable to find Plant with index " + index + " in PlantManifest");
 
         return null;
     }

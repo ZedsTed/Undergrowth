@@ -15,6 +15,8 @@ public class ContainerManifest : ScriptableObject
                 return containerDefinitions[i];
         }
 
+        Debug.LogError("[GetContainerDefinition] Unable to find a Container with name " + name + " in ContainerManifest");
+
         return null;
     }
 
@@ -22,6 +24,8 @@ public class ContainerManifest : ScriptableObject
     {
         if (index >= 0 && index < containerDefinitions.Count)
             return containerDefinitions[index];
+
+        Debug.LogError("[GetContainerDefinition] Unable to find a Container at index " + index + " in ContainerManifest");
 
         return null;
     }

@@ -50,7 +50,7 @@ public class WorldNotification : MonoBehaviour, IPointerDownHandler, IPointerUpH
 
     Vector3 doneScale = new Vector3(1.3f, 1.3f, 1.3f);
 
-    // Start is called before the first frame update
+    
     void Start()
     {
         ring.fillAmount = 0f;
@@ -66,8 +66,11 @@ public class WorldNotification : MonoBehaviour, IPointerDownHandler, IPointerUpH
             spawnTween = StartCoroutine(SpawnTween());
     }
 
+    /// <summary>
+    /// A coroutine that will lerp the notification from its current pos to the final position until it reaches it at an overall non-linear rate.
+    /// </summary>    
     protected IEnumerator SpawnTween()
-    {
+    { 
         while (transform.position != finalSpawnedPosition)
         {
             transform.position = Vector3.Lerp(transform.position, finalSpawnedPosition, notificationSpawnSpeed * Time.unscaledDeltaTime);
@@ -88,7 +91,9 @@ public class WorldNotification : MonoBehaviour, IPointerDownHandler, IPointerUpH
         }
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Here we use LateUpdate to 'billboard' the notification towards the main camera.
+    /// </summary>
     void LateUpdate()
     {
         transform.rotation = CameraOrbit.Instance.mainCamera.transform.rotation;
@@ -97,6 +102,9 @@ public class WorldNotification : MonoBehaviour, IPointerDownHandler, IPointerUpH
 
 
     protected float progress = 0f;
+    /// <summary>
+    /// Updates the fill amount on the ring icon in correspondence to the players input.
+    /// </summary>
     protected void UpdateRingIncrease()
     {
         progress = Mathf.Clamp01(progress + (GameConstants.Instance.NotificationRingSpeed * Time.unscaledDeltaTime));
@@ -110,6 +118,9 @@ public class WorldNotification : MonoBehaviour, IPointerDownHandler, IPointerUpH
     }
 
     protected float decreaseProgress = 0f;
+    /// <summary>
+    /// Updates the fill amount on the ring icon in correspondence to the players lac of input.
+    /// </summary>
     protected void UpdateRingDecrease()
     {
         decreaseProgress = Mathf.Clamp01(decreaseProgress + (GameConstants.Instance.NotificationRingSpeed * Time.unscaledDeltaTime));
@@ -117,17 +128,24 @@ public class WorldNotification : MonoBehaviour, IPointerDownHandler, IPointerUpH
         ring.fillAmount = Mathf.Lerp(ring.fillAmount, 0f, decreaseProgress);
     }
 
+    /// <summary>
+    /// Fired when the ring is complete - i.e. the player has held the notification for sufficient time.
+    /// </summary>
     protected void OnRingComplete()
     {
         if (doneTween == null)
             doneTween = StartCoroutine(DoneScaleTween());
 
         onPressComplete?.Invoke(this);
-        pressEventFired = true;
-        // TODO: Add in a nice completion effect.        
+        pressEventFired = true;           
     }
 
     float opacity = 1f;
+
+    /// <summary>
+    /// A coroutine to control the scale and opacity of the notification once it is complete.
+    /// </summary>
+    /// <returns></returns>
     protected IEnumerator DoneScaleTween()
     {
         Color iconColor = icon.color;
@@ -163,15 +181,11 @@ public class WorldNotification : MonoBehaviour, IPointerDownHandler, IPointerUpH
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        //((IPointerDownHandler)button).OnPointerDown(eventData);
-
         pressed = true;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        //((IPointerUpHandler)button).OnPointerUp(eventData);
-
         pressed = false;
     }
 }

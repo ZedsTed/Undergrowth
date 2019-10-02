@@ -8,7 +8,7 @@ using System;
 
 public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 {
-    // TODO: Pop all of the below into a big ol' game class.
+    // TODO: Pop all of the manifests into a singleton'd game class.
 
     [SerializeField]
     protected PropManifest propManifest;
@@ -34,7 +34,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     protected ShopManifest shopManifest;
     public ShopManifest ShopManifest => shopManifest;
 
-
+    
     public Grid EditorGrid;
 
     public ToolsManager ToolsManager;
@@ -58,6 +58,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     protected ConstructionState mode;
     public ConstructionState Mode { get { return mode; } protected set { mode = value; } }
 
+    // These are our placed props and actors. It allows us to - if needed - refer to all instances of them.
 
     public List<Prop> Props { get; protected set; } = new List<Prop>();
     public List<Container> Containers { get; protected set; } = new List<Container>();
@@ -65,27 +66,43 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     public List<Plant> Plants { get; protected set; } = new List<Plant>();
 
 
+    // Events for if we change construction mode, hit gameobjects with a raycast, and when we hit a gameobject in the UI with a raycast.
     public Action<ConstructionState> onConstructionModeChanged;
     public Action<List<GameObject>> onRaycastHit;
     public Action<GameObject> onRaycastHitUI;
 
+    /// <summary>
+    /// The currently picked actor.
+    /// </summary>
     protected Actor pickedActor;
-    public Actor PickedObject { get { return pickedActor; } protected set { pickedActor = value; } }
+    public Actor PickedActor { get { return pickedActor; } protected set { pickedActor = value; } }
 
+    // Position vectors based off of the current mouse position on the editor grid.
+    // We perform a lerp between previous input and input to create a 'snappy' feeling in the editor.
     protected Vector3 inputPosition;
     protected Vector3 previousInputPosition;
     protected Vector3 editorGridWorldPosition;
     protected Vector3 hitCellPosition;
 
+    /// <summary>
+    /// The current value of rotation the player is applying in this frame.
+    /// </summary>
     [SerializeField]
     protected float appliedRotationY = 0f;
 
+    /// <summary>
+    /// The actor rotation in the previous frame.
+    /// </summary>
     [SerializeField]
     protected float previousActorRotation;
 
+    /// <summary>
+    /// The actor rotation in the current frame.
+    /// </summary>
     [SerializeField]
     protected float actorRotation;
 
+    // Used for exposing lerp multipliers in the inspector to allow for better balancing/tweaking.
     public float lerpFactor1;
     public float lerpFactor2;
 
@@ -93,68 +110,83 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     {
         inputPosition = new Vector3(0f, 0f, 0f);
         previousInputPosition = new Vector3(0f, 0f, 0f);
-
-
     }
 
 
 
     protected void Update()
     {
+        // Debug text on-screen.
         WorldCellPositionDebug.text = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(editorGridWorldPosition)).ToString();
         WorldPositionDebug.text = editorGridWorldPosition.ToString();
 
+        // If our pointer isn't currently over any UI.
         if (!IsPointerOverUI())
         {
+            // If the player is currently in the placement mode.
             if (mode == ConstructionState.Placing)
             {
+                // If they have a valid picked actor.
                 if (pickedActor != null)
                 {
-
+                    // Update actor position based on player mouse input.
                     UpdatePosition();
 
+                    // Update actor rotation based on player rotational input.
                     UpdateRotation();
 
 
-
+                    // If the player has the actor in a valid position
                     if (IsValidPosition())
                     {
+                        // Fire off any functions/events that occur on a valid actor position.
                         OnValidPosition();
 
+                        // If the player has pressed the input for placing the actor.
                         if (Input.GetMouseButtonDown(0))
                         {
                             bool multiple = false;
 
+                            // If they're holding down Left Control to place multiple.
                             if (Input.GetKey(KeyCode.LeftControl))
                                 multiple = true;
 
+                            // Fire off any functions/events that occur when a valid actor is placed.
                             OnActorPlaced(hitCellPosition, multiple);
                         }
                     }
                     else
                     {
+                        // Fire off any functions/events that occur on an invalid position.
                         OnInvalidPosition();
                     }
                 }
                 else
                 {
+                    // If there is not picked actor, we want to set the grid highlight to false.
                     GridHighlight.Instance.SetVisibility(false);
                 }
-            }
+            }   // If the player is currently in the watering mode.
             else if (mode == ConstructionState.Watering)
             {
+                // If they've pressed the left mouse button.
                 if (Input.GetMouseButtonDown(0))
                 {
+                    // Fast iterate over the current frame's raycast results (set in IsPointerOverUI).
                     for (int i = raycastResults.Count; i-- > 0;)
                     {
                         Actor actor = raycastResults[i].gameObject.GetComponentInParent<Actor>();
+
+                        // Skip any null actors.
                         if (actor == null)
                             continue;
 
+                        // Skip any actors which aren't landscaping types.
                         if (!(actor is Landscaping))
                             continue;
 
-                        // TODO: Change to some sort of variable quantity.
+                        // Water it!
+                        // TODO: Change to some sort of variable quantity, based on time mouse0 is held.
                         (actor as Landscaping).OnWatered(1f);
                     }
                 }
@@ -229,24 +261,6 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
         mode = previousMode;
     }
 
-
-    protected void OnConstructionModeChanged()
-    {
-        switch (mode)
-        {
-            case ConstructionState.None:
-                break;
-            case ConstructionState.Placing:
-                break;
-            case ConstructionState.Watering:
-                break;
-            case ConstructionState.Removing:
-                break;
-            default:
-                break;
-        }
-    }
-
     public void OnItemSelected(SelectableListItem item, bool selected)
     {
         Debug.Log("CEselected " + item.id + " " + selected);
@@ -261,7 +275,6 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
             actorRotation = 0f;
             appliedRotationY = 0f;
 
-            //Highlighter.Instance.RemoveHighlight(pickedActor.gameObject);
 
             return;
         }
@@ -370,6 +383,10 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
     #region Actor Spawning
 
+    /// <summary>
+    /// Spawns a duplicate of the given actor. Utilised for multiple placements (i.e. when the player hold Ctrl when placing an actor).
+    /// </summary>
+    /// <param name="currentActor">The actor you want to spawn a duplicate of.</param>
     protected void SpawnDuplicateActor(Actor currentActor)
     {
         if (currentActor is Prop)
@@ -386,9 +403,16 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
         pickedActor.SetLayerForHighlight(true);
     }
 
+    /// <summary>
+    /// Finds the prop of the given name and will spawn it.
+    /// </summary>
+    /// <param name="name"></param>
     protected void SpawnProp(string name)
     {
         PropDefinition pDef = PropManifest.GetPropDefinition(name);
+
+        if (pDef == null)
+            return; // If the propDefintion is null, we just return here. We will have already logged an error in PropManifest's function which will have our stack trace.
 
         Prop p = Instantiate(pDef.Actor, inputPosition,
             Quaternion.identity, transform);
@@ -406,6 +430,9 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     {
         ContainerDefinition cDef = ContainerManifest.GetContainerDefinition(name);
 
+        if (cDef == null)
+            return; // If the ContainerDefinition is null, we just return here. We will have already logged an error in ContainerManifest's function which will have our stack trace.
+
         Container c = Instantiate(cDef.Actor, inputPosition,
             Quaternion.identity, transform);
 
@@ -422,6 +449,9 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     {
         LandscapingDefinition lDef = LandscapingManifest.GetLandscapingDefinition(name);
 
+        if (lDef == null)
+            return; // If the LandscapingDefinition is null, we just return here. We will have already logged an error in LandscapingManifest's function which will have our stack trace.
+
         Landscaping l = Instantiate(lDef.Actor, inputPosition,
             Quaternion.identity, transform);
 
@@ -437,6 +467,9 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
     protected void SpawnPlant(string name)
     {
         PlantDefinition pDef = PlantManifest.GetPlantDefinition(name);
+
+        if (pDef == null)
+            return; // If the PlantDefinition is null, we just return here. We will have already logged an error in PlantManifest's function which will have our stack trace.
 
         Plant p = Instantiate(pDef.Actor, inputPosition,
             Quaternion.identity, transform);
@@ -460,7 +493,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
         {
             if (pickedActor is Container)
             {
-                // Containers are never valid if they're colliding with something
+                // Containers are never valid if they're colliding with something.
                 return false;
             }
             else if (pickedActor is Landscaping)
@@ -472,6 +505,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
                 {
                     if (sceneColliders[i].CompareTag("Landscaping") || sceneColliders[i].CompareTag("Plant"))
                     {
+                        // It's not valid to have a landscaping placed in another landscaping or a plant.
                         continue;
                     }
                     else if (sceneColliders[i].CompareTag("Container"))
@@ -480,7 +514,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
                         {
                             pickedActor.transform.parent = sceneColliders[i].transform.parent;
                             return true;
-                        }   //If our container isn't this scene collider and the current input position is in its bounds, we want to switch to it.
+                        }   // If the landscape parent isn't this collider's parent (i.e. a container) and the current input position is in its bounds, we want to parent to its parent (i.e. the container).
                         else if (pickedActor.transform.parent != sceneColliders[i].transform.parent &&
                             sceneColliders[i].bounds.Contains(inputPosition))
                         {
@@ -489,7 +523,7 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
                         }
                         else if (pickedActor.transform.parent == sceneColliders[i].transform.parent &&
                             sceneColliders[i].bounds.Contains(inputPosition))
-                        {   // at this point, we've checked if we've changed and we haven't so we're the same one.
+                        {   // at this point, we've checked if we've changed and we haven't so we're valid.
                             pickedActor.transform.parent = sceneColliders[i].transform.parent;
                             return true;
                         }
@@ -538,17 +572,17 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
         sceneColliders.Clear();
         actorColliders.Clear();
 
+        // Generate our layermask.
         colliderLayer = LayerMask.NameToLayer("EditorColliders");
-        colliderLayerMask = 1 << colliderLayer;
-        int properMask = LayerMask.GetMask("EditorColliders");
+        colliderLayerMask = 1 << colliderLayer;        
 
-        // Gather colliders
+        // Gather colliders - to optimise this, we can store all colliders on an actor in start or awake on the actor component. At the moment though, with one collider on average, it's not too much of a hit.
         actorColliders.AddRange(pickedActor.GetComponentsInChildren<Collider>(true));
 
         Collider c;
-        float colliderShrink = 0.8f; // We want to shrink our colliders just to make sure we have a proper intersect.
+        float colliderShrink = 0.8f; // We want to shrink our colliders to allow for some tolerance. In a grid-based game this is a pretty fair tolerance.
 
-        // Sort them and then union to see what we intersect with.
+        // Iterate through the actor's colliders and check if they intersect with any other colliders in the scene on the collider layer.
         for (int i = actorColliders.Count; i-- > 0;)
         {
             c = actorColliders[i];
@@ -560,6 +594,8 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
             }
 
             Matrix4x4 localToWorld = c.transform.localToWorldMatrix;
+
+            // Perform a bunch of overlaps to check if the current collider (c) is intersecting with anything in the scene on the collider layer.
 
             if (c is BoxCollider)
             {
@@ -611,13 +647,14 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
                 sceneColliders.RemoveAt(i);
         }
 
+        // Sort the colliders based on their distance from our picked actor. This allows for more predictable analysis and effects later on when accessing scene colliders - as well as more efficient iteration when looking for the closest (iterate from 0) and farthest (iterate from (count - 1)).
         sceneColliders.Sort((x, y) =>
         Vector3.Distance(x.gameObject.transform.position, pickedActor.gameObject.transform.position)
         .CompareTo
         (Vector3.Distance(y.gameObject.transform.position, pickedActor.gameObject.transform.position)));
 
 
-
+        // If we have more than 0 colliders then we are colliding with something, if 0 then nothing!
         return sceneColliders.Count > 0 ? true : false;
     }
 
