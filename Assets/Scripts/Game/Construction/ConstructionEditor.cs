@@ -6,6 +6,9 @@ using TMPro;
 using UnityEngine.EventSystems;
 using System;
 
+/// <summary>
+/// The Construction Editor manages all placement, watering and removal of actors and props on an in-game grid.
+/// </summary>
 public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 {
     // TODO: Pop all of the manifests into a singleton'd game class.

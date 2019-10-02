@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// A world notifcation is an interactable icon that appears in world space UI and allows the player to carry out actions by clicking it (e.g. harvesting the crop).
+/// </summary>
 public class WorldNotification : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     /// <summary>
