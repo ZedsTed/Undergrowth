@@ -1,34 +1,38 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 [CreateAssetMenu(fileName = "PlantDefinition.asset", menuName = "Data/Plant Definition")]
 public class PlantDefinition : ActorDefinition
 {
+    
     public Plant Actor => actor as Plant;
 
     /// <summary>
     /// How much sunlight this plant needs.
     /// </summary>
-    [Header("Sunlight Needs")]
+    [BoxGroup("Actor Info/Plant Needs")]
     [Tooltip("How much Sunlight this plant needs.")]
     [SerializeField]
+    [EnumToggleButtons]
     protected SunlightDefinition.Sunlight sunlightNeed;
-    public SunlightDefinition.Sunlight SunlightNeed => sunlightNeed; 
+    public SunlightDefinition.Sunlight SunlightNeed => sunlightNeed;
 
     /// <summary>
     /// How much moisture/water the plant needs.
     /// </summary>
-    [Header("Water Needs")]
+    [BoxGroup("Actor Info/Plant Needs")]
     [Tooltip("How much Water this plant needs.")]
     [SerializeField]
+    [EnumToggleButtons]
     protected WaterDefinition.Moisture moistureNeed;
     public WaterDefinition.Moisture MoistureNeed => moistureNeed;
 
     /// <summary>
     /// How fast this plant grows in optimal conditions for it.
     /// </summary>
-    [Header("Optimal Growth Rate")]
+    [BoxGroup("Actor Info/Growth Data")]
     [Tooltip("Optimal growth rate for the plant in ideal conditions.")]
     [SerializeField]
     protected float growthRate;
@@ -37,15 +41,16 @@ public class PlantDefinition : ActorDefinition
     /// <summary>
     /// The maximum growth value for this plant, perhaps in meters, we'll figure it out later.
     /// </summary>
-    [Header("Maximum Growth")]
+    [BoxGroup("Actor Info/Growth Data")]
     [Tooltip("Float value for maximum growth this plant can reach.")]
     [SerializeField]
     protected float maxGrowth;
     public float MaxGrowth => maxGrowth;
 
-    [Header("Growth Thresholds")]
+    [BoxGroup("Actor Info/Growth Data")]
     [Tooltip("Percentage of growth for each life cycle stage to be achieved.")]
-    [SerializeField]
+    //[SerializeField]
+    [DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
     public Dictionary<LifeCycle, int> GrowthThresholds = new Dictionary<LifeCycle, int>
     {
         [LifeCycle.Seed] = 0,
@@ -55,11 +60,22 @@ public class PlantDefinition : ActorDefinition
         [LifeCycle.Mature] = 80
     };
 
-    [Header("Harvest Type")]
+    [BoxGroup("Actor Info/Seed Data")]
+    [Tooltip("Type of seed that this plant has.")]
+    [SerializeField]
+    protected ItemDefinition.ItemType seed;
+    public ItemDefinition.ItemType Seed => seed;
+
+    [BoxGroup("Actor Info/Harvest Data")]
     [Tooltip("Type of harvest that this plant provides.")]
     [SerializeField]
     protected ItemDefinition.ItemType harvest;
     public ItemDefinition.ItemType Harvest => harvest;
+
+    [BoxGroup("Actor Info/Harvest Data")]
+    [SerializeField]
+    protected int harvestQuantity;
+    public int HarvestQuantity => harvestQuantity;
 
 
     // Probably more complex than needed atm.

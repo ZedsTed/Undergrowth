@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.Text;
 
 public class ShopItem
 {
@@ -57,6 +59,21 @@ public class ShopItem
 
         quantity -= amount;
 
-        return 0;
+        return quantity;
+    }
+
+    StringBuilder sb;
+    public override string ToString()
+    {
+        if (sb == null)
+            sb = new StringBuilder();
+
+        sb.Clear();
+        sb.AppendLine("<b>" + definition.DescriptiveName + "</b>");
+        sb.AppendLine(definition.Description);
+        sb.AppendLine();
+        sb.AppendLine("Stock: " + Quantity);
+
+        return sb.ToString();
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine;
 public class StorageManager : SingletonDontCreate<StorageManager>
 {
     protected Dictionary<ItemDefinition.ItemType, StorageItem> stock = new Dictionary<ItemDefinition.ItemType, StorageItem>();
+    public Dictionary<ItemDefinition.ItemType, StorageItem> Stock => stock;
 
     [SerializeField]
     protected int maxStoragePerItem = 99;
@@ -18,13 +19,13 @@ public class StorageManager : SingletonDontCreate<StorageManager>
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public bool AddStorageItem(ItemDefinition.ItemType type, int quantity)
@@ -56,9 +57,15 @@ public class StorageManager : SingletonDontCreate<StorageManager>
             remainingQuantity = item.RemoveQuantity(quantity);
 
             if (remainingQuantity == 0)
+            {
                 stock.Remove(item.Definition.Type);
 
-            onStorageItemRemoved?.Invoke(item);
+                onStorageItemRemoved?.Invoke(item);
+            }
+            else
+            {
+                onStorageItemUpdated?.Invoke(item);
+            }
 
             return true;
         }

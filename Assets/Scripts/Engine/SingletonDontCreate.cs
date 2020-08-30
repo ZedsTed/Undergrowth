@@ -1,7 +1,8 @@
 ﻿using System;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
-public class SingletonDontCreate<T> : MonoBehaviour
+public class SingletonDontCreate<T> : SerializedMonoBehaviour
     where T : MonoBehaviour
 {
     private static T instance;

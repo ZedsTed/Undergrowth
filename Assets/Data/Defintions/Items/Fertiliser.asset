@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Fertiliser
   m_EditorClassIdentifier: 
   descriptiveName: Fertiliser
-  type: 4
+  description: Spread something other than gossip this weekend.
   cost: 20
+  type: 4
   icon: {fileID: 21300000, guid: fc0a3d6a14fe8b64db00548a30d7dca1, type: 3}

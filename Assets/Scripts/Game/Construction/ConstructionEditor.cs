@@ -220,14 +220,15 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
         //Debug.Log(pointerEventData.pointerCurrentRaycast.worldPosition);
         hitCellPosition = EditorGrid.GetCellCenterWorld(EditorGrid.WorldToCell(editorGridWorldPosition));
 
-        hitCellPosition.y = 0f;
+        // TODO: Change to only affect containers, everything else should ideally inherit the y value of the parent it has moused over.
+        hitCellPosition.y = editorGridWorldPosition.y;
 
         GridHighlight.Instance.SetVisibility(true);
         GridHighlight.Instance.SetPosition(hitCellPosition);
 
-        previousInputPosition = Vector3.Lerp(previousInputPosition, (hitCellPosition - inputPosition) * 0.6f, 33f * Time.unscaledDeltaTime);
+        previousInputPosition = Vector3.Lerp(previousInputPosition, (hitCellPosition - inputPosition) * 0.45f, 30f * Time.unscaledDeltaTime);
         inputPosition += previousInputPosition;
-        inputPosition.y = 0f;
+        inputPosition.y = editorGridWorldPosition.y;
 
         pickedActor.transform.position = hitCellPosition;
         pickedActor.Mesh.transform.position = inputPosition;
@@ -367,7 +368,37 @@ public class ConstructionEditor : SingletonDontCreate<ConstructionEditor>
 
         pickedActor.Mesh.transform.position = cellPosition;
         pickedActor.SetLayerForHighlight(false);
-        Accounts.Instance.BuyItem(pickedActor.Definition.Cost); // TODO: Need to add in a solution for if the player can't afford to buy
+
+        if (pickedActor is Plant)
+        {
+            PlantDefinition def = pickedActor.Definition as PlantDefinition;
+            ItemDefinition.ItemType itemType = def.Seed;
+
+            if (StorageManager.Instance.Stock.TryGetValue(itemType, out StorageItem storageItem))
+            {
+                if (storageItem.Quantity > 0)
+                {
+                    Accounts.Instance.BuyItem(storageItem.Definition.Cost);
+                    int remainingQuantity = 0;
+                    StorageManager.Instance.RemoveStorageItem(itemType, 1, ref remainingQuantity);
+                }
+                else
+                {
+                    Debug.Log("No storage stock of " + storageItem.Definition.DescriptiveName);
+                }
+            }
+            else
+            {
+                Debug.Log("No storage key stock of " + itemType.ToString());
+            }
+            
+        }
+        else
+        {
+            Accounts.Instance.BuyItem(pickedActor.Definition.Cost); // TODO: Need to add in a solution for if the player can't afford to buy
+        }
+
+
         pickedActor.OnPlaced();
         pickedActor.Picked = false;
 

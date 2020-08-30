@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: ArtichokeHarvest
   m_EditorClassIdentifier: 
   descriptiveName: Harvested Artichoke
-  type: 2
+  description: A bunch of harvested artichoke.
   cost: 30
+  actorDefinition: {fileID: 11400000, guid: 86a873e1c831c16408ce24e2ed4b6294, type: 2}
+  type: 2
+  subType: 2
   icon: {fileID: 21300000, guid: 7bde216632e23cb4c891be5864fbc77d, type: 3}

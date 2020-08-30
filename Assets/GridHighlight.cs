@@ -21,7 +21,7 @@ public class GridHighlight : SingletonDontCreate<GridHighlight>
 
     public void SetPosition(Vector3 position)
     {
-        position.y = 0.025f;
+        position.y += 0.025f;
         transform.position = position;
     }
 

@@ -2,10 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 public class ShopManager : SingletonDontCreate<ShopManager>
 {
-    protected Dictionary<ItemDefinition.ItemType, ShopItem> stock = new Dictionary<ItemDefinition.ItemType, ShopItem>();
+   
+    [DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.Foldout)]
+    public Dictionary<ItemDefinition.ItemType, ShopItem> stock = new Dictionary<ItemDefinition.ItemType, ShopItem>();
 
     [SerializeField]
     protected int maxQuantityPerItem = 99;
@@ -18,10 +21,10 @@ public class ShopManager : SingletonDontCreate<ShopManager>
 
     protected void Start()
     {
-        SetupShop();
+        //FirstTimeSetup();
     }
 
-    protected void SetupShop()
+    public void FirstTimeSetup()
     {
         for (int i = 0, iC = ConstructionEditor.Instance.ShopManifest.stockedItems.Count; i < iC; ++i)
         {
@@ -45,6 +48,7 @@ public class ShopManager : SingletonDontCreate<ShopManager>
             return false;
 
         ShopItem item = new ShopItem(itemDef, quantity);
+       // Debug.Log("Adding: " + itemDef.DescriptiveName);
         stock.Add(type, item);
 
         onShopItemAdded?.Invoke(item);

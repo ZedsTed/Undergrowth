@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c33aea000a973342b80965229087c62, type: 3}
+  m_Name: ArtichokeSeed
+  m_EditorClassIdentifier: 
+  descriptiveName: Artichoke Seeds
+  description: Artichoke seeds to make your harvest smell a bit different this year.
+  cost: 8
+  actorDefinition: {fileID: 11400000, guid: 86a873e1c831c16408ce24e2ed4b6294, type: 2}
+  type: 8
+  subType: 1
+  icon: {fileID: 21300000, guid: 7bee5b7f6b36eaa40a16883265b74549, type: 3}

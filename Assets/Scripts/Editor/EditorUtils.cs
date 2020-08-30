@@ -167,5 +167,57 @@ public class EditorUtils
         Vector3 extent = new Vector3(offset.x / bounds.extents.x, offset.y / bounds.extents.y, offset.z / bounds.extents.z);
         return Vector3.Scale(bounds.extents, extent);
     }
+
+
+    [MenuItem("GameObject/Create Parent (For Each)", false, 0)]
+    public static void CreateParentGameObject()
+    {
+        GameObject[] selectedGO = Selection.gameObjects;
+
+        for (int i = selectedGO.Length; i-- > 0;)
+        {
+            GameObject parent = new GameObject();
+            selectedGO[i].transform.parent = parent.transform;
+            parent.name = selectedGO[i].name + " Parent";
+        }
+    }
+
+    [MenuItem("GameObject/Group Selected %g", false, 0)]
+    public static void GroupGameObjectsUnderParent()
+    {
+        if (!Selection.activeTransform)
+            return;
+
+        GameObject go = new GameObject(Selection.activeTransform.name + " Group");
+        
+        go.transform.localPosition = GetMeanPosition(Selection.transforms);        
+
+        Undo.RegisterCreatedObjectUndo(go, "Group Selected");
+
+        go.transform.SetParent(Selection.activeTransform.parent, false);
+
+        foreach (var transform in Selection.transforms)
+            Undo.SetTransformParent(transform, go.transform, "Group Selected");
+
+        Selection.activeGameObject = go;
+    }
+
+    protected static Vector3 GetMeanPosition(Transform[] transforms)
+    {
+        if (transforms.Length == 0)
+        {
+            return Vector3.zero;
+        }
+    
+
+        Vector3 meanVector = Vector3.zero;
+
+        for (int i = transforms.Length; i-- > 0;)
+        {
+            meanVector += transforms[i].localPosition;
+        }
+
+        return (meanVector / transforms.Length);
+    }
 }
 #endif

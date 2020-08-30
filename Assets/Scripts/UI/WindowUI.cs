@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Sirenix.OdinInspector;
 
-public class WindowUI : MonoBehaviour
+public class WindowUI : SerializedMonoBehaviour
 {
     protected Vector3 hideScale = new Vector3(0f, 1f, 1f);
     protected Vector3 showScale = new Vector3(1f, 1f, 1f);

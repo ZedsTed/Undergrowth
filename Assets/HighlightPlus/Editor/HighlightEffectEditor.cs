@@ -180,9 +180,9 @@ namespace HighlightPlus {
                 EditorGUILayout.PropertyField(cullBackFaces);
                 EditorGUILayout.PropertyField(fadeInDuration);
                 EditorGUILayout.PropertyField(fadeOutDuration);
-                if ((PlayerSettings.virtualRealitySupported && ((outlineQuality.intValue == (int)QualityLevel.Highest && outline.floatValue > 0) || (glowQuality.intValue == (int)QualityLevel.Highest && glow.floatValue > 0)))) {
-                    EditorGUILayout.PropertyField(flipY, new GUIContent("Flip Y Fix", "Flips outline/glow effect to fix bug introduced in Unity 2019.1.0 when VR is enabled."));
-                }
+                //if ((PlayerSettings.virtualRealitySupported && ((outlineQuality.intValue == (int)QualityLevel.Highest && outline.floatValue > 0) || (glowQuality.intValue == (int)QualityLevel.Highest && glow.floatValue > 0)))) {
+                //    EditorGUILayout.PropertyField(flipY, new GUIContent("Flip Y Fix", "Flips outline/glow effect to fix bug introduced in Unity 2019.1.0 when VR is enabled."));
+                //}
                 if (glowQuality.intValue != (int)QualityLevel.Highest || outlineQuality.intValue != (int)QualityLevel.Highest) {
                     EditorGUILayout.PropertyField(constantWidth, new GUIContent("Constant Width", "Compensates outline/glow width with depth increase."));
                 }
@@ -336,11 +336,11 @@ namespace HighlightPlus {
         }
 
         void CheckVRSupport(int qualityLevel) {
-            if (qualityLevel == (int)QualityLevel.Highest && PlayerSettings.virtualRealitySupported) {
-                if (PlayerSettings.stereoRenderingPath != StereoRenderingPath.MultiPass) {
-                    EditorGUILayout.HelpBox("Highest Quality only supports VR Multi-Pass as CommandBuffers do not support this VR mode yet. Either switch to 'High Quality' or change VR Stereo mode to Multi-Pass.", MessageType.Error);
-                }
-            }
+            //if (qualityLevel == (int)QualityLevel.Highest && PlayerSettings.virtualRealitySupported) {
+            //    if (PlayerSettings.stereoRenderingPath != StereoRenderingPath.MultiPass) {
+            //        EditorGUILayout.HelpBox("Highest Quality only supports VR Multi-Pass as CommandBuffers do not support this VR mode yet. Either switch to 'High Quality' or change VR Stereo mode to Multi-Pass.", MessageType.Error);
+            //    }
+            //}
         }
 
         bool CheckForwardMSAA() {

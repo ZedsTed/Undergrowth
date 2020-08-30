@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Mulch
   m_EditorClassIdentifier: 
   descriptiveName: Mulch
-  type: 5
+  description: Free range mulch. Used once, offered at small discount. No haggling.
   cost: 5
+  type: 5
   icon: {fileID: 21300000, guid: 0a907f7425147bf40851687592184905, type: 3}

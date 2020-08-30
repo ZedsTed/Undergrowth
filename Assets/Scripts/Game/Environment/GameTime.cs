@@ -79,7 +79,7 @@ public class GameTime : SingletonDontCreate<GameTime>
     }
 
 
-    public List<TimeWarp> TimeWarpStates = new List<TimeWarp>()
+    protected List<TimeWarp> timeWarpStates = new List<TimeWarp>()
     {
         new TimeWarp(TimeWarp.TimeWarpState.Normal, 1f),
         new TimeWarp(TimeWarp.TimeWarpState.Fast, 2f),
@@ -87,6 +87,7 @@ public class GameTime : SingletonDontCreate<GameTime>
         new TimeWarp(TimeWarp.TimeWarpState.Fastest, 10f)
 
     };
+    public List<TimeWarp> TimeWarpStates => timeWarpStates;
 
     public TimeWarp.TimeWarpState CurrentState { get; protected set; }
 
@@ -127,9 +128,9 @@ public class GameTime : SingletonDontCreate<GameTime>
     {
         if (state != CurrentState)
         {
-            for (int i = TimeWarpStates.Count; i-- > 0;)
+            for (int i = timeWarpStates.Count; i-- > 0;)
             {
-                if (TimeWarpStates[i].State == state)
+                if (timeWarpStates[i].State == state)
                 {
                     Time.timeScale = TimeWarpStates[i].Speed;
                     timeScale = Time.timeScale;

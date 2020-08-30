@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 [CreateAssetMenu(fileName = "ShopManifest.asset", menuName = "Data/Shop Manifest")]
 public class ShopManifest : ScriptableObject
-{ 
+{
+    [InlineEditor]
     public List<ShopItemDefinition> stockedItems;
 
     //public bool AddItemDefinition(ItemDefinition itemDefinition, int quantity)

@@ -13,5 +13,13 @@ MonoBehaviour:
   m_Name: ShopManifest
   m_EditorClassIdentifier: 
   stockedItems:
+  - {fileID: 11400000, guid: 7e9cf0bca9aa1034ba261b735fea580c, type: 2}
+  - {fileID: 11400000, guid: e507285780aafe44c9aca45ffd0ef562, type: 2}
+  - {fileID: 11400000, guid: 22b7467558f902f4082ad86b64928f00, type: 2}
+  - {fileID: 11400000, guid: 16de79de8d89e2942bf893bd52a5424c, type: 2}
   - {fileID: 11400000, guid: 6fe09fc5a10ad1045869b00881612020, type: 2}
   - {fileID: 11400000, guid: 9445e71740854324bb9092b6c0628fb4, type: 2}
+  - {fileID: 11400000, guid: f5e1fd91459a9344da0222eb6ee3e8af, type: 2}
+  - {fileID: 11400000, guid: 8b3b90913d001da47a1159ddd0cc68e8, type: 2}
+  - {fileID: 11400000, guid: eb3e8936e31e5c84e8b0122fa736ffba, type: 2}
+  - {fileID: 11400000, guid: 9b6bb571afaad6b428ef0f9e865913b3, type: 2}

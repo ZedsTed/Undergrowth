@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: RootVegetableHarvest
   m_EditorClassIdentifier: 
   descriptiveName: Harvested Beetroot
-  type: 0
+  description: 
   cost: 30
+  actorDefinition: {fileID: 11400000, guid: 1aa86e133ba2c2b44a06b216d8c3a195, type: 2}
+  type: 0
+  subType: 2
   icon: {fileID: 21300000, guid: 331281a7c7349334b9c43ae75dcc42ce, type: 3}
